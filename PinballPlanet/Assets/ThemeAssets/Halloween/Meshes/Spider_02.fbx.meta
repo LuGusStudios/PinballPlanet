@@ -1,0 +1,144 @@
+fileFormatVersion: 2
+guid: a6b91128c0d494446a5e9cbcfe855770
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: Right_leggA_01
+    100002: Left_leggA_04
+    100004: Left_leggA_03
+    100006: Left_leggA_02
+    100008: Left_leggA_01
+    100010: Tail_01
+    100012: hip_01
+    100014: Head_01
+    100016: Neck_01
+    100018: Base_01
+    100020: Root
+    100022: //RootNode
+    100024: Null
+    100026: body.1
+    100028: Right_leggD_04
+    100030: Right_leggD_03
+    100032: Right_leggD_02
+    100034: Right_leggD_01
+    100036: Left_leggD_04
+    100038: Left_leggD_03
+    100040: Left_leggD_02
+    100042: Left_leggD_01
+    100044: Right_leggC_04
+    100046: Right_leggC_03
+    100048: Right_leggC_02
+    100050: Right_leggC_01
+    100052: Left_leggC_04
+    100054: Left_leggC_03
+    100056: Left_leggC_02
+    100058: Left_leggC_01
+    100060: Right_leggB_04
+    100062: Right_leggB_03
+    100064: Right_leggB_02
+    100066: Right_leggB_01
+    100068: Left_leggB_04
+    100070: Left_leggB_03
+    100072: Left_leggB_02
+    100074: Left_leggB_01
+    100076: Right_leggA_04
+    100078: Right_leggA_03
+    100080: Right_leggA_02
+    400000: Right_leggA_01
+    400002: Left_leggA_04
+    400004: Left_leggA_03
+    400006: Left_leggA_02
+    400008: Left_leggA_01
+    400010: Tail_01
+    400012: hip_01
+    400014: Head_01
+    400016: Neck_01
+    400018: Base_01
+    400020: Root
+    400022: //RootNode
+    400024: Null
+    400026: body.1
+    400028: Right_leggD_04
+    400030: Right_leggD_03
+    400032: Right_leggD_02
+    400034: Right_leggD_01
+    400036: Left_leggD_04
+    400038: Left_leggD_03
+    400040: Left_leggD_02
+    400042: Left_leggD_01
+    400044: Right_leggC_04
+    400046: Right_leggC_03
+    400048: Right_leggC_02
+    400050: Right_leggC_01
+    400052: Left_leggC_04
+    400054: Left_leggC_03
+    400056: Left_leggC_02
+    400058: Left_leggC_01
+    400060: Right_leggB_04
+    400062: Right_leggB_03
+    400064: Right_leggB_02
+    400066: Right_leggB_01
+    400068: Left_leggB_04
+    400070: Left_leggB_03
+    400072: Left_leggB_02
+    400074: Left_leggB_01
+    400076: Right_leggA_04
+    400078: Right_leggA_03
+    400080: Right_leggA_02
+    4300000: body.1
+    7400002: C4D Animation Take
+    11100000: //RootNode
+    13700000: Root
+    13700002: body.1
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  userData: 
