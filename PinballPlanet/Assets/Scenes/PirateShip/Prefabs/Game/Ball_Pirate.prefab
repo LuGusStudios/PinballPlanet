@@ -120,6 +120,7 @@ MonoBehaviour:
   FireFadeMinSpeed: 300
   FireFadeMaxSpeed: 350
   KillHeight: 0
+  TrailParticle: {fileID: 100000, guid: 35ffec7e4909b6940b9a4987cf0a818a, type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
