@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   m_Layer: 0
-  m_Name: Tent01
+  m_Name: WoodBridge01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,9 +23,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: -.707106829, y: 0, z: -0, w: .707106829}
-  m_LocalPosition: {x: -24.0972691, y: -2.27161598, z: 19.5719528}
-  m_LocalScale: {x: .229009852, y: .229009852, z: .229009852}
+  m_LocalRotation: {x: -.707106829, y: -6.18172464e-08, z: -6.18172464e-08, w: .707106829}
+  m_LocalPosition: {x: -.0006838353, y: 924.056458, z: -43.3444519}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!23 &2300000
@@ -55,7 +55,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: b0c72898cc206054296053a3bf882f96, type: 3}
+  m_Mesh: {fileID: 4300000, guid: ba35071d30fa3c94f98f0d93790ba092, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
