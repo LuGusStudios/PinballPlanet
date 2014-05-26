@@ -16,17 +16,20 @@ public class Ball : MonoBehaviour
     // Height under which ball is destroyed.
     public float KillHeight = 0;
 
+    // Particle trail that follows ball if it's over a certain speed.
+    public GameObject TrailParticle = null;
+
     void Update()
     {
+        if (TrailParticle == null)
+            return;
+
         // alpha = (value - min) / (max - min)
         float lerpValue = (rigidbody.velocity.magnitude - FireFadeMinSpeed) / (FireFadeMaxSpeed - FireFadeMinSpeed);
         float alpha = Mathf.Lerp(0, 1, lerpValue);
 
-        //Debug.Log("--- Fire Lerp: " + lerp + " ---");
-        // Debug.Log("--- Fire alpha: " + alpha + " at speed:" + rigidbody.velocity.magnitude + " ---");
-
         // Only show particles when above a certain speed.
-        transform.FindChild("P_Ball02").GetComponent<ParticleSystem>().startColor = new Color(1,1,1, alpha);
+        TrailParticle.GetComponent<ParticleSystem>().startColor = new Color(1, 1, 1, alpha);
     }
 
     public void OnPause()
