@@ -6,13 +6,16 @@ using System.Collections;
 public class MineCart : MonoBehaviour
 {
     // iTween path names.
-    private const string StartPath =    "StartPath";
-    private const string DefaultPath =  "DefaultPath";
+    private const string StartPath = "StartPath";
+    private const string DefaultPath = "DefaultPath";
     private const string BridgeStartPath = "BridgeStartPath";
     private const string BridgeEndPath = "BridgeEndPath";
 
     // Transform of upside down cart. Used to put cart upside down for weird iTween behaviour.
-    public Transform _upsideDownTransform;
+    private Transform _upsideDownTransform;
+
+    // How long the mine cart stays hidden.
+    public float HiddenDelay = 1.0f;
 
     // Use this for initialization
     void Start()
@@ -29,8 +32,17 @@ public class MineCart : MonoBehaviour
 
     }
 
+    private void DestroyCart()
+    {
+        GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().OnMineCartDestroyed();
+        Destroy(gameObject);
+    }
+
+    //------------------------------
+    // Start path moving.
+    //------------------------------
     // Make cart follow start path.
-    void StartPathMove()
+    private void StartPathMove()
     {
         iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPath(StartPath)
                                             , "movetopath", false
@@ -41,7 +53,7 @@ public class MineCart : MonoBehaviour
     }
 
     // Called when the start path ends.
-    void OnStartPathEnded()
+    private void OnStartPathEnded()
     {
         // Play default path animation if not following bridge path.
         if (GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().RailsSwitched)
@@ -50,8 +62,28 @@ public class MineCart : MonoBehaviour
             DefaultPathMove();
     }
 
-    // Make cart follow start path.
-    void DefaultPathMove()
+    // Make cart follow start reversed path.
+    private void StartPathRevMove()
+    {
+        iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPathReversed(StartPath)
+                                            , "movetopath", false
+                                            , "orienttopath", true
+                                            , "speed", 300
+                                            , "easetype", iTween.EaseType.linear
+                                            , "oncomplete", "OnStartPathRevEnded"));
+    }
+
+    // Called when the start path reversed ends.
+    private void OnStartPathRevEnded()
+    {
+        DestroyCart();
+    }
+
+    //------------------------------
+    // Default path moving.
+    //------------------------------
+    // Make cart follow default path.
+    private void DefaultPathMove()
     {
         iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPath(DefaultPath)
                                             , "movetopath", false
@@ -61,41 +93,62 @@ public class MineCart : MonoBehaviour
                                             , "oncomplete", "OnDefaultPathEnded"));
     }
 
-    // Called when the start path ends.
-    void OnDefaultPathEnded()
+    // Called when the default path ends.
+    private void OnDefaultPathEnded()
     {
-        GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().OnMineCartDestroyed();
-        Destroy(gameObject);
+        DestroyCart();
     }
 
+    //------------------------------
+    // Bridge start path moving.
+    //------------------------------
     // Make cart follow bridge start path.
-    void BridgeStartPathMove()
+    private void BridgeStartPathMove()
     {
         iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPath(BridgeStartPath)
                                             , "movetopath", false
                                             , "orienttopath", true
-                                            , "speed", 100
+                                            , "speed", 80
                                             , "easetype", iTween.EaseType.linear
                                             , "oncomplete", "OnBridgeStartPathEnded"));
     }
 
     // Called when the bridge start path ends.
-    void OnBridgeStartPathEnded()
+    private void OnBridgeStartPathEnded()
     {
-        // Play start path animation.
-        float delay = 2.0f;
-        Invoke("BridgeEndPathMove", delay);
+        // Play bridge end animation with small delay when out of vision.
+        Invoke("BridgeEndPathMove", HiddenDelay);
     }
 
-    // Make cart follow bridge path.
-    void BridgeEndPathMove()
+    // Make cart follow bridge start reversed path.
+    private void BridgeStartPathRevMove()
     {
         // Set rotation upside down, to compensate for weird iTween behaviour.
         transform.FindChild("MineCart02").rotation = _upsideDownTransform.rotation;
-
-        iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPath(BridgeEndPath)
+        
+        iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPathReversed(BridgeStartPath)
                                             , "movetopath", false
                                             , "orienttopath", true
+                                            , "speed", 250
+                                            , "easetype", iTween.EaseType.linear
+                                            , "oncomplete", "OnBridgeStartPathRevEnded"));
+    }
+
+    // Called when the bridge start reversed path ends.
+    private void OnBridgeStartPathRevEnded()
+    {
+        StartPathRevMove();
+    }
+
+    //------------------------------
+    // Bridge end path moving.
+    //------------------------------
+    // Make cart follow bridge path.
+    private void BridgeEndPathMove()
+    {
+        iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPath(BridgeEndPath)
+                                            , "movetopath", false
+                                            , "orienttopath", false
                                             , "looktime", 0.1f
                                             , "speed", 100
                                             , "easetype", iTween.EaseType.linear
@@ -103,9 +156,28 @@ public class MineCart : MonoBehaviour
     }
 
     // Called when the bridge path ends.
-    void OnBridgeEndPathEnded()
+    private void OnBridgeEndPathEnded()
     {
-        GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().OnMineCartDestroyed();
-        Destroy(gameObject);
+        BridgeEndPathRevMove();
     }
+
+    // Make cart follow bridge end reversed path.
+    private void BridgeEndPathRevMove()
+    {
+        iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPathReversed(BridgeEndPath)
+                                            , "movetopath", false
+                                            , "orienttopath", false
+                                            , "looktime", 0.1f
+                                            , "speed", 70
+                                            , "easetype", iTween.EaseType.easeInQuint
+                                            , "oncomplete", "OnBridgeEndPathRevEnded"));
+    }
+
+    // Called when the bridge path end reversed ends.
+    private void OnBridgeEndPathRevEnded()
+    {
+        // Play bridge start reverse animation with small delay when out of vision.
+        Invoke("BridgeStartPathRevMove", HiddenDelay);
+    }
+
 }
