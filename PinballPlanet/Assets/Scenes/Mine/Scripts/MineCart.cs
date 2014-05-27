@@ -65,7 +65,7 @@ public class MineCart : MonoBehaviour
     // Destroys the mine cart and notifies the Rails script.
     private void DestroyCart()
     {
-        GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().OnMineCartDestroyed();
+        GameObject.Find("MineCart_Paths_02").GetComponent<MineCart_Rails>().OnMineCartDestroyed();
         Destroy(gameObject);
     }
 
@@ -87,7 +87,7 @@ public class MineCart : MonoBehaviour
     private void OnStartPathEnded()
     {
         // Play default path animation if not following bridge path.
-        if (GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().RailsSwitched)
+        if (GameObject.Find("MineCart_Paths_02").GetComponent<MineCart_Rails>().RailsSwitched)
             BridgeStartPathMove();
         else
             DefaultPathMove();
@@ -99,7 +99,7 @@ public class MineCart : MonoBehaviour
         iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPathReversed(StartPath)
                                             , "movetopath", false
                                             , "orienttopath", true
-                                            , "speed", 300
+                                            , "speed", 200
                                             , "easetype", iTween.EaseType.linear
                                             , "oncomplete", "OnStartPathRevEnded"));
     }
@@ -160,7 +160,7 @@ public class MineCart : MonoBehaviour
         iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPathReversed(BridgeStartPath)
                                             , "movetopath", false
                                             , "orienttopath", true
-                                            , "speed", 250
+                                            , "speed", 150
                                             , "easetype", iTween.EaseType.linear
                                             , "oncomplete", "OnBridgeStartPathRevEnded"));
     }
