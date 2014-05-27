@@ -44,6 +44,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MineCartPrefab: {fileID: 100006, guid: 3fca7056fb064504980226aedcdad873, type: 2}
   SwitchLight: {fileID: 0}
+  SpawnCartDelay: 3
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -105,7 +106,7 @@ MonoBehaviour:
   nodes:
   - {x: -123.003128, y: 122.049553, z: 0}
   - {x: -163.440475, y: 142.154816, z: 0}
-  - {x: -161.464218, y: 242.018448, z: 0}
+  - {x: -174.53421, y: 252.90892, z: 0}
   - {x: -231.30748, y: 249.490036, z: 0}
   nodeCount: 4
   initialized: 1

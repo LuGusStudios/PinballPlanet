@@ -5707,6 +5707,7 @@ MonoBehaviour:
   BonusPoints: 5000
   ResetDelay: 15
   CoinPrefab: {fileID: 100002, guid: 2a39143a386d1ba4baf830bbe087eda3, type: 2}
+  CoinsAmount: 10
   OpenSound: {fileID: 0}
   CoinsSound: {fileID: 8300000, guid: 5caaf4b0a5775b440898034595be4820, type: 3}
 --- !u!82 &456402243

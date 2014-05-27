@@ -37,7 +37,6 @@ public class MineCart : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
     // Called when this collider/rigidbody has begun touching another rigidbody/collider.

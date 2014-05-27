@@ -28,16 +28,23 @@ public class CrystalShard : Projectile
         // Update base.
         base.Update();
 
+        float rotSpeed = 100;
+        transform.Rotate(0,0,rotSpeed * Time.deltaTime);
+
+        // Update time.
         _timeAlive += Time.deltaTime;
 
+        // Destroy if life time exceeded.
         if(_timeAlive >= Lifetime)
             Destroy(gameObject);
     }
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log("--- " + other.tag + " entered ---");
+
         // Return if not colliding with ball.
-        if (other.gameObject.tag != "Ball")
+        if (other.tag != "Ball")
             return;
 
         // Destroy the shard.

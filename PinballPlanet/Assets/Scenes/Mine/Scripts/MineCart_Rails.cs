@@ -12,6 +12,10 @@ public class MineCart_Rails : MonoBehaviour
     // Light that controls the rail switch.
     public FloorLight_Toggle SwitchLight;
 
+    // How long till a new cart is spawned.
+    public float SpawnCartDelay = 3.0f; 
+
+    // Returns whether rail track is switched from default to bridge.
     public bool RailsSwitched
     {
         get { return SwitchLight.IsBroken; }
@@ -25,7 +29,7 @@ public class MineCart_Rails : MonoBehaviour
 
     public void OnMineCartDestroyed()
     {
-        SpawnMineCart();
+        Invoke("SpawnMineCart", SpawnCartDelay);
     }
 
     private void SpawnMineCart()
