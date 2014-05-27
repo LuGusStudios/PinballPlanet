@@ -17,6 +17,13 @@ public class MineCart : MonoBehaviour
     // How long the mine cart stays hidden.
     public float HiddenDelay = 1.0f;
 
+    // Prefab of the crystal shards to drop.
+    public GameObject CrystalShardPrefab = null;
+
+    // How many crystal shard to drop.
+    public int CrystalsToDropBarrier = 3;
+    public int CrystalsToDropHit = 3;
+
     // Use this for initialization
     void Start()
     {
@@ -161,6 +168,19 @@ public class MineCart : MonoBehaviour
     private void OnBridgeEndPathEnded()
     {
         transform.FindChild("MineCart02").animation.Play("MineCartBarrierHit");
+
+        // Spawn crystal shard projectiles.
+        for (int i = 0; i < CrystalsToDropBarrier; i++)
+        {
+            // Find area to spawn in and pick a random spot.
+            GameObject spawnArea = GameObject.Find("CrystalShardArea_Barrier");
+            Vector3 randPos = new Vector3(spawnArea.transform.position.x + Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.x, spawnArea.transform.position.y + Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.y);
+            // Spawn crystal shard at cart and move it to new position.
+            GameObject crystal = Instantiate(CrystalShardPrefab, transform.position, Quaternion.identity) as GameObject;
+            crystal.GetComponent<CrystalShard>().SetTarget(randPos);
+            // Give random rotation.
+            crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
+        }
 
         BridgeEndPathRevMove();
     }

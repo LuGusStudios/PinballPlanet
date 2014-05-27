@@ -2299,6 +2299,62 @@ Transform:
   - {fileID: 1588504692}
   - {fileID: 40974398}
   m_Father: {fileID: 0}
+--- !u!1 &322937180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 322937183}
+  - 33: {fileID: 322937182}
+  - 23: {fileID: 322937181}
+  m_Layer: 0
+  m_Name: CrystalShardArea_Barrier
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &322937181
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 322937180}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: e52c475a58000d94ea0b1728bed40275, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+--- !u!33 &322937182
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 322937180}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &322937183
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 322937180}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -156.477753, y: 148.121399, z: 2.5}
+  m_LocalScale: {x: 50, y: 50, z: 5}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &331937558
 GameObject:
   m_ObjectHideFlags: 0
@@ -5450,10 +5506,9 @@ MonoBehaviour:
   pathName: BridgeEndPath
   pathColor: {r: .117241383, g: 1, b: 0, a: 1}
   nodes:
-  - {x: -290.646606, y: 232.656723, z: 37.6535797}
-  - {x: -244.453918, y: 201.115875, z: 38.1033249}
-  - {x: -199.857727, y: 177.265686, z: 37.755661}
-  nodeCount: 3
+  - {x: -294.809967, y: 239.088943, z: 39.4674835}
+  - {x: -193.760605, y: 173.306854, z: 38.598526}
+  nodeCount: 2
   initialized: 1
   initialName: New Path 1
   pathVisible: 1
@@ -5657,6 +5712,10 @@ Prefab:
     - target: {fileID: 400022, guid: 5648d92585d8f144c8fb206440f47eed, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400038, guid: 5648d92585d8f144c8fb206440f47eed, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: .47948125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5648d92585d8f144c8fb206440f47eed, type: 2}
@@ -7785,6 +7844,32 @@ MeshFilter:
   m_PrefabInternal: {fileID: 796990182}
   m_GameObject: {fileID: 1118047881}
   m_Mesh: {fileID: 4300000, guid: fe4107f4d18febf429de47220ce6347a, type: 3}
+--- !u!1 &1126982134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100006, guid: 3fca7056fb064504980226aedcdad873, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1126982135}
+  m_Layer: 0
+  m_Name: MineCart_BridgeEnd_Rotation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1126982135
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400006, guid: 3fca7056fb064504980226aedcdad873, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1126982134}
+  m_LocalRotation: {x: -.204997167, y: -.676739395, z: -.204997227, w: .676739395}
+  m_LocalPosition: {x: -311.550201, y: 253.16806, z: 39.3671722}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1001 &1127851687
 Prefab:
   m_ObjectHideFlags: 0
@@ -8418,6 +8503,7 @@ GameObject:
   - 4: {fileID: 1235932229}
   - 33: {fileID: 1235932232}
   - 23: {fileID: 1235932231}
+  - 111: {fileID: 1235932230}
   m_Layer: 0
   m_Name: MineCart02
   m_TagString: Untagged
@@ -8436,6 +8522,22 @@ Transform:
   m_LocalScale: {x: .0215133261, y: .0215133261, z: .0215133261}
   m_Children: []
   m_Father: {fileID: 1584804485}
+--- !u!111 &1235932230
+Animation:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11100000, guid: 3fca7056fb064504980226aedcdad873,
+    type: 2}
+  m_PrefabInternal: {fileID: 234295786}
+  m_GameObject: {fileID: 1235932228}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 21ad553dcca56034bb6f3174310e40e6, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!23 &1235932231
 Renderer:
   m_ObjectHideFlags: 0
@@ -9934,6 +10036,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HiddenDelay: 1
+  CrystalShardPrefab: {fileID: 100002, guid: a383b178096d98b4daee967f59070e2a, type: 2}
+  CrystalsToDropBarrier: 3
+  CrystalsToDropHit: 3
 --- !u!4 &1584804485
 Transform:
   m_ObjectHideFlags: 0
@@ -11500,7 +11605,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400038, guid: 5648d92585d8f144c8fb206440f47eed, type: 2}
   m_PrefabInternal: {fileID: 796990182}
   m_GameObject: {fileID: 2057348537}
-  m_LocalRotation: {x: 0, y: 0, z: .47948131, w: .877552152}
+  m_LocalRotation: {x: 0, y: 0, z: .47948125, w: .877552152}
   m_LocalPosition: {x: -24.6729889, y: 7.57992554, z: 34.4251556}
   m_LocalScale: {x: 4.36264324, y: 6.06218195, z: 4.36264324}
   m_Children: []

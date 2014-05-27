@@ -50,13 +50,13 @@ public class Coin : Projectile
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         // Return if not colliding with ball.
         if (other.gameObject.tag != "Ball")
             return;
 
-        // Destroy the coin by destroying the parent object.
+        // Destroy the coin.
         Destroy(gameObject);
     }
 }

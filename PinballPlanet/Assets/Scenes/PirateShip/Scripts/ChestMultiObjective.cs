@@ -7,6 +7,7 @@ public class ChestMultiObjective : BreakableMultiObjective
 
     // Prefab of a coin to spawn.
     public GameObject CoinPrefab;
+    public int CoinsAmount = 10;
 
     // Sounds
     public AudioClip OpenSound;
@@ -45,7 +46,7 @@ public class ChestMultiObjective : BreakableMultiObjective
         }
 
         // Spawn coins.
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < CoinsAmount; i++)
         {
             // Find area to spawn in and pick a random spot.
             GameObject spawnArea = GameObject.Find("CoinSpawn");

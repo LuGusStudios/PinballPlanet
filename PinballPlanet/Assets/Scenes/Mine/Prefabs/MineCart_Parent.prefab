@@ -169,6 +169,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HiddenDelay: 1
+  CrystalShardPrefab: {fileID: 100002, guid: a383b178096d98b4daee967f59070e2a, type: 2}
+  CrystalsToDropBarrier: 3
+  CrystalsToDropHit: 3
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
