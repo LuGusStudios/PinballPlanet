@@ -23,11 +23,12 @@ public class MineCart : MonoBehaviour
     // How many crystal shard to drop.
     public int CrystalsToDropBarrier = 3;
     public int CrystalsToDropHit = 3;
+    public float CrystalsDropHitRadius = 50;
 
     // Use this for initialization
     void Start()
     {
-        _upsideDownTransform = transform.FindChild("MineCart02_UpsideDown").transform;
+        _upsideDownTransform = transform.Find("MineCart02_UpsideDown").transform;
 
         // Play start path animation.
         StartPathMove();
@@ -39,6 +40,29 @@ public class MineCart : MonoBehaviour
 
     }
 
+    // Called when this collider/rigidbody has begun touching another rigidbody/collider.
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag != "Ball")
+            return;
+
+        // Spawn crystal shard projectiles.
+        for (int i = 0; i < CrystalsToDropBarrier; i++)
+        {
+            // Pick a random spot around the cart to spawn the crystals.
+            Vector3 randPos = new Vector3(transform.position.x + Random.Range(-0.5f, 0.5f) * CrystalsDropHitRadius, transform.position.y + Random.Range(-0.5f, 0.5f) * CrystalsDropHitRadius);
+            // Spawn crystal shard at cart and set projectile target to new position.
+            GameObject crystal = Instantiate(CrystalShardPrefab, transform.position, Quaternion.identity) as GameObject;
+            crystal.GetComponent<CrystalShard>().SetTarget(randPos);
+            // Give random rotation.
+            crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
+        }
+
+        // Play shake animation.
+        transform.Find("MineCart_Pivot/MineCart02").animation.Play("MineCartShake");
+    }
+
+    // Destroys the mine cart and notifies the Rails script.
     private void DestroyCart()
     {
         GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().OnMineCartDestroyed();
@@ -63,7 +87,7 @@ public class MineCart : MonoBehaviour
     private void OnStartPathEnded()
     {
         // Play default path animation if not following bridge path.
-        if (!GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().RailsSwitched)
+        if (GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().RailsSwitched)
             BridgeStartPathMove();
         else
             DefaultPathMove();
@@ -131,7 +155,7 @@ public class MineCart : MonoBehaviour
     private void BridgeStartPathRevMove()
     {
         // Set rotation upside down, to compensate for weird iTween behaviour.
-        transform.FindChild("MineCart02").rotation = _upsideDownTransform.rotation;
+        transform.Find("MineCart_Pivot").rotation = _upsideDownTransform.rotation;
         
         iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPathReversed(BridgeStartPath)
                                             , "movetopath", false
@@ -167,7 +191,8 @@ public class MineCart : MonoBehaviour
     // Called when the bridge path ends.
     private void OnBridgeEndPathEnded()
     {
-        transform.FindChild("MineCart02").animation.Play("MineCartBarrierHit");
+        // Play barrier hit animation.
+        transform.Find("MineCart_Pivot/MineCart02").animation.Play("MineCartBarrierHit");
 
         // Spawn crystal shard projectiles.
         for (int i = 0; i < CrystalsToDropBarrier; i++)
@@ -182,6 +207,7 @@ public class MineCart : MonoBehaviour
             crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
         }
 
+        // Reverse cart.
         BridgeEndPathRevMove();
     }
 
