@@ -56,7 +56,7 @@ public class MineCart : MonoBehaviour
     private void OnStartPathEnded()
     {
         // Play default path animation if not following bridge path.
-        if (GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().RailsSwitched)
+        if (!GameObject.Find("MineCart_Paths").GetComponent<MineCart_Rails>().RailsSwitched)
             BridgeStartPathMove();
         else
             DefaultPathMove();
@@ -146,11 +146,13 @@ public class MineCart : MonoBehaviour
     // Make cart follow bridge path.
     private void BridgeEndPathMove()
     {
+        transform.rotation = GameObject.Find("MineCart_BridgeEnd_Rotation").transform.rotation;
+
         iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPath(BridgeEndPath)
                                             , "movetopath", false
                                             , "orienttopath", false
                                             , "looktime", 0.1f
-                                            , "speed", 100
+                                            , "speed", 150
                                             , "easetype", iTween.EaseType.linear
                                             , "oncomplete", "OnBridgeEndPathEnded"));
     }
@@ -158,6 +160,8 @@ public class MineCart : MonoBehaviour
     // Called when the bridge path ends.
     private void OnBridgeEndPathEnded()
     {
+        transform.FindChild("MineCart02").animation.Play("MineCartBarrierHit");
+
         BridgeEndPathRevMove();
     }
 
