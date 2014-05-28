@@ -82,7 +82,7 @@ public class MineCart : MonoBehaviour
     private void OnStartPathEnded()
     {
         // Play default path animation if not following bridge path.
-        if (!GameObject.Find("MineCart_Paths_02").GetComponent<MineCart_Rails>().RailsSwitched)
+        if (GameObject.Find("MineCart_Paths_02").GetComponent<MineCart_Rails>().RailsSwitched)
             BridgeStartPathMove();
         else
             DefaultPathMove();
@@ -143,7 +143,7 @@ public class MineCart : MonoBehaviour
     private void OnBridgeStartPathEnded()
     {
         // Play bridge broken animation if all TNT boxes are hit otherwise play bridge end animation.
-        if (!GameObject.Find("Bridge").GetComponent<TNTMultiObjective>().IsBroken)
+        if (GameObject.Find("Bridge").GetComponent<TNTMultiObjective>().IsBroken)
             PlayCrashAnimation();
         else
             Invoke("BridgeEndPathMove", HiddenDelay);
