@@ -82,7 +82,7 @@ public class MineCart : MonoBehaviour
     private void OnStartPathEnded()
     {
         // Play default path animation if not following bridge path.
-        if (GameObject.Find("MineCart_Paths_02").GetComponent<MineCart_Rails>().RailsSwitched)
+        if (!GameObject.Find("MineCart_Paths_02").GetComponent<MineCart_Rails>().RailsSwitched)
             BridgeStartPathMove();
         else
             DefaultPathMove();
@@ -142,8 +142,11 @@ public class MineCart : MonoBehaviour
     // Called when the bridge start path ends.
     private void OnBridgeStartPathEnded()
     {
-        // Play bridge end animation with small delay when out of vision.
-        Invoke("BridgeEndPathMove", HiddenDelay);
+        // Play bridge broken animation if all TNT boxes are hit otherwise play bridge end animation.
+        if (!GameObject.Find("Bridge").GetComponent<TNTMultiObjective>().IsBroken)
+            PlayCrashAnimation();
+        else
+            Invoke("BridgeEndPathMove", HiddenDelay);
     }
 
     // Make cart follow bridge start reversed path.
@@ -151,7 +154,7 @@ public class MineCart : MonoBehaviour
     {
         // Set rotation upside down, to compensate for weird iTween behaviour.
         transform.Find("MineCart_Pivot").rotation = _upsideDownTransform.rotation;
-        
+
         iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPathReversed(BridgeStartPath)
                                             , "movetopath", false
                                             , "orienttopath", true
@@ -186,54 +189,27 @@ public class MineCart : MonoBehaviour
     // Called when the bridge path ends.
     private void OnBridgeEndPathEnded()
     {
-        if (GameObject.Find("Bridge").GetComponent<TNTMultiObjective>().IsBroken)
+        // Play barrier hit animation.
+        transform.Find("MineCart_Pivot/MineCart02").animation.Play("MineCartBarrierHit");
+
+        // Spawn crystal shard projectiles.
+        for (int i = 0; i < CrystalsToDropBarrier; i++)
         {
-            // Play minecart crash animation.
-            transform.Find("MineCart_Pivot/MineCart02").animation.Play("MineCartCrash");
-            //transform.Find("MineCart_Pivot/MineCart02").animation["MineCartCrash"].speed = 2;
-            float destroyCartDelay = transform.Find("MineCart_Pivot/MineCart02").animation["MineCartCrash"].length + 2;
-            Invoke("DestroyCart", destroyCartDelay);
-
-            // Spawn crystal shard projectiles.
-            for (int i = 0; i < CrystalsToDropCrash; i++)
-            {
-                // Find area to spawn in and pick a random spot.
-                GameObject spawnArea = GameObject.Find("CrystalShardArea_Crash");
-                Vector3 randPos = new Vector3( Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.x,
-                                               Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.y);
-                randPos = spawnArea.transform.rotation * randPos;
-                randPos += spawnArea.transform.position;
-                // Spawn crystal shard at cart and move it to new position.
-                GameObject crystal = Instantiate(CrystalShardPrefab, transform.position, Quaternion.identity) as GameObject;
-                crystal.GetComponent<CrystalShard>().SetTarget(randPos);
-                // Give random rotation.
-                crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
-            }
+            // Find area to spawn in and pick a random spot.
+            GameObject spawnArea = GameObject.Find("CrystalShardArea_Barrier");
+            Vector3 randPos = new Vector3(Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.x,
+                                           Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.y);
+            randPos = spawnArea.transform.rotation * randPos;
+            randPos += spawnArea.transform.position;
+            // Spawn crystal shard at cart and move it to new position.
+            GameObject crystal = Instantiate(CrystalShardPrefab, transform.position, Quaternion.identity) as GameObject;
+            crystal.GetComponent<CrystalShard>().SetTarget(randPos);
+            // Give random rotation.
+            crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
         }
-        else
-        {
-            // Play barrier hit animation.
-            transform.Find("MineCart_Pivot/MineCart02").animation.Play("MineCartBarrierHit");
 
-            // Spawn crystal shard projectiles.
-            for (int i = 0; i < CrystalsToDropBarrier; i++)
-            {
-                // Find area to spawn in and pick a random spot.
-                GameObject spawnArea = GameObject.Find("CrystalShardArea_Barrier");
-                Vector3 randPos = new Vector3( Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.x,
-                                               Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.y);
-                randPos = spawnArea.transform.rotation * randPos;
-                randPos += spawnArea.transform.position;
-                // Spawn crystal shard at cart and move it to new position.
-                GameObject crystal = Instantiate(CrystalShardPrefab, transform.position, Quaternion.identity) as GameObject;
-                crystal.GetComponent<CrystalShard>().SetTarget(randPos);
-                // Give random rotation.
-                crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
-            }
-
-            // Reverse cart.
-            BridgeEndPathRevMove();            
-        }
+        // Reverse cart.
+        BridgeEndPathRevMove();
     }
 
     // Make cart follow bridge end reversed path.
@@ -255,4 +231,38 @@ public class MineCart : MonoBehaviour
         Invoke("BridgeStartPathRevMove", HiddenDelay);
     }
 
+    // Plays the crash animation and spawns a number of crystal shards.
+    public void PlayCrashAnimation()
+    {
+        transform.position = GameObject.Find("MineCart_BridgeEnd_Rotation").transform.position;
+        transform.rotation = GameObject.Find("MineCart_BridgeEnd_Rotation").transform.rotation;
+
+        // Play minecart crash animation.
+        transform.Find("MineCart_Pivot/MineCart02").animation.Play("MineCartCrash");
+        //transform.Find("MineCart_Pivot/MineCart02").animation["MineCartCrash"].speed = 2;
+        float destroyCartDelay = transform.Find("MineCart_Pivot/MineCart02").animation["MineCartCrash"].length + 2;
+        Invoke("DestroyCart", destroyCartDelay);
+
+        // Spawn crystals after a certain delay.
+        Invoke("SpawnCrashCrystals", 0.7f);
+    }
+
+    private void SpawnCrashCrystals()
+    {
+        // Spawn crystal shard projectiles.
+        for (int i = 0; i < CrystalsToDropCrash; i++)
+        {
+            // Find area to spawn in and pick a random spot.
+            GameObject spawnArea = GameObject.Find("CrystalShardArea_Crash");
+            Vector3 randPos = new Vector3( Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.x,
+                                           Random.Range(-0.5f, 0.5f) * spawnArea.transform.localScale.y);
+            randPos = spawnArea.transform.rotation * randPos;
+            randPos += spawnArea.transform.position;
+            // Spawn crystal shard at cart and move it to new position.
+            GameObject crystal = Instantiate(CrystalShardPrefab, transform.FindChild("MineCart_Pivot/MineCart02").position, Quaternion.identity) as GameObject;
+            crystal.GetComponent<CrystalShard>().SetTarget(randPos);
+            // Give random rotation.
+            crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
+        }
+    }
 }
