@@ -25,7 +25,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400002}
-  - 111: {fileID: 11100000}
   m_Layer: 0
   m_Name: MineCart_Pivot
   m_TagString: Untagged
@@ -109,8 +108,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
-  m_LocalRotation: {x: 0, y: -.707106829, z: 0, w: .707106829}
-  m_LocalPosition: {x: -121.616455, y: 119.8358, z: 47.7547836}
+  m_LocalRotation: {x: -.203966141, y: -.677050829, z: -.203966185, w: .677050829}
+  m_LocalPosition: {x: -202.499115, y: 176.926926, z: 37.3915443}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
@@ -184,22 +183,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 19.9500008, y: 17.7999992, z: 23.5300007}
   m_Center: {x: 6.69000006, y: 0, z: 0}
---- !u!111 &11100000
-Animation:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 0}
-  m_Animations:
-  - {fileID: 7400000, guid: 21ad553dcca56034bb6f3174310e40e6, type: 2}
-  - {fileID: 7400000, guid: 5db48c52546d71d49b6d5522aac6ba8b, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!111 &11100002
 Animation:
   m_ObjectHideFlags: 1
@@ -212,6 +195,7 @@ Animation:
   m_Animations:
   - {fileID: 7400000, guid: 21ad553dcca56034bb6f3174310e40e6, type: 2}
   - {fileID: 7400000, guid: 5db48c52546d71d49b6d5522aac6ba8b, type: 2}
+  - {fileID: 7400000, guid: aab1aa3f9aeb190479e93ccf6dd34d81, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -231,6 +215,7 @@ MonoBehaviour:
   CrystalShardPrefab: {fileID: 100002, guid: a383b178096d98b4daee967f59070e2a, type: 2}
   CrystalsToDropBarrier: 3
   CrystalsToDropHit: 3
+  CrystalsToDropCrash: 15
   CrystalsDropHitRadius: 50
 --- !u!114 &11400002
 MonoBehaviour:
