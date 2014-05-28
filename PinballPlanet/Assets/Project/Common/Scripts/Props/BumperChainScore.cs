@@ -6,24 +6,32 @@ public static class ChainScore
     public static int ChainBonusScore = 50;
     public static int ChainMultiplier = 0;
     // Time chain stays active since last barrel hit.
-    public static float ChainResetTime = 5.0f;
+    public static float ChainResetTime = 1.5f;
+    // Time till actual reset: single chain reset time is added for every object that has a BumperChainScore script attached.
+    public static float ActualChainResetTime = 0;
     public static float TimeSinceHit = 0;
 }
 
 public class BumperChainScore : MonoBehaviour
 {
     // Hit Score.
-    public int score = 100;
-    public AudioClip sound;
+    public int Score = 100;
+    public AudioClip Sound;
 
-    // Called at fixed frames.
+    // Use this for initialization
+    void Start()
+    {
+        ChainScore.ActualChainResetTime += ChainScore.ChainResetTime;
+    }
+
+    // Called every frame.
     void Update()
     {
         // Only update if barrels are hit at least once.
         if (ChainScore.ChainMultiplier > 1)
         {
             // Reset if the time since the last barrel hit exceeds the time to reset.
-            if (ChainScore.TimeSinceHit < ChainScore.ChainResetTime)
+            if (ChainScore.TimeSinceHit < ChainScore.ActualChainResetTime)
             {
                 ChainScore.TimeSinceHit += Time.deltaTime;
             }
@@ -51,7 +59,7 @@ public class BumperChainScore : MonoBehaviour
         ChainScore.TimeSinceHit = 0;
 
         // Give score
-        ScoreManager.use.ShowScore(score + ChainScore.ChainBonusScore * (ChainScore.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, sound, Color.white);
+        ScoreManager.use.ShowScore(Score + ChainScore.ChainBonusScore * (ChainScore.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, Sound, Color.white);
 
     }
 }

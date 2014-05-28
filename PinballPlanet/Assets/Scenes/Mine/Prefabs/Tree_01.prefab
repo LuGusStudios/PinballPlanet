@@ -126,7 +126,7 @@ Animation:
   serializedVersion: 3
   m_Animation: {fileID: 0}
   m_Animations:
-  - {fileID: 7400000, guid: 6e9053e34bcdc4c4aae49318d136a0d3, type: 2}
+  - {fileID: 7400000, guid: 4e54cee60a961f043ae483e3d105715b, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -142,6 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97eae515ad9574145972168fe64b5fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: 100
+  sound: {fileID: 0}
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1

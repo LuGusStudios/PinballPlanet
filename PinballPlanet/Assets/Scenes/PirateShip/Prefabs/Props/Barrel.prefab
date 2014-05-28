@@ -41,8 +41,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: .542379916, y: .45367837, z: .45367834, w: .542379916}
-  m_LocalPosition: {x: -65.2901764, y: 317.07431, z: 0}
+  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
+  m_LocalPosition: {x: -56.6194916, y: -7.39867401, z: -2.78578282e-05}
   m_LocalScale: {x: 1.25999999, y: 1.25999999, z: 1.25999999}
   m_Children:
   - {fileID: 400002}
@@ -96,7 +96,7 @@ Animation:
   serializedVersion: 3
   m_Animation: {fileID: 0}
   m_Animations:
-  - {fileID: 7400000, guid: 6e9053e34bcdc4c4aae49318d136a0d3, type: 2}
+  - {fileID: 7400000, guid: 4e54cee60a961f043ae483e3d105715b, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76afe7012da8ce44eaa282f0557676c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 97eae515ad9574145972168fe64b5fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   score: 100
@@ -120,7 +120,7 @@ CapsuleCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Material: {fileID: 13400000, guid: e5ad823a74a83104c9346bf082cfd107, type: 2}
+  m_Material: {fileID: 13400000, guid: 63ce31733f201954698024e6513e2ea4, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 11.4424963
