@@ -27,7 +27,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -64.2312775, y: 246.756302, z: 5.10735254e-06}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -58,9 +58,9 @@ MonoBehaviour:
   pathName: BridgeEndPath
   pathColor: {r: .117241383, g: 1, b: 0, a: 1}
   nodes:
-  - {x: -342.452911, y: 232.633133, z: 25.3208008}
-  - {x: -294.975037, y: 237.352753, z: 33.7216568}
-  - {x: -198.738724, y: 175.423813, z: 33.6029358}
+  - {x: -311.833344, y: 221.498749, z: 39}
+  - {x: -280.261749, y: 227.80899, z: 39}
+  - {x: -215.745148, y: 188.762192, z: 39}
   nodeCount: 3
   initialized: 1
   initialName: New Path 1
@@ -80,11 +80,11 @@ MonoBehaviour:
   pathColor: {r: 0, g: 1, b: 1, a: 1}
   nodes:
   - {x: -123.016785, y: 122.041283, z: 0}
-  - {x: -169.873611, y: 113.203346, z: 0}
-  - {x: -205.996475, y: 109.484604, z: 0}
-  - {x: -229.18602, y: 108.191742, z: 15.9849701}
-  - {x: -264.330292, y: 110.621666, z: 20.3144188}
-  - {x: -296.709229, y: 110.074371, z: 20.6003227}
+  - {x: -167.350754, y: 122.39312, z: 1.08390808}
+  - {x: -192.198425, y: 116.29055, z: 4.91498184}
+  - {x: -219.250687, y: 108.099487, z: 21.5767975}
+  - {x: -243.29393, y: 107.998146, z: 23.9799347}
+  - {x: -294.702942, y: 108.577103, z: 24.0985832}
   nodeCount: 6
   initialized: 1
   initialName: New Path 3
@@ -103,14 +103,15 @@ MonoBehaviour:
   pathName: DefaultPath
   pathColor: {r: 1, g: 0, b: 0, a: 1}
   nodes:
-  - {x: -123.003128, y: 122.049553, z: 0}
-  - {x: -163.440475, y: 142.154816, z: 0}
-  - {x: -161.464218, y: 242.018448, z: 0}
-  - {x: -231.30748, y: 249.490036, z: 0}
-  nodeCount: 4
+  - {x: -123.051193, y: 122.042809, z: 0}
+  - {x: -141.290939, y: 127.604828, z: 0}
+  - {x: -162.549728, y: 154.384872, z: 0}
+  - {x: -173.024704, y: 231.226593, z: 0}
+  - {x: -230.951904, y: 251.978607, z: 0}
+  nodeCount: 5
   initialized: 1
   initialName: New Path 2
-  pathVisible: 1
+  pathVisible: 0
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,13 +126,14 @@ MonoBehaviour:
   pathName: StartPath
   pathColor: {r: .613792896, g: 0, b: 1, a: 1}
   nodes:
-  - {x: -23.6824341, y: 186.855377, z: 0}
-  - {x: -90.4197845, y: 132.573242, z: 0}
-  - {x: -123.004646, y: 122.008041, z: 0}
-  nodeCount: 3
+  - {x: -21.9418068, y: 186.855377, z: 0}
+  - {x: -87.8010406, y: 131.825027, z: 0}
+  - {x: -103.239159, y: 122.43589, z: 0}
+  - {x: -123.004601, y: 122.008003, z: 0}
+  nodeCount: 4
   initialized: 1
   initialName: New Path 1
-  pathVisible: 1
+  pathVisible: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
