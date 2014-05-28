@@ -2,8 +2,10 @@
 
 public class Crystal : Breakable
 {
-    // Seperate shard subobjects of the crystal.
+    // Seperate shard subobjects.
     private GameObject _shard1, _shard2, _shard3, _particles, _light;
+
+    // Index of currently broken subobject.
     private int _breakIndex = 0;
 
     // Time till reset.

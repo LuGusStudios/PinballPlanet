@@ -19,6 +19,7 @@ public class LaunchPoint_Mine : MonoBehaviour {
 			return;
 		
 		GameObject.Find("FlowBackPreventer_02").GetComponent<FlowBackPreventer_02>().Reset();
-		
+	
+        GameObject.Find("Logs").GetComponent<Logs>().Unbreak();
 	}
 }

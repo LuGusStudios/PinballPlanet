@@ -41,8 +41,6 @@ public class CrystalShard : Projectile
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("--- " + other.tag + " entered ---");
-
         // Return if not colliding with ball.
         if (other.tag != "Ball")
             return;
