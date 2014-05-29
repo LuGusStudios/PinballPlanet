@@ -43,8 +43,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -103.30043, y: 295.424957, z: 3.52173956e-05}
+  m_LocalRotation: {x: .432758421, y: -.559213877, z: -.559213996, w: .432758421}
+  m_LocalPosition: {x: -103.188354, y: 294.801117, z: 3.43322754e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -126,7 +126,7 @@ Animation:
   serializedVersion: 3
   m_Animation: {fileID: 0}
   m_Animations:
-  - {fileID: 7400000, guid: 4e54cee60a961f043ae483e3d105715b, type: 2}
+  - {fileID: 7400000, guid: 7ac8cac1522789e4a9cb40366d49a2db, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -142,8 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97eae515ad9574145972168fe64b5fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 100
-  sound: {fileID: 0}
+  Score: 100
+  Sound: {fileID: 0}
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1

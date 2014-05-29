@@ -62,7 +62,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400006}
-  - 95: {fileID: 9500000}
   m_Layer: 0
   m_Name: Level_Borders
   m_TagString: Untagged
@@ -186,21 +185,21 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300004, guid: 8818993b72b43d34bb16fc42fa8cce27, type: 3}
+  m_Mesh: {fileID: 4300000, guid: d6d3fe0ccc2e5cc4f9f32207d2617bd1, type: 3}
 --- !u!33 &3300002
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Mesh: {fileID: 4300002, guid: 8818993b72b43d34bb16fc42fa8cce27, type: 3}
+  m_Mesh: {fileID: 4300004, guid: d6d3fe0ccc2e5cc4f9f32207d2617bd1, type: 3}
 --- !u!33 &3300004
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
-  m_Mesh: {fileID: 4300000, guid: 8818993b72b43d34bb16fc42fa8cce27, type: 3}
+  m_Mesh: {fileID: 4300004, guid: d6d3fe0ccc2e5cc4f9f32207d2617bd1, type: 3}
 --- !u!64 &6400000
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -240,20 +239,6 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 4300000, guid: 8818993b72b43d34bb16fc42fa8cce27, type: 3}
---- !u!95 &9500000
-Animator:
-  serializedVersion: 2
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100006}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 8818993b72b43d34bb16fc42fa8cce27, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_ApplyRootMotion: 1
-  m_AnimatePhysics: 0
-  m_HasTransformHierarchy: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
