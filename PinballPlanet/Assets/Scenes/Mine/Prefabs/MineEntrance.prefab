@@ -155,7 +155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Exit: {fileID: 0}
   LaunchForce: 500
-  LaunchDelay: 2
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

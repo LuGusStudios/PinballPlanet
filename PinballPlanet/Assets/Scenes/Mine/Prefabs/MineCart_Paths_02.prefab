@@ -27,7 +27,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -64.2312775, y: 246.756302, z: 5.10735254e-06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,6 +44,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MineCartPrefab: {fileID: 100006, guid: 3fca7056fb064504980226aedcdad873, type: 2}
   SwitchLight: {fileID: 0}
+  SpawnCartDelay: 3
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -80,7 +81,7 @@ MonoBehaviour:
   pathColor: {r: 0, g: 1, b: 1, a: 1}
   nodes:
   - {x: -123.016785, y: 122.041283, z: 0}
-  - {x: -167.350754, y: 122.39312, z: 1.08390808}
+  - {x: -167.350754, y: 123.686867, z: 1.08390808}
   - {x: -192.198425, y: 116.29055, z: 4.91498184}
   - {x: -219.250687, y: 108.099487, z: 21.5767975}
   - {x: -243.29393, y: 107.998146, z: 23.9799347}
@@ -104,14 +105,14 @@ MonoBehaviour:
   pathColor: {r: 1, g: 0, b: 0, a: 1}
   nodes:
   - {x: -123.051193, y: 122.042809, z: 0}
-  - {x: -141.290939, y: 127.604828, z: 0}
-  - {x: -162.549728, y: 154.384872, z: 0}
-  - {x: -173.024704, y: 231.226593, z: 0}
-  - {x: -230.951904, y: 251.978607, z: 0}
+  - {x: -140.66655, y: 126.62854, z: 0}
+  - {x: -164.559586, y: 156.603897, z: 0}
+  - {x: -175.158508, y: 234.376923, z: .144706726}
+  - {x: -223.066757, y: 247.499405, z: 0}
   nodeCount: 5
   initialized: 1
   initialName: New Path 2
-  pathVisible: 0
+  pathVisible: 1
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -133,7 +134,7 @@ MonoBehaviour:
   nodeCount: 4
   initialized: 1
   initialName: New Path 1
-  pathVisible: 0
+  pathVisible: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

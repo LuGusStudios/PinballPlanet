@@ -11,9 +11,6 @@ public class TeleportBall : MonoBehaviour
     // How hard the new balls launch.
     public float LaunchForce = 500;
 
-    // How long till the ball launches from the exit.
-    public float LaunchDelay = 2;
-
     // Stores the ball when teleporting.
     private GameObject _ball = null;
 
@@ -32,16 +29,10 @@ public class TeleportBall : MonoBehaviour
 
         // Set ball at exit.
         _ball = other.gameObject;
-        _ball.transform.position = Exit.transform.position;
-        _ball.rigidbody.isKinematic = true;
-
-        Invoke("LaunchBall", LaunchDelay);
-    }
-
-    private void LaunchBall()
-    {
+        Vector3 newPos = Exit.transform.position;
+        newPos.z = 5.637837f;
+        _ball.transform.position = newPos;
         // Apply force.
-        _ball.rigidbody.isKinematic = false;
-        _ball.rigidbody.velocity = Exit.up * LaunchForce;
+        _ball.rigidbody.velocity = Exit.up.normalized * LaunchForce;
     }
 }

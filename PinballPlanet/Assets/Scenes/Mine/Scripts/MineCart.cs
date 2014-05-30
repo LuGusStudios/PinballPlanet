@@ -143,7 +143,7 @@ public class MineCart : MonoBehaviour
     private void OnBridgeStartPathEnded()
     {
         // Play bridge broken animation if all TNT boxes are hit otherwise play bridge end animation.
-        if (GameObject.Find("Bridge").GetComponent<TNTMultiObjective>().IsBroken)
+        if (GameObject.Find("BridgeMultiObjective").GetComponent<TNTMultiObjective>().IsBroken)
             PlayCrashAnimation();
         else
             Invoke("BridgeEndPathMove", HiddenDelay);

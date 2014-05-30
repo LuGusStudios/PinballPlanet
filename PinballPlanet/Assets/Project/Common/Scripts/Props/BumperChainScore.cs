@@ -18,6 +18,8 @@ public class BumperChainScore : MonoBehaviour
     public int Score = 100;
     public AudioClip Sound;
 
+    public string AnimationName;
+
     // Use this for initialization
     void Start()
     {
@@ -51,8 +53,8 @@ public class BumperChainScore : MonoBehaviour
             return;
 
         // Play bump animation.
-        GetComponent<Animation>().Play("Bump");
-
+        GetComponent<Animation>().Play(AnimationName);
+        
         // Add to the score chain.
         ++ChainScore.ChainMultiplier;
         // Reset time since last barrel hit.
@@ -60,6 +62,5 @@ public class BumperChainScore : MonoBehaviour
 
         // Give score
         ScoreManager.use.ShowScore(Score + ChainScore.ChainBonusScore * (ChainScore.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, Sound, Color.white);
-
     }
 }
