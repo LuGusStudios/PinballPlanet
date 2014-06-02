@@ -16,6 +16,9 @@ public class TNT : Breakable
         // Play animation on child lock.
         gameObject.transform.FindChild("DetonatorPlunger").GetComponent<Animation>().Play("TNTPush");
 
+        // Turn off collider.
+        collider.enabled = false;
+
         // Call inherited break function.
         base.Break();
     }
@@ -29,6 +32,9 @@ public class TNT : Breakable
         animState.time = animState.length;
         const float animSpeed = -0.5f;
         animState.speed = animSpeed;
+
+        // Turn on collider.
+        collider.enabled = true;
 
         // Reset completed after animation is done.
         Invoke("UnbreakBase", animState.length / animSpeed);
