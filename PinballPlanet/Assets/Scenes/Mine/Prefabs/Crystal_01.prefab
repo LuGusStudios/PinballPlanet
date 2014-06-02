@@ -367,7 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsBroken: 0
   BrokenScore: 100
-  ResetTime: 8
+  ResetTime: 12
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
