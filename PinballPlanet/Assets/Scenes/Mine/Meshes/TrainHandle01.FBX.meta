@@ -1,13 +1,23 @@
 fileFormatVersion: 2
 guid: 082b794f71f8cfb41a66d2f90670dca1
 ModelImporter:
-  serializedVersion: 16
+  serializedVersion: 15
   fileIDToRecycleName:
     100000: //RootNode
+    100002: TrainHendel
+    100004: TrainHendelBrake
     400000: //RootNode
+    400002: TrainHendel
+    400004: TrainHendelBrake
     2300000: //RootNode
+    2300002: TrainHendel
+    2300004: TrainHendelBrake
     3300000: //RootNode
+    3300002: TrainHendel
+    3300004: TrainHendelBrake
     4300000: Cylinder001
+    4300002: TrainHendelBrake
+    4300004: TrainHendel
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -59,6 +69,5 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
-  additionalBone: 0
+  animationType: 0
   userData: 
