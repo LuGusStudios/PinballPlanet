@@ -9,6 +9,9 @@ public class TNTMultiObjective : BreakableMultiObjective
     // Explosion particle spawned on activation.
     public GameObject ExplosionPrefab;
 
+    // Sounds
+    public AudioClip ExplosionSound;
+
     protected override void Start()
     {
         // Replace bridge with broken version.
@@ -23,6 +26,10 @@ public class TNTMultiObjective : BreakableMultiObjective
     {
         _bridgeDestroyed.SetActive(true);
         _bridge.SetActive(false);
+
+        // Play coins falling sound.
+        if (audio != null)
+            audio.PlayOneShot(ExplosionSound);
 
         Instantiate(ExplosionPrefab);
 

@@ -123,6 +123,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 11826153}
   - 64: {fileID: 11826156}
+  - 114: {fileID: 11826157}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Untagged
@@ -186,6 +187,20 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 4300024, guid: 8818993b72b43d34bb16fc42fa8cce27, type: 3}
+--- !u!114 &11826157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 11826152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52cac72912655cb459455f3ce87aa3bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 100
+  sound: {fileID: 8300000, guid: b14fea9eb405a43a5b69b836528d416c, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &24230226
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,7 +917,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &146515603
 Animator:
   serializedVersion: 2
@@ -1153,19 +1168,31 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
       propertyPath: m_LocalRotation.x
-      value: .706818581
+      value: .697425127
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -.0201872736
+      value: -.116611212
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -.0201872848
+      value: -.116611235
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
       propertyPath: m_LocalRotation.w
-      value: .706818581
+      value: .697425187
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
+      propertyPath: m_Size.x
+      value: 9.85000038
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
+      propertyPath: m_Size.y
+      value: 14.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
+      propertyPath: m_Size.z
+      value: 12.3999996
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
@@ -4980,7 +5007,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 12, y: 14, z: 15}
+  m_Size: {x: 9.85000038, y: 14.5, z: 12.3999996}
   m_Center: {x: 0, y: 6.65999985, z: -.670000017}
 --- !u!23 &418398037
 Renderer:
@@ -5018,7 +5045,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400000, guid: c469d4b45bba89e4eba365e1a2525cc2, type: 2}
   m_PrefabInternal: {fileID: 216604947}
   m_GameObject: {fileID: 418398035}
-  m_LocalRotation: {x: .706818581, y: -.0201872736, z: -.0201872848, w: .706818581}
+  m_LocalRotation: {x: .697425127, y: -.116611212, z: -.116611235, w: .697425187}
   m_LocalPosition: {x: -10.6197844, y: 124.310883, z: 4.08702108e-05}
   m_LocalScale: {x: 1.33656847, y: 1.33656847, z: 1.33656847}
   m_Children:
@@ -5537,6 +5564,7 @@ MonoBehaviour:
   BonusPoints: 5000
   ResetDelay: 20
   ExplosionPrefab: {fileID: 100004, guid: 7c627c060ecfc6444915e700c65831d5, type: 2}
+  ExplosionSound: {fileID: 0}
 --- !u!4 &470827424
 Transform:
   m_ObjectHideFlags: 0
@@ -7698,6 +7726,10 @@ Prefab:
     - target: {fileID: 400000, guid: 74b5d1beb90f5f646a2801344f2da6b5, type: 2}
       propertyPath: m_LocalRotation.w
       value: .707106829
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400000, guid: 74b5d1beb90f5f646a2801344f2da6b5, type: 2}
+      propertyPath: m_Convex
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 74b5d1beb90f5f646a2801344f2da6b5, type: 2}
@@ -13611,6 +13643,7 @@ GameObject:
   - 23: {fileID: 1384716874}
   - 65: {fileID: 1384716876}
   - 114: {fileID: 1384716877}
+  - 114: {fileID: 1384716878}
   m_Layer: 0
   m_Name: Log03
   m_TagString: Untagged
@@ -13684,6 +13717,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751fa0d02e66cf642bdb9bdaa5ae4ba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1384716878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1384716872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52cac72912655cb459455f3ce87aa3bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 100
+  sound: {fileID: 0}
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1396782981
 GameObject:
   m_ObjectHideFlags: 0
@@ -14203,6 +14250,10 @@ Prefab:
     - target: {fileID: 400000, guid: 0460fedf8918fea489f94654eff6c5aa, type: 2}
       propertyPath: m_LocalRotation.w
       value: .707106829
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 0460fedf8918fea489f94654eff6c5aa, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0460fedf8918fea489f94654eff6c5aa, type: 2}
@@ -18627,6 +18678,7 @@ GameObject:
   - 23: {fileID: 2094815059}
   - 65: {fileID: 2094815061}
   - 114: {fileID: 2094815062}
+  - 114: {fileID: 2094815063}
   m_Layer: 0
   m_Name: Log02
   m_TagString: Untagged
@@ -18700,6 +18752,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751fa0d02e66cf642bdb9bdaa5ae4ba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2094815063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2094815057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52cac72912655cb459455f3ce87aa3bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 100
+  sound: {fileID: 0}
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2114645944
 GameObject:
   m_ObjectHideFlags: 0
