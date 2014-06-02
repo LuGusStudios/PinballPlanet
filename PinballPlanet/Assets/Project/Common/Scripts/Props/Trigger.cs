@@ -12,9 +12,9 @@ public class Trigger : MonoBehaviour
     public event TriggeredEventHandler Triggered;
 
     // Called when another object enters trigger.
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("--- Trigger hit. ---");
-        Triggered(gameObject, collider.gameObject);
+        if(Triggered != null)
+            Triggered(gameObject, other.gameObject);
     }
 }
