@@ -25,4 +25,4 @@ public class SpawnOnTouch : MonoBehaviour
 
         Instantiate(ObjectToSpawn, transform.position + RelativePos, Quaternion.identity);
     }
-}
+} 
