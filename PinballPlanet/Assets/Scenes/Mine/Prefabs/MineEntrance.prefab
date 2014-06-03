@@ -12,6 +12,7 @@ GameObject:
   - 65: {fileID: 6500000}
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: MineEntrance
   m_TagString: Untagged
@@ -155,6 +156,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Exit: {fileID: 0}
   LaunchForce: 500
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52cac72912655cb459455f3ce87aa3bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 400
+  sound: {fileID: 8300000, guid: cf58e1ced9389234184ca42ff3c71dbe, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

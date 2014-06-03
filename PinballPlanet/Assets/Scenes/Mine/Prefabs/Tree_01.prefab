@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Score: 100
-  Sound: {fileID: 0}
+  Sound: {fileID: 8300000, guid: fc002b047bb56bf4f9a13e7d420e717e, type: 3}
   AnimationName: PineTree
 --- !u!114 &11400002
 MonoBehaviour:

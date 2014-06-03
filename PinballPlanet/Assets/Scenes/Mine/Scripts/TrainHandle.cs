@@ -7,6 +7,8 @@ public class TrainHandle : Triggerable
 
     private bool _setDefault = false;
 
+    public AudioClip Sound;
+
     protected override void Start()
     {
         // Automatically set to default.
@@ -24,6 +26,9 @@ public class TrainHandle : Triggerable
             SetBridge();
         else
             SetDefault();
+
+        if (Sound != null)
+            audio.PlayOneShot(Sound);
     }
 
     public void SetDefault()

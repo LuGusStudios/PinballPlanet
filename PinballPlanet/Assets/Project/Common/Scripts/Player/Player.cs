@@ -23,13 +23,16 @@ public class Player : LugusSingletonExisting<Player>
     public float LaunchMaxForce;
     public float LaunchAnimationTime;
 
-    // How hard the ball launches.
+    // How much force the ball launches with.
     private float _ballLaunchForce;
     public float BallLaunchForce
     {
         get { return _ballLaunchForce; }
         private set { _ballLaunchForce = value; }
     }
+
+    // Whether launch button is being held.
+    private bool _launching = false;
 
     // True when game is paused.
     public bool Paused = false;
@@ -184,12 +187,25 @@ public class Player : LugusSingletonExisting<Player>
                 //ballLaunch.localScale.z = Mathf.Lerp(SpringMaxScale, SpringMinScale, BallLaunchForce / LaunchMaxForce);
             }
 
-            if (audio != null)
+            // Play launch sound.
+            if (!_launching)
             {
-                audio.clip = LaunchSound;
-                audio.loop = false;
-                audio.Play();
+                if(audio != null)
+                {
+                    audio.clip = LaunchSound;
+                    audio.Play();
+                    audio.loop = true;                   
+                }
             }
+
+            // Stop sound when max reached.
+            if (BallLaunchForce >= LaunchMaxForce)
+            {
+                audio.loop = false;
+                audio.Stop();
+            }
+
+            _launching = true;
         }
         else
         {
@@ -224,6 +240,8 @@ public class Player : LugusSingletonExisting<Player>
                         audio.Stop();
                         audio.PlayOneShot(ReleaseSound);
                     }
+
+                    _launching = false;
                 }
             }
         }

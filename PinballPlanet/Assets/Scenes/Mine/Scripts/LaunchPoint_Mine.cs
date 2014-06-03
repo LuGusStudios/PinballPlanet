@@ -18,8 +18,13 @@ public class LaunchPoint_Mine : MonoBehaviour {
 		if (collision.collider.name != "Ball")
 			return;
 		
+        // Reset flowback preventer.
 		GameObject.Find("FlowBackPreventer_02").GetComponent<FlowBackPreventer_02>().Reset();
 	
+        // Reset logs.
         GameObject.Find("Logs").GetComponent<Logs>().Unbreak();
-	}
+
+        // Reset launch lights.
+        GameObject.Find("FloorLight_Launch_Link1").GetComponent<FloorLight_Link>().Unbreak();
+    }
 }
