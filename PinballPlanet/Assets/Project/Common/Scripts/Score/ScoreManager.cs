@@ -15,6 +15,11 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	
 	public int BallCount = 5;
 
+    private float _timeSinceScore = 0;
+    private float _scoreComboTime = 0.8f;
+    private float _scoreComboHeight = 7;
+    private int _scoreCombo = 0;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -64,9 +69,9 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void Update ()
 	{
-		
+	    _timeSinceScore += Time.deltaTime;
 	}
 	
 	// Instantiates a score popup and awards the player points.
@@ -83,7 +88,20 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
         // Randomize position.
         position.xAdd(Random.Range(-5, 5));
         position.yAdd(Random.Range(-5, 5));
-        position.zAdd(Random.Range(-15, 15));
+        //position.zAdd(Random.Range(-5, 5));
+
+        // Put score slightly higher if scoring in quick sucession.
+	    if (_timeSinceScore <= _scoreComboTime)
+	    {
+	        position.z += _scoreComboHeight * _scoreCombo;
+	        ++_scoreCombo;
+	    }
+	    else
+	    {
+	        _scoreCombo = 0;
+	    }
+        // Reset time since score.
+	    _timeSinceScore = 0;
 
         Transform scoreText = (Transform)Instantiate(ScoreTextPrefab, position, ScoreTextPrefab.transform.rotation);
 		scoreText.GetComponent<TextMesh>().text = "" + score;

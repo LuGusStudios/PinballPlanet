@@ -10,7 +10,7 @@ public class TNTMultiObjective : BreakableMultiObjective
     public GameObject ExplosionPrefab;
 
     // Sounds
-    public AudioClip ExplosionSound;
+    private AudioClip ExplosionSound;
 
     protected override void Start()
     {
@@ -18,6 +18,8 @@ public class TNTMultiObjective : BreakableMultiObjective
         _bridge = GameObject.Find("Bridge");
         _bridgeDestroyed = GameObject.Find("BridgeDestroyed");
         _bridgeDestroyed.SetActive(false);
+
+        ExplosionSound = Resources.Load<AudioClip>("BridgeTNT_01");
 
         base.Start();
     }

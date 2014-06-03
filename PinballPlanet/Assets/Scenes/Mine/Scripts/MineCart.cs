@@ -26,6 +26,10 @@ public class MineCart : MonoBehaviour
     public int CrystalsToDropCrash = 15;
     public float CrystalsDropHitRadius = 50;
 
+    // Sounds
+    public AudioClip TravelSound = null;
+    public AudioClip CrashSound = null;
+
     // Use this for initialization
     void Start()
     {
@@ -243,6 +247,9 @@ public class MineCart : MonoBehaviour
         float destroyCartDelay = transform.Find("MineCart_Pivot/MineCart02").animation["MineCartCrash"].length + 2;
         Invoke("DestroyCart", destroyCartDelay);
 
+        // Disable collision.
+        collider.enabled = false;
+
         // Spawn crystals after a certain delay.
         Invoke("SpawnCrashCrystals", 0.7f);
     }
@@ -263,6 +270,19 @@ public class MineCart : MonoBehaviour
             crystal.GetComponent<CrystalShard>().SetTarget(randPos);
             // Give random rotation.
             crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
+        }
+
+        // Hide crystals in minecart itself.
+        foreach ( Transform child in transform.FindChild("MineCart_Pivot/MineCart02"))
+        {
+            child.gameObject.SetActive(false);
+        }
+
+        // Play crash sound.
+        if (CrashSound != null)
+        {
+            audio.Stop();
+            audio.PlayOneShot(CrashSound);         
         }
     }
 }
