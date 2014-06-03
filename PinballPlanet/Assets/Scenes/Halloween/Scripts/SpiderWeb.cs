@@ -79,7 +79,7 @@ public class SpiderWeb : MonoBehaviour
 		iTween.MoveTo( spider.parent.gameObject, new Vector3(-58.87466f, 11.84898f, -37.04593f), 2.0f );
 		
 		spider.animation.Stop();
-		spider.animation.Play("bounce2");
+		spider.animation.Play("C4D Animation Take");
 		
 		
 		yield return new WaitForSeconds(2.6f);
