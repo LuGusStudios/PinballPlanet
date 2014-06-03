@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Score: 100
-  Sound: {fileID: 0}
+  Sound: {fileID: 8300000, guid: fe94d5dd1b2feba41b302a73a79f033b, type: 3}
   AnimationName: Bump
 --- !u!136 &13600000
 CapsuleCollider:

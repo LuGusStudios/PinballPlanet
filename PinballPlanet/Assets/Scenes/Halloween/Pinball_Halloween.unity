@@ -2589,7 +2589,7 @@ CapsuleCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 23124268}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 63ce31733f201954698024e6513e2ea4, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 10.2668715
@@ -25060,7 +25060,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1574247764}
-  m_Material: {fileID: 13400000, guid: dc68a565d58d6374eb72ce423231ff83, type: 2}
+  m_Material: {fileID: 13400000, guid: 63ce31733f201954698024e6513e2ea4, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -30594,7 +30594,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2038373420}
-  m_Material: {fileID: 13400000, guid: dc68a565d58d6374eb72ce423231ff83, type: 2}
+  m_Material: {fileID: 13400000, guid: 63ce31733f201954698024e6513e2ea4, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
