@@ -72,7 +72,10 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	void Update ()
 	{
 	    _timeSinceScore += Time.deltaTime;
-	}
+
+        if(Input.GetKeyDown(KeyCode.R))
+            Application.LoadLevel(Application.loadedLevel);
+    }
 	
 	// Instantiates a score popup and awards the player points.
 	public GameObject ShowScore( int score, Vector3 position, float time, AudioClip sound, Color color )

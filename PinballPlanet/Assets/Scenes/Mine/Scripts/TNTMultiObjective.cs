@@ -19,7 +19,8 @@ public class TNTMultiObjective : BreakableMultiObjective
         _bridgeDestroyed = GameObject.Find("BridgeDestroyed");
         _bridgeDestroyed.SetActive(false);
 
-        ExplosionSound = Resources.Load<AudioClip>("BridgeTNT_01");
+        // Load audio.
+        ExplosionSound = Resources.Load<AudioClip>("Shared/Audio/BridgeTNT_01");
 
         base.Start();
     }

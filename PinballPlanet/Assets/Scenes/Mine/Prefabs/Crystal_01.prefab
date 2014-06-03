@@ -112,8 +112,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: .683724105, y: -.180336803, z: -.180336773, w: .683724105}
-  m_LocalPosition: {x: -25.7065163, y: 143.376572, z: 2.67028809e-05}
+  m_LocalRotation: {x: .674667776, y: .211715624, z: .211715624, w: .674667716}
+  m_LocalPosition: {x: -64.7997894, y: 225.631729, z: 2.67028809e-05}
   m_LocalScale: {x: 1.80446017, y: 1.80446017, z: 1.80446017}
   m_Children:
   - {fileID: 400008}
@@ -380,7 +380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 200
-  sound: {fileID: 0}
+  sound: {fileID: 8300000, guid: 67b70491d1be15945ac064d29c430b28, type: 3}
   color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!136 &13600000
 CapsuleCollider:

@@ -10,11 +10,12 @@ public class FloorLight_LaunchEnd : Triggerable
     // Called when a trigger is hit.
     protected override void TriggerHit(GameObject trigger, GameObject other)
     {
+        if (!GetComponent<FloorLight_Link>().PreviousLight.IsBroken)
+            return;
+
         // Turn on the end light.
         GetComponent<FloorLight_Link>().Break();
 
-        // Turn off all launch lights after a small delay.
-        Invoke("TurnOffLaunchLights", TurnOffLaunchLightsDelay);
         ScoreManager.use.ShowScore(LaunchLightsScore, transform.position.zAdd(Random.Range(10, 20)), 2.0f, null, Color.white);
     }
 
@@ -29,8 +30,9 @@ public class FloorLight_LaunchEnd : Triggerable
         if (other.tag != "Ball")
             return;
 
-        // Turn off all launch lights after a small delay.
-        Invoke("TurnOffLaunchLights", TurnOffLaunchLightsDelay);
+        if (!GetComponent<FloorLight_Link>().PreviousLight.IsBroken)
+            return;
+
         ScoreManager.use.ShowScore(LaunchLightsScore, transform.position.zAdd(Random.Range(10, 20)), 2.0f, null, Color.white);
     }
 }
