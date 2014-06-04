@@ -175,7 +175,7 @@ public class BallPhysics : MonoBehaviour
 
             if (_leftFlipperBuffer.bounds.Contains(_objTransform.position))
             {
-                if ((_leftFlipper.IsGoingToPressedPosition() || _leftFlipper.IsAtRest()) && Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0)
+                if ((_leftFlipper.IsGoingToPressedPosition || _leftFlipper.IsAtRest) && Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0)
                 //if (Mathf.Abs(leftFlipper.rigidbody.angularVelocity.z) > 2.0) 
                 {
                     // We're near the left flipper and it's in motion. Set the layer mask to that of the correction tangents of the left flipper
@@ -184,7 +184,7 @@ public class BallPhysics : MonoBehaviour
             }
             else if (_rightFlipperBuffer.bounds.Contains(_objTransform.position))
             {
-                if ((_rightFlipper.IsGoingToPressedPosition() || _rightFlipper.IsAtRest()) && Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0)
+                if ((_rightFlipper.IsGoingToPressedPosition || _rightFlipper.IsAtRest) && Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0)
                 {
                     // We're near the right flipper and it's in motion. Set the layer mask to that of the correction tangents of the right flipper
                     layerMask = _rightFlipper.transform.FindChild("FlipperTangent").gameObject.layer;

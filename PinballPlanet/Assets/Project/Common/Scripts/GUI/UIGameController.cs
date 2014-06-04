@@ -72,7 +72,13 @@ public class UIGameController : MonoBehaviour
 			
 			ShowPauzeMenu();
 		}
-		
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+            Time.timeScale = 1.0f;
+        }
+
 		//if( Input.GetKeyDown(KeyCode.G) )
 		//	ShowGameoverGUI();
 	}

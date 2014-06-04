@@ -1,28 +1,41 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Static class that holds all the data shared across each bumper chain score.
+/// Used to calculate the bonus score given for hitting multiple bumpers quickly.
+/// </summary>
 public static class ChainScore
 {
     // Chaining barrel hits in quick succession gives bonus score for each one hit.
     public static int ChainBonusScore = 50;
     public static int ChainMultiplier = 0;
     // Time chain stays active since last barrel hit.
-    public static float ChainResetTime = 1.5f;
+    public static float ChainResetTime = 2.0f;
+    public static float TimeSinceHit = 0;
     // Time till actual reset: single chain reset time is added for every object that has a BumperChainScore script attached.
     public static float ActualChainResetTime = 0;
-    public static float TimeSinceHit = 0;
+    // Last hit object used to check if last hit object was the same.
+    public static GameObject LastHitBumper;
 }
 
+/// <summary>
+/// Script for a bumper that gives more score for each other bumper that is hit in quick sucession.
+/// When the same bumper is hit before hitting another bumper the same score bonus is given
+/// without increasing, but the timer still resets.
+/// </summary>
 public class BumperChainScore : MonoBehaviour
 {
     // Hit Score.
     public int Score = 100;
     public AudioClip Sound;
 
+    // Bumper hit animation.
     public string AnimationName;
 
     // Use this for initialization
     void Start()
     {
+        // Increase the 'actual' chain rest time for every instance of this script.
         ChainScore.ActualChainResetTime += ChainScore.ChainResetTime;
     }
 
@@ -55,8 +68,16 @@ public class BumperChainScore : MonoBehaviour
         // Play bump animation.
         GetComponent<Animation>().Play(AnimationName);
         
-        // Add to the score chain.
-        ++ChainScore.ChainMultiplier;
+        // Don't increase score if hitting same bumper twice.
+        if(ChainScore.LastHitBumper != gameObject)
+        {
+            // Add to the score chain.
+            ++ChainScore.ChainMultiplier;         
+        }        
+        
+        // Store last hit bumper.
+        ChainScore.LastHitBumper = gameObject;
+
         // Reset time since last barrel hit.
         ChainScore.TimeSinceHit = 0;
 

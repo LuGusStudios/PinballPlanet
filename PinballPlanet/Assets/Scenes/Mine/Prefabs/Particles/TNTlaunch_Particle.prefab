@@ -96,14 +96,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e22181b79bda240adbf29df058dfc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeToDestroy: 5
+  TimeToDestroy: 3
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  lengthInSec: 6
+  lengthInSec: 3
   startDelay: 0
   speed: 1
   randomSeed: 0
@@ -1090,7 +1090,7 @@ ParticleSystem:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  lengthInSec: 6
+  lengthInSec: 3
   startDelay: 0
   speed: 1
   randomSeed: 0

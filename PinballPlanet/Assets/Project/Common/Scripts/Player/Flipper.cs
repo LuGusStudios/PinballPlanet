@@ -3,32 +3,34 @@ using UnityEngine;
 
 public class Flipper : MonoBehaviour
 {
-
     public string CommandKey;	// The key to activate the flipper
     public float RestPosition = 0; // The z target rotation when at rest
     public float PressedPosition = -1; // The z target rotation when pressed
     public ConfigurableJoint ConfigurableJoint; // The configurable joint of the flipper
 
-    public bool _isGoingToPressedPosition = false;
+    ///// Storing the list of balls touching the flipper collider this frame and last frame after flipper should have hit them.
+    ///// If balls that were touching last frame after the flipper hit are still touching this frame it means they're stuck.
+    //// Balls touching flipper this update.
+    //public List<GameObject> BallsTouching = new List<GameObject>();
+    //// Balls touching last update.
+    //public List<GameObject> BallsLastTouching = new List<GameObject>();
 
-    /// Storing the list of balls touching the flipper collider this frame and last frame after flipper should have hit them.
-    /// If balls that were touching last frame after the flipper hit are still touching this frame it means they're stuck.
-    // Balls touching flipper this update.
-    public List<GameObject> _ballsTouching = new List<GameObject>();
-    // Balls touching last update.
-    public List<GameObject> _ballsLastTouching = new List<GameObject>();
-
-    public bool IsGoingToPressedPosition()
+    private bool _isGoingToPressedPosition = false;
+    public bool IsGoingToPressedPosition
     {
-        return _isGoingToPressedPosition;
+        get
+        { return _isGoingToPressedPosition; }
     }
 
-    public bool IsAtRest()
+    public bool IsAtRest
     {
-        return (Vector3.Magnitude(rigidbody.angularVelocity) < 0.0001) ? true : false;
+        get 
+        { return (Vector3.Magnitude(rigidbody.angularVelocity) < 0.0001) ? true : false; }
     }
 
-    void GoToPressedPosition()
+    public bool TouchPressed = false;
+
+    public void GoToPressedPosition()
     {
         if (!_isGoingToPressedPosition)
         {
@@ -37,21 +39,14 @@ public class Flipper : MonoBehaviour
             ConfigurableJoint.targetRotation = newRot;
             _isGoingToPressedPosition = true;
 
-            //if (_ballsTouching.Count > 0 && _ballsLastTouching.Count > 0)
-            //{
-            //    //Debug.Log("*** Balls: " + _ballsTouching.Count + " Balls Last: " + _ballsLastTouching.Count + " ***");
-
-            //    // Check if any touching balls this frame were also touching last frame.
-            //    foreach (GameObject ball in _ballsTouching)
-            //    {
-            //        if (_ballsLastTouching.Contains(ball))
-            //            Debug.Log("*** Ball still touching?! ***");
-            //    }
-            //}
+            if(name.Contains("Left"))
+                Player.use.PlayLeftFlipperSound();
+            else
+                Player.use.PlayRightFlipperSound();
         }
     }
 
-    void GoToRestPosition()
+    public void GoToRestPosition()
     {
         if (_isGoingToPressedPosition)
         {
@@ -65,7 +60,7 @@ public class Flipper : MonoBehaviour
     void FixedUpdate()
     {
         // Respond to keystrokes.
-        if (Input.GetKey(CommandKey))
+        if (Input.GetKey(CommandKey) || TouchPressed)
         {
             GoToPressedPosition();
         }
@@ -74,22 +69,24 @@ public class Flipper : MonoBehaviour
             GoToRestPosition();
         }
 
-        _ballsLastTouching = new List<GameObject>(_ballsTouching);
+        TouchPressed = false;
+
+        //BallsLastTouching = new List<GameObject>(BallsTouching);
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.name != "Ball")
-            return;
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.collider.name != "Ball")
+    //        return;
 
-        _ballsTouching.Add(collision.collider.gameObject);
-    }
+    //    BallsTouching.Add(collision.collider.gameObject);
+    //}
 
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.collider.name != "Ball")
-            return;
+    //void OnCollisionExit(Collision collision)
+    //{
+    //    if (collision.collider.name != "Ball")
+    //        return;
 
-        _ballsTouching.Remove(collision.collider.gameObject);
-    }
+    //    BallsTouching.Remove(collision.collider.gameObject);
+    //}
 }

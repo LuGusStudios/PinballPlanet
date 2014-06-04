@@ -18,6 +18,8 @@ public class Player : LugusSingletonExisting<Player>
     public AudioClip BallLostSound;
     public AudioClip LightOnSound;
     public AudioClip LightOffSound;
+    public AudioClip LeftFlipperSound;
+    public AudioClip RightFlipperSound;
 
     // The force when launching the ball.
     public float LaunchMaxForce;
@@ -28,11 +30,11 @@ public class Player : LugusSingletonExisting<Player>
     public float BallLaunchForce
     {
         get { return _ballLaunchForce; }
-        private set { _ballLaunchForce = value; }
+        set { _ballLaunchForce = value; }
     }
 
     // Whether launch button is being held.
-    private bool _launching = false;
+    private bool _launchSoundPlaying = false;
 
     // True when game is paused.
     public bool Paused = false;
@@ -137,23 +139,40 @@ public class Player : LugusSingletonExisting<Player>
         if (Paused)
             return;
 
-        //GameObject ball;
-
-        //Debug.Log("--- Ball Ready for launch: " + IsSingleBallReadyForLaunch() + " ---");
-
-        // Control the launch spring
-        if (IsSingleBallReadyForLaunch())
+        // Do not use keyboard launch controls when mouse/touch is being used.
+        if (LugusInput.use.up)
         {
-            ControlBallLaunchByKeyboard();
+            // Control the launch.
+            if (IsSingleBallReadyForLaunch())
+            {
+                ControlBallLaunchByKeyboard();
+            }           
         }
-        else
+
+        // Play launch sound.
+        if (BallLaunchForce > 0)
         {
-            // Spring resets back to normal position
-            ResetSpring();
+            if (audio != null && !_launchSoundPlaying)
+            {
+                audio.clip = LaunchSound;
+                audio.Play();
+                audio.loop = true;
+                _launchSoundPlaying = true;
+            }
+        }
+
+        // Stop sound when max reached.
+        if (BallLaunchForce >= LaunchMaxForce)
+        {
+            if (audio != null)
+            {
+                audio.loop = false;
+                audio.Stop();
+            }
         }
     }
 
-    private bool IsSingleBallReadyForLaunch()
+    public bool IsSingleBallReadyForLaunch()
     {
         if (BallsInPlay.Count != 1)
         {
@@ -183,81 +202,45 @@ public class Player : LugusSingletonExisting<Player>
             {
                 float dt = Time.deltaTime;
                 _ballLaunchForce += dt * forceMultiplier;
-
-                //ballLaunch.localScale.z = Mathf.Lerp(SpringMaxScale, SpringMinScale, BallLaunchForce / LaunchMaxForce);
             }
-
-            // Play launch sound.
-            if (!_launching)
-            {
-                if(audio != null)
-                {
-                    audio.clip = LaunchSound;
-                    audio.Play();
-                    audio.loop = true;                   
-                }
-            }
-
-            // Stop sound when max reached.
-            if (BallLaunchForce >= LaunchMaxForce)
-            {
-                audio.loop = false;
-                audio.Stop();
-            }
-
-            _launching = true;
-        }
-        else
-        {
-            ResetSpring();
         }
 
-        // Release the ball
+        // Release the ball if down button is released.
         if (Input.GetAxis("Vertical") >= 0)
         {
-            //var flowBackPreventer = GameObject.Find("PreventFlowbackCollider");
-            //flowBackPreventer.collider.isTrigger = true;
-
             var ball = GameObject.Find("Ball");
             if (ball != null)
             {
                 Ball ballScript = ball.GetComponent<Ball>();
                 if (ballScript.TouchingLauncher && _ballLaunchForce > 0)
                 {
-                    //Debug.Log("Launch force: " + BallLaunchForce);
-                    ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
-                    // Reset launch force.
-                    _ballLaunchForce = 0;
-
-                    // Spawn fire particles.
-                    //Instantiate(FireParticlesPrefab, transform.position, Quaternion.identity);
-                    Instantiate(LaunchParticlesPrefab);
-
-                    // Play release sound.
-                    if (audio != null)
-                    {
-                        audio.loop = false;
-                        audio.Stop();
-                        audio.PlayOneShot(ReleaseSound);
-                    }
-
-                    _launching = false;
+                    LaunchBall();
                 }
             }
         }
     }
 
-    private void ResetSpring()
+    public void LaunchBall()
     {
-        //// Reset the launch trigger.
-        //var launchTrigger = GameObject.Find("Blunderbuss_Trigger01");
-        //launchTrigger.transform.rotation = TriggerStartTransform.rotation;
+        var ball = GameObject.Find("Ball");
 
-        //    if (ballLaunch.localScale.z < SpringMaxScale) 
-        //	{
-        //		ballLaunch.localScale.z = SpringMaxScale;
-        //	}		
-    }
+        //Debug.Log("Launch force: " + BallLaunchForce);
+        ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
+        // Reset launch force.
+        _ballLaunchForce = 0;
+
+        // Spawn fire particles.
+        Instantiate(LaunchParticlesPrefab);
+
+        // Play release sound.
+        if (audio != null)
+        {
+            audio.loop = false;
+            audio.Stop();
+            audio.PlayOneShot(ReleaseSound);
+            _launchSoundPlaying = false;
+        }
+    } 
 
     // Play light on sound.
     public void PlayLightOnSound()
@@ -278,6 +261,24 @@ public class Player : LugusSingletonExisting<Player>
             audio.loop = false;
             //audio.Stop();
             audio.PlayOneShot(LightOffSound);
+        }
+    }
+
+    public void PlayLeftFlipperSound()
+    {
+        if (audio != null)
+        {
+            audio.loop = false;
+            audio.PlayOneShot(LeftFlipperSound);
+        }
+    }
+
+    public void PlayRightFlipperSound()
+    {
+        if (audio != null)
+        {
+            audio.loop = false;
+            audio.PlayOneShot(RightFlipperSound);
         }
     }
 }
