@@ -131,6 +131,8 @@ public class Player : LugusSingletonExisting<Player>
 
     void Start()
     {
+        LugusDebug.debug = false;
+
         ReleaseBall();
     }
 

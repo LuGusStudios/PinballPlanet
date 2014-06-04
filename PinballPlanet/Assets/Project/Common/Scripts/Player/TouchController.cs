@@ -3,10 +3,11 @@ using System.Collections;
 
 public class TouchController : MonoBehaviour
 {
-    private bool _dragging = false;
+    // The end and start point where the player was dragging.
     private Vector3 _dragStart;
     private Vector3 _dragEnd;
 
+    // How far the player needs to drag to launch with max force.
     public float MaxDragDistance = 250;
 
     private void FixedUpdate()
@@ -38,7 +39,6 @@ public class TouchController : MonoBehaviour
         // Store where player started dragging.
         if (LugusInput.use.down)
         {
-            _dragging = true;
             _dragStart = LugusInput.use.lastPoint;
         }
 
@@ -59,7 +59,6 @@ public class TouchController : MonoBehaviour
         // Calculate how hard to launch the ball.
         if (LugusInput.use.up)
         {
-            _dragging = false;
             _dragEnd = LugusInput.use.lastPoint;
 
             // Calculate how far was dragged.
