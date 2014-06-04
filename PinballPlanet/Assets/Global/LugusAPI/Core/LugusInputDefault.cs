@@ -169,8 +169,6 @@ public class LugusInputDefault : MonoBehaviour
 		*/	
 	}
 	
-	
-	
 	public Vector3 ScreenTo3DPointOnPlane( Vector3 screenPoint, Plane plane)
 	{
 		float distance;
@@ -314,7 +312,6 @@ public class LugusInputDefault : MonoBehaviour
 	{
 		return Input.GetKey(key);
 	}
-	
 	
 	void OnGUI()
 	{	

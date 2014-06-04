@@ -2,6 +2,7 @@
 
 #if !UNITY_WEBPLAYER
 using System.IO;
+using System.Text;
 #endif
 using System.Collections.Generic;
 

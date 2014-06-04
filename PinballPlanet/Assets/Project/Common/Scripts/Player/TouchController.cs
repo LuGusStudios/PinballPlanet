@@ -54,7 +54,7 @@ public class TouchController : MonoBehaviour
                 // Set launch force.
                 Player.use.BallLaunchForce = Mathf.Lerp(0, Player.use.LaunchMaxForce, Mathf.Abs(dragDist) / MaxDragDistance);
             }
-        }
+        } 
 
         // Calculate how hard to launch the ball.
         if (LugusInput.use.up)
