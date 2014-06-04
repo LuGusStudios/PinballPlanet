@@ -477,8 +477,7 @@ MonoBehaviour:
   LaunchMaxForce: 5000
   LaunchAnimationTime: 1
   Paused: 0
-  LaunchParticlesPrefab: {fileID: 100000, guid: ac379f9ddde9e6a4a9733dc90344c3be,
-    type: 2}
+  LaunchParticlesPrefab: {fileID: 0}
 --- !u!1 &36
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,7 +1153,7 @@ Camera:
     height: 1
   near clip plane: .00999999978
   far clip plane: 1000
-  field of view: 60
+  field of view: 72
   orthographic: 0
   orthographic size: 105
   m_Depth: -1
