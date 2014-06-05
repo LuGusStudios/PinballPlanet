@@ -8,13 +8,6 @@ public class Flipper : MonoBehaviour
     public float PressedPosition = -1; // The z target rotation when pressed
     public ConfigurableJoint ConfigurableJoint; // The configurable joint of the flipper
 
-    ///// Storing the list of balls touching the flipper collider this frame and last frame after flipper should have hit them.
-    ///// If balls that were touching last frame after the flipper hit are still touching this frame it means they're stuck.
-    //// Balls touching flipper this update.
-    //public List<GameObject> BallsTouching = new List<GameObject>();
-    //// Balls touching last update.
-    //public List<GameObject> BallsLastTouching = new List<GameObject>();
-
     private bool _isGoingToPressedPosition = false;
     public bool IsGoingToPressedPosition
     {
@@ -71,22 +64,5 @@ public class Flipper : MonoBehaviour
 
         TouchPressed = false;
 
-        //BallsLastTouching = new List<GameObject>(BallsTouching);
     }
-
-    //void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.collider.name != "Ball")
-    //        return;
-
-    //    BallsTouching.Add(collision.collider.gameObject);
-    //}
-
-    //void OnCollisionExit(Collision collision)
-    //{
-    //    if (collision.collider.name != "Ball")
-    //        return;
-
-    //    BallsTouching.Remove(collision.collider.gameObject);
-    //}
 }

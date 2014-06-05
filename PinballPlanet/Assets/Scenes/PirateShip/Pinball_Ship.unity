@@ -9664,8 +9664,8 @@ MonoBehaviour:
   BallLostSound: {fileID: 8300000, guid: eb37063da0b6a8a4383ec629dafb3a87, type: 3}
   LightOnSound: {fileID: 8300000, guid: 3d036083893a8114fbc1aae34f391175, type: 3}
   LightOffSound: {fileID: 8300000, guid: 4d2a0f295324b3a478b8d03820761458, type: 3}
-  LeftFlipperSound: {fileID: 0}
-  RightFlipperSound: {fileID: 0}
+  LeftFlipperSound: {fileID: 8300000, guid: 6c2f6be7f6224474ea4cb7ab17524e63, type: 3}
+  RightFlipperSound: {fileID: 8300000, guid: ecb56fefa83534124bc160edfb885a90, type: 3}
   LaunchMaxForce: 5000
   LaunchAnimationTime: 1.5
   Paused: 0
