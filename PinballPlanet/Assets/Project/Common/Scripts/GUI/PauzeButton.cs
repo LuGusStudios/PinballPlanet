@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PauzeButton : MonoBehaviour 
 {
-
 	protected Camera uiCamera = null;
 
 	// Use this for initialization

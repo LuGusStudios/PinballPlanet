@@ -9,12 +9,6 @@ public class UIGameController : MonoBehaviour
 	
 	public GameObject gameOverGUI = null;
 	public AudioClip gameOverSound = null;
-
-	// Use this for initialization
-	void Start () 
-	{
-	
-	}
 	
 	public void PauseGameFunctionality()
 	{
@@ -112,7 +106,12 @@ public class UIGameController : MonoBehaviour
 	{
 		ingameGUI.SetActive(true);
 	}
-	
+
+    public void ShowHelpGUI()
+    {
+        ingameGUI.SetActive(true);
+    }
+
 	public void ShowGameoverGUI()
 	{
 		if( gameOverSound != null )
