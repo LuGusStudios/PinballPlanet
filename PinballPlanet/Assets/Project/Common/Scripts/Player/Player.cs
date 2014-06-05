@@ -141,8 +141,9 @@ public class Player : LugusSingletonExisting<Player>
         if (Paused)
             return;
 
+        //Debug.Log(LugusInput.use.up);
         // Do not use keyboard launch controls when mouse/touch is being used.
-        if (LugusInput.use.up)
+        if (!LugusInput.use.down && !LugusInput.use.dragging)
         {
             // Control the launch.
             if (IsSingleBallReadyForLaunch())

@@ -10,26 +10,40 @@ public class TouchController : MonoBehaviour
     // How far the player needs to drag to launch with max force.
     public float MaxDragDistance = 250;
 
-    private void FixedUpdate()
+    // Transforms of often accessed game objects.
+    private Transform _leftFlipperTransform;
+    private Transform _rightFlipperTransform;
+    private Transform _mainCameraTransform;
+
+    // Initialization.
+    void Start()
+    {
+        _leftFlipperTransform = GameObject.Find("LeftFlipper").transform;
+        _rightFlipperTransform = GameObject.Find("RightFlipper").transform;
+        _mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
+    }
+
+    // Called every fixed frame.
+    void FixedUpdate()
     {
         // Check if mouse/touch is being held.
         if (LugusInput.use.down || LugusInput.use.dragging)
         {
-            // Check if one of flipper click boxes is clicked.
-            Transform clickedObject =
-                LugusInput.use.RayCastFromMouse(GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>());
+            // Store the clicked/touched object.
+            Transform clickedObject = LugusInput.use.RayCastFromMouse(_mainCameraTransform.GetComponent<Camera>());
 
             if (clickedObject != null)
             {
-                // Move flippers if touched.
-                if (clickedObject.name == "ClickBox_LeftFlipper")
-                    GameObject.Find("LeftFlipper").GetComponent<Flipper>().TouchPressed = true;
-                if (clickedObject.name == "ClickBox_RightFlipper")
-                    GameObject.Find("RightFlipper").GetComponent<Flipper>().TouchPressed = true;
+                // Move flippers if touched/clicked.
+                if (clickedObject == _leftFlipperTransform)
+                    _leftFlipperTransform.GetComponent<Flipper>().TouchPressed = true;
+                if (clickedObject == _rightFlipperTransform)
+                    _rightFlipperTransform.GetComponent<Flipper>().TouchPressed = true;
             }
         }
     }
 
+    // Called every frame.
     void Update()
     {
         // Only allow launch when ball is ready.
