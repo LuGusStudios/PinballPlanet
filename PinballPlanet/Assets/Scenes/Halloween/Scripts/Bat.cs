@@ -99,7 +99,7 @@ public class Bat : MonoBehaviour
 		if( ball.tag != "Ball" )
 			return;
 		
-		//Score s = GetComponent<Score>();
+		//ScoreHit s = GetComponent<ScoreHit>();
 		//if( s != null )
 		//	s.DoScore();
 		

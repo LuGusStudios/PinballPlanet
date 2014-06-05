@@ -24,7 +24,7 @@ public class PathItem : MonoBehaviour
 		renderer.material = litMaterial;
 		
 		
-		Score s = GetComponent<Score>();
+		ScoreHit s = GetComponent<ScoreHit>();
 		if( s != null )
 			s.DoScore();
 		

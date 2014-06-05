@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Score : MonoBehaviour
+public class ScoreHit : MonoBehaviour
 {
     public int score = 1000;
     public AudioClip sound = null;

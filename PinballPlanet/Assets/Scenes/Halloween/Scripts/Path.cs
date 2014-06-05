@@ -46,7 +46,7 @@ public class Path : MonoBehaviour
 		
 		Debug.LogError("ALL ITEMS LIT!!!");
 		
-		Score s = GetComponent<Score>();
+		ScoreHit s = GetComponent<ScoreHit>();
 		if( s != null )
 			s.DoScore();
 		

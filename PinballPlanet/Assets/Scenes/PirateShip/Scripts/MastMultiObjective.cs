@@ -72,7 +72,7 @@ public class MastMultiObjective : BreakableMultiObjective
     // Lower score of the mast foot object.
     protected override void LowerScore()
     {
-        transform.FindChild("Mast_Foot01").GetComponent<Score>().score = BrokenScore;
+        transform.FindChild("Mast_Foot01").GetComponent<ScoreHit>().score = BrokenScore;
     }
 
     // Reset.

@@ -25,8 +25,8 @@ public class Breakable : MonoBehaviour
     protected virtual void Start()
     {
         // Store original score.
-        if (GetComponent<Score>() != null)
-            _originalScore = GetComponent<Score>().score;
+        if (GetComponent<ScoreHit>() != null)
+            _originalScore = GetComponent<ScoreHit>().score;
     }
 
     // Called when another object collides.
@@ -59,8 +59,8 @@ public class Breakable : MonoBehaviour
     {
         IsBroken = false;
 
-        if (GetComponent<Score>() != null)
-            GetComponent<Score>().score = _originalScore;
+        if (GetComponent<ScoreHit>() != null)
+            GetComponent<ScoreHit>().score = _originalScore;
 
         // Call unbroken event.
         OnUnBreak();
@@ -69,8 +69,8 @@ public class Breakable : MonoBehaviour
     // Lower score of the game object.
     protected virtual void LowerScore()
     {
-        if (GetComponent<Score>() != null)
-            GetComponent<Score>().score = BrokenScore;
+        if (GetComponent<ScoreHit>() != null)
+            GetComponent<ScoreHit>().score = BrokenScore;
     }
 
     // Call break event.

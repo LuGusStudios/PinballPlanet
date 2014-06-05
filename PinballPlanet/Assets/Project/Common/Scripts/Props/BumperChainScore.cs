@@ -25,8 +25,8 @@ public static class ChainScore
 /// </summary>
 public class BumperChainScore : MonoBehaviour
 {
-    // Hit Score.
-    public int Score = 100;
+    // Hit ScoreHit.
+    public int ScoreHit = 100;
     public AudioClip Sound;
 
     // Bumper hit animation.
@@ -82,6 +82,6 @@ public class BumperChainScore : MonoBehaviour
         ChainScore.TimeSinceHit = 0;
 
         // Give score
-        ScoreManager.use.ShowScore(Score + ChainScore.ChainBonusScore * (ChainScore.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, Sound, Color.white);
+        ScoreManager.use.ShowScore(ScoreHit + ChainScore.ChainBonusScore * (ChainScore.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, Sound, Color.white);
     }
 }
