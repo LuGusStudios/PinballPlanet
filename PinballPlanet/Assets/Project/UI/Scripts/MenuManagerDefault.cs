@@ -18,6 +18,9 @@ public class MenuManagerDefault: MonoBehaviour
 	{
 		NONE = -1,
 		GameMenu = 1,
+        GameOverMenu = 2,
+        PauseMenu = 3,
+        HelpGameMenu = 4
 	}
 
 	public MenuTypes startMenu = MenuTypes.GameMenu;
@@ -29,60 +32,68 @@ public class MenuManagerDefault: MonoBehaviour
 			menus.Add(MenuTypes.GameMenu, gameMenu);
 		else
 			Debug.LogError("MenuManager: Missing game menu!");
-		
-        //StepLevelMenu levelMenu = transform.FindChild("LevelMenu").GetComponent<StepLevelMenu>();
-        //if (levelMenu != null)
-        //    menus.Add(MenuTypes.LevelMenu, levelMenu);
-        //else
-        //    Debug.LogError("MenuManager: Missing level menu!");
 
-        //StepHelpMenu helpMenu = transform.FindChild("HelpMenu").GetComponent<StepHelpMenu>();
-        //if (helpMenu != null)
-        //    menus.Add(MenuTypes.HelpMenu, helpMenu);
-        //else
-        //    Debug.LogError("MenuManager: Missing help menu!");
+        StepGameOverMenu gameOverMenu = transform.FindChild("GameOverMenu").GetComponent<StepGameOverMenu>();
+        if (gameOverMenu != null)
+            menus.Add(MenuTypes.GameOverMenu, gameOverMenu);
+        else
+            Debug.LogError("MenuManager: Missing game over menu!");
 
-		if (background == null)
-			background = transform.FindChild("Background");
-		if (background == null)
-			Debug.LogError("MenuManager: Missing background!");
+        StepPauseMenu pauseMenu = transform.FindChild("PauseMenu").GetComponent<StepPauseMenu>();
+        if (pauseMenu != null)
+            menus.Add(MenuTypes.PauseMenu, pauseMenu);
+        else
+            Debug.LogError("MenuManager: Missing pause menu!");
+
+        StepGameHelpMenu gameHelpMenu = transform.FindChild("HelpMenu").GetComponent<StepGameHelpMenu>();
+        if (gameHelpMenu != null)
+            menus.Add(MenuTypes.HelpGameMenu, gameHelpMenu);
+        else
+            Debug.LogError("MenuManager: Missing game help menu!");
+
+        //if (background == null)
+        //    background = transform.FindChild("Background");
+        //if (background == null)
+        //    Debug.LogError("MenuManager: Missing background!");   
 	}
 	
 	public void SetupGlobal()
 	{
-		SpriteRenderer backgroundRenderer = background.GetComponent<SpriteRenderer>();
+        ActivateMenu(MenuTypes.GameMenu);
+        
+        //SpriteRenderer backgroundRenderer = background.GetComponent<SpriteRenderer>();
 
-		if (backgroundSprite != null)
-		{
-			backgroundRenderer.sprite = backgroundSprite;
-		}
-		else
-		{
-			string key = Application.loadedLevelName + ".main.background";
-			string backgroundName = Application.loadedLevelName + "BG01";
-		
-            //if( LugusResources.use.Levels.HasText(key) )
-            //{
-            //    Debug.Log("Loading menu background texture from Levels text at key:" + key);
-            //    backgroundName = LugusResources.use.Levels.GetText(key);
-            //}
+        //if (backgroundSprite != null)
+        //{
+        //    backgroundRenderer.sprite = backgroundSprite;
+        //}
+        //else
+        //{
+        //    string key = Application.loadedLevelName + ".main.background";
+        //    string backgroundName = Application.loadedLevelName + "BG01";
 
-			//Debug.LogError("BACKGROUND SPRITE " + backgroundName);
+        //    if (LugusResources.use.Levels.HasText(key))
+        //    {
+        //        Debug.Log("Loading menu background texture from Levels text at key:" + key);
+        //        backgroundName = LugusResources.use.Levels.GetText(key);
+        //    }
 
-			backgroundRenderer.enabled = true;
+        //    Debug.LogError("BACKGROUND SPRITE " + backgroundName);
 
-			Sprite newBackground = LugusResources.use.Shared.GetSprite(backgroundName);
+        //    backgroundRenderer.enabled = true;
 
-			if (newBackground != LugusResources.use.errorSprite)
-			{
-				backgroundSprite = newBackground;
-				backgroundRenderer.sprite = newBackground;
-			}
-			else
-			{
-				backgroundRenderer.enabled = false;
-			}
-		}
+        //    Sprite newBackground = LugusResources.use.Shared.GetSprite(backgroundName);
+
+        //    if (newBackground != LugusResources.use.errorSprite)
+        //    {
+        //        backgroundSprite = newBackground;
+        //        backgroundRenderer.sprite = newBackground;
+        //    }
+        //    else
+        //    {
+        //        backgroundRenderer.enabled = false;
+        //    }
+        //}
 	}
 	
 	protected void Awake()
@@ -111,7 +122,7 @@ public class MenuManagerDefault: MonoBehaviour
 			}
 			else
 			{
-				if (step.IsActive() == true)
+				if (step.IsActive())
 				{
 					step.Deactivate(true);
 				}
@@ -120,7 +131,6 @@ public class MenuManagerDefault: MonoBehaviour
 					step.Deactivate(false);
 				}
 			}
-
 		}
 	}
 
@@ -130,7 +140,7 @@ public class MenuManagerDefault: MonoBehaviour
 
 		if (type == MenuTypes.NONE)
 		{
-			background.gameObject.SetActive(false);
+			//background.gameObject.SetActive(false);
 			DeactivateAllMenus();
 			return;
 		}
@@ -149,12 +159,12 @@ public class MenuManagerDefault: MonoBehaviour
             //    proceed = !nextStep.GetComponent<StepLevelMenu>().LoadSingleLevel();
             //}
 
-			//Debug.LogError("PROCEED " + proceed);
+            //Debug.LogError("PROCEED " + proceed);
 
 			if( proceed )
 			{
-				if (!background.gameObject.activeSelf)
-					background.gameObject.SetActive(true);
+                //if (!background.gameObject.activeSelf)
+                //    background.gameObject.SetActive(true);
 
 				DeactivateAllMenus();
 				nextStep.Activate();

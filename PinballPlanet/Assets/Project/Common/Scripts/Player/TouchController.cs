@@ -13,6 +13,8 @@ public class TouchController : MonoBehaviour
     // Transforms of often accessed game objects.
     private Transform _leftFlipperTransform;
     private Transform _rightFlipperTransform;
+    private Transform _leftFlipperClickBoxTransform;
+    private Transform _rightFlipperClickBoxTransform;
     private Transform _mainCameraTransform;
 
     // Initialization.
@@ -20,6 +22,8 @@ public class TouchController : MonoBehaviour
     {
         _leftFlipperTransform = GameObject.Find("LeftFlipper").transform;
         _rightFlipperTransform = GameObject.Find("RightFlipper").transform;
+        _leftFlipperClickBoxTransform = GameObject.Find("ClickBox_LeftFlipper").transform;
+        _rightFlipperClickBoxTransform = GameObject.Find("ClickBox_RightFlipper").transform;
         _mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
 
@@ -35,9 +39,9 @@ public class TouchController : MonoBehaviour
             if (clickedObject != null)
             {
                 // Move flippers if touched/clicked.
-                if (clickedObject == _leftFlipperTransform)
+                if (clickedObject == _leftFlipperClickBoxTransform)
                     _leftFlipperTransform.GetComponent<Flipper>().TouchPressed = true;
-                if (clickedObject == _rightFlipperTransform)
+                if (clickedObject == _rightFlipperClickBoxTransform)
                     _rightFlipperTransform.GetComponent<Flipper>().TouchPressed = true;
             }
         }

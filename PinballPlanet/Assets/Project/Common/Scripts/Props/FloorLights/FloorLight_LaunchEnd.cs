@@ -17,6 +17,8 @@ public class FloorLight_LaunchEnd : Triggerable
         GetComponent<FloorLight_Link>().Break();
 
         ScoreManager.use.ShowScore(LaunchLightsScore, transform.position.zAdd(Random.Range(10, 20)), 2.0f, null, Color.white);
+
+        TurnOffLaunchLights();
     }
 
     // Turn off all launch lights by turning of the first one.
@@ -34,5 +36,7 @@ public class FloorLight_LaunchEnd : Triggerable
             return;
 
         ScoreManager.use.ShowScore(LaunchLightsScore, transform.position.zAdd(Random.Range(10, 20)), 2.0f, null, Color.white);
+
+        TurnOffLaunchLights();
     }
 }

@@ -69,7 +69,7 @@ public class Player : LugusSingletonExisting<Player>
         if (ScoreManager.use.BallCount <= 0)
         {
             //GameObject.Find("GOD").GetComponent<KetnetController>().AddScore(totalScore);
-            GameObject.Find("JESUS").GetComponent<UIGameController>().ShowGameoverGUI();
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameOverMenu);
 
             return null;
         }
@@ -141,36 +141,35 @@ public class Player : LugusSingletonExisting<Player>
         if (Paused)
             return;
 
-        //Debug.Log(LugusInput.use.up);
-        // Do not use keyboard launch controls when mouse/touch is being used.
-        if (!LugusInput.use.down && !LugusInput.use.dragging)
+        // Control the launch.
+        if (IsSingleBallReadyForLaunch())
         {
-            // Control the launch.
-            if (IsSingleBallReadyForLaunch())
+            // Do not use keyboard launch controls when mouse/touch is being used.
+            if (!LugusInput.use.down && !LugusInput.use.dragging)
             {
                 ControlBallLaunchByKeyboard();
-            }           
-        }
-
-        // Play launch sound.
-        if (BallLaunchForce > 0)
-        {
-            if (audio != null && !_launchSoundPlaying)
-            {
-                audio.clip = LaunchSound;
-                audio.Play();
-                audio.loop = true;
-                _launchSoundPlaying = true;
             }
-        }
 
-        // Stop sound when max reached.
-        if (BallLaunchForce >= LaunchMaxForce)
-        {
-            if (audio != null)
+            // Play launch sound if launched.
+            if (BallLaunchForce > 0)
             {
-                audio.loop = false;
-                audio.Stop();
+                if (audio != null && !_launchSoundPlaying)
+                {
+                    audio.clip = LaunchSound;
+                    audio.Play();
+                    audio.loop = true;
+                    _launchSoundPlaying = true;
+                }
+            }
+
+            // Stop sound when max reached.
+            if (BallLaunchForce >= LaunchMaxForce)
+            {
+                if (audio != null)
+                {
+                    audio.loop = false;
+                    audio.Stop();
+                }
             }
         }
     }

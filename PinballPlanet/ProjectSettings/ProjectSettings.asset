@@ -73,7 +73,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  iPhoneBundleIdentifier: com.Lugus.MineTest
+  iPhoneBundleIdentifier: com.Lugus.PinballPlanet_TestBuild
   productGUID: 170e736900acf0a4aa9f17c5bab25556
   iPhoneBundleVersion: 1.0
   AndroidBundleVersionCode: 1
