@@ -36,15 +36,30 @@ public class Button : MonoBehaviour
 	
 	protected void Update() 
 	{
-		if( LugusInput.use.RayCastFromMouseUp() == this.transform )
-		{
-			if(!string.IsNullOrEmpty(pressSoundKey))
-			{
-				LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio(pressSoundKey));
-			}
-			
-			StartCoroutine( PressRoutine() );	
-		}
+	    if (gameObject.layer == LayerMask.NameToLayer("GUI"))
+	    {
+            if (LugusInput.use.RayCastFromMouseUp() == this.transform)
+            {
+                if (!string.IsNullOrEmpty(pressSoundKey))
+                {
+                    LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio(pressSoundKey));
+                }
+
+                StartCoroutine(PressRoutine());
+            }
+	    }
+	    else
+	    {
+            if (LugusInput.use.RayCastFromMouseUp(Camera.main) == this.transform)
+            {
+                if (!string.IsNullOrEmpty(pressSoundKey))
+                {
+                    LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio(pressSoundKey));
+                }
+
+                StartCoroutine(PressRoutine());
+            }
+	    }
 	}
 	
 	// postpone the pressed-event by 1 frame

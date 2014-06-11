@@ -31,11 +31,11 @@ public class BatsMainMenuAnimator : MonoBehaviour
 	
 	protected IEnumerator AnimationRoutine()
 	{
-		while( mainMenu.gameObject.active )
+		while( mainMenu.gameObject.activeInHierarchy )
 		{
 			yield return new WaitForSeconds(2.0f);
-			
-			if( !mainMenu.gameObject.active )
+
+            if (!mainMenu.gameObject.activeInHierarchy)
 				yield return null;
 			
 			targetPosition = new Vector3( Random.Range(103, 436) , targetPosition.y, targetPosition.z);

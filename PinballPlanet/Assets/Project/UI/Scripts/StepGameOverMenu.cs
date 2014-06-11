@@ -18,7 +18,7 @@ public class StepGameOverMenu : IMenuStep
         }
         if (RestartButton == null)
         {
-            Debug.Log("StepGameMenu: Missing restart button.");
+            Debug.Log("StepGameOverMenu: Missing restart button.");
         }
 
         if (MainMenuButton == null)
@@ -27,7 +27,7 @@ public class StepGameOverMenu : IMenuStep
         }
         if (MainMenuButton == null)
         {
-            Debug.Log("StepGameMenu: Missing main menu button.");
+            Debug.Log("StepGameOverMenu: Missing main menu button.");
         }
 
         if (Score == null)
@@ -36,7 +36,7 @@ public class StepGameOverMenu : IMenuStep
         }
         if (Score == null)
         {
-            Debug.Log("StepGameMenu: Missing score text mesh!");
+            Debug.Log("StepGameOverMenu: Missing score text mesh!");
         }
 
         if (HighScore == null)
@@ -45,7 +45,7 @@ public class StepGameOverMenu : IMenuStep
         }
         if (HighScore == null)
         {
-            Debug.Log("StepGameMenu: Missing high score text mesh!");
+            Debug.Log("StepGameOverMenu: Missing high score text mesh!");
         }
 
 		OriginalPosition = transform.position;
@@ -80,45 +80,11 @@ public class StepGameOverMenu : IMenuStep
         }
 	}
 
-	protected void LoadLevelData()
-	{
-		//LugusResources.use.ChangeLanguage("nl");
-
-		// TO DO: Set data about levels here (name, description, etc.)
-		string key = Application.loadedLevelName + ".main.";
-	
-        //title.SetText(LugusResources.use.Levels.GetText(key + "title"));
-        //description.SetText(LugusResources.use.Levels.GetText(key + "description"));
-
-        //Sprite imageSprite = null;
-
-        //if (LugusResources.use.Levels.HasText(key + "image"))
-        //{
-        //    imageSprite = LugusResources.use.Shared.GetSprite(LugusResources.use.Levels.GetText(key + "image"));
-        //}
-        //else
-        //{
-        //    imageSprite = LugusResources.use.Shared.GetSprite( Application.loadedLevelName + "_Main_Image");
-        //}
-
-        //if (imageSprite == null || imageSprite == LugusResources.use.errorSprite)
-        //{
-        //    image.gameObject.SetActive(false);
-        //}
-        //else
-        //{
-        //    image.sprite = imageSprite;
-        //    image.gameObject.SetActive(true);
-        //}
-	
-	}
-
 	public override void Activate(bool animate = true)
 	{
 		activated = true;
 
 		gameObject.SetActive(true);
-		LoadLevelData();
 
 		iTween.Stop(gameObject);
 
@@ -129,22 +95,7 @@ public class StepGameOverMenu : IMenuStep
         // Fill in score text.
         Score.SetText(ScoreManager.use.TotalScore.ToString());
         HighScore.SetText(ScoreManager.use.TotalScore.ToString());
-
-		//LugusCoroutines.use.StartRoutine(MusicLoop());
 	}
-
-    //protected IEnumerator MusicLoop()
-    //{
-    //    LugusAudio.use.Music().StopAll();
-    //    LugusAudio.use.Music().Play(LugusResources.use.Shared.GetAudio("MenuIntro01"));
-
-    //    while ( LugusAudio.use.Music().IsPlaying )
-    //    {
-    //        yield return new WaitForEndOfFrame();
-    //    }
-	
-    //    LugusAudio.use.Music().Play(LugusResources.use.Shared.GetAudio("MenuLoop01"), true, musicTrackSettings);
-    //}
 
 	public override void Deactivate(bool animate = true)
 	{

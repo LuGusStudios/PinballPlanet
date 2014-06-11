@@ -60,7 +60,6 @@ public class StepGameMenu : IMenuStep
 
         // Activate launch help
         launchHelp.gameObject.SetActive(true);
-
     }
 
     public void SetupGlobal()
@@ -99,19 +98,19 @@ public class StepGameMenu : IMenuStep
 
     public override void Activate(bool animate = true)
     {
-        activated = true;
+        Debug.Log("--- Activating Game Menu ---");  
 
+        activated = true;
         gameObject.SetActive(true);
 
         pauseButton.scaleDownFactor = 0.9f;
-        helpButton.scaleDownFactor = 0.9f;
     }
 
     public override void Deactivate(bool animate = true)
     {
         activated = false;
 
-        pauseButton.scaleDownFactor = 1;
-        helpButton.scaleDownFactor = 1;
+        if (pauseButton != null) 
+            pauseButton.scaleDownFactor = 1;
     }
 }

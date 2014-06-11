@@ -16,7 +16,7 @@ public class StepGameHelpMenu : IMenuStep
         }
         if (helpButton == null)
         {
-            Debug.Log("StepGameMenu: Missing help button.");
+            Debug.Log("StepGameHelpMenu: Missing help button.");
         }
 
         if (pauseButton == null)
@@ -25,13 +25,10 @@ public class StepGameHelpMenu : IMenuStep
         }
         if (pauseButton == null)
         {
-            Debug.Log("StepGameMenu: Missing pause button.");
+            Debug.Log("StepGameHelpMenu: Missing pause button.");
         }
 
 		originalPosition = transform.position;
-
-
-		//musicTrackSettings = new LugusAudioTrackSettings().Loop(true);
 	}
 	
 	public void SetupGlobal()
@@ -67,67 +64,14 @@ public class StepGameHelpMenu : IMenuStep
         }
 	}
 
-	protected void LoadLevelData()
-	{
-		//LugusResources.use.ChangeLanguage("nl");
 
-		// TO DO: Set data about levels here (name, description, etc.)
-		string key = Application.loadedLevelName + ".main.";
-	
-        //title.SetText(LugusResources.use.Levels.GetText(key + "title"));
-        //description.SetText(LugusResources.use.Levels.GetText(key + "description"));
+    public override void Activate(bool animate = true)
+    {
+        activated = true;
 
-        //Sprite imageSprite = null;
+        gameObject.SetActive(true);
+    }
 
-        //if (LugusResources.use.Levels.HasText(key + "image"))
-        //{
-        //    imageSprite = LugusResources.use.Shared.GetSprite(LugusResources.use.Levels.GetText(key + "image"));
-        //}
-        //else
-        //{
-        //    imageSprite = LugusResources.use.Shared.GetSprite( Application.loadedLevelName + "_Main_Image");
-        //}
-
-        //if (imageSprite == null || imageSprite == LugusResources.use.errorSprite)
-        //{
-        //    image.gameObject.SetActive(false);
-        //}
-        //else
-        //{
-        //    image.sprite = imageSprite;
-        //    image.gameObject.SetActive(true);
-        //}
-	
-	}
-
-	public override void Activate(bool animate = true)
-	{
-		activated = true;
-
-		gameObject.SetActive(true);
-		LoadLevelData();
-
-        //iTween.Stop(gameObject);
-
-        //transform.position = originalPosition + new Vector3(30, 0, 0);
-
-        //gameObject.MoveTo(originalPosition).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
-
-		//LugusCoroutines.use.StartRoutine(MusicLoop());
-	}
-
-    //protected IEnumerator MusicLoop()
-    //{
-    //    LugusAudio.use.Music().StopAll();
-    //    LugusAudio.use.Music().Play(LugusResources.use.Shared.GetAudio("MenuIntro01"));
-
-    //    while ( LugusAudio.use.Music().IsPlaying )
-    //    {
-    //        yield return new WaitForEndOfFrame();
-    //    }
-	
-    //    LugusAudio.use.Music().Play(LugusResources.use.Shared.GetAudio("MenuLoop01"), true, musicTrackSettings);
-    //}
 
 	public override void Deactivate(bool animate = true)
 	{

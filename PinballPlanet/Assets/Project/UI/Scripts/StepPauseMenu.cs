@@ -17,7 +17,7 @@ public class StepPauseMenu : IMenuStep
         }
         if (ResumeButton == null)
         {
-            Debug.Log("StepGameMenu: Missing resume button.");
+            Debug.Log("StepPauseMenu: Missing resume button.");
         }
 
         if (MainMenuButton == null)
@@ -26,7 +26,7 @@ public class StepPauseMenu : IMenuStep
         }
         if (MainMenuButton == null)
         {
-            Debug.Log("StepGameMenu: Missing main menu button.");
+            Debug.Log("StepPauseMenu: Missing main menu button.");
         }
 
         if (NoButton == null)
@@ -35,7 +35,7 @@ public class StepPauseMenu : IMenuStep
         }
         if (NoButton == null)
         {
-            Debug.Log("StepGameMenu: Missing no button.");
+            Debug.Log("StepPauseMenu: Missing no button.");
         }
 
         if (YesButton == null)
@@ -44,7 +44,7 @@ public class StepPauseMenu : IMenuStep
         }
         if (YesButton == null)
         {
-            Debug.Log("StepGameMenu: Missing yes button.");
+            Debug.Log("StepPauseMenu: Missing yes button.");
         }
 
         if (ExitConfirmation == null)
@@ -53,7 +53,7 @@ public class StepPauseMenu : IMenuStep
         }
         if (ExitConfirmation == null)
         {
-            Debug.Log("StepGameMenu: Missing exit confirmation.");
+            Debug.Log("StepPauseMenu: Missing exit confirmation.");
         }
 
 
