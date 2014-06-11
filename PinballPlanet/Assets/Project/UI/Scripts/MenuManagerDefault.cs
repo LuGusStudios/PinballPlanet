@@ -68,6 +68,10 @@ public class MenuManagerDefault: MonoBehaviour
 	public void SetupGlobal()
 	{
         ActivateMenu(startMenu);
+
+        // Make sure to disable game menu in main menu.
+        if(Application.loadedLevelName == "MainMenu")
+            menus[MenuTypes.GameMenu].gameObject.SetActive(false);
 	}
 	
 	protected void Awake()

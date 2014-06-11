@@ -98,8 +98,6 @@ public class StepGameMenu : IMenuStep
 
     public override void Activate(bool animate = true)
     {
-        Debug.Log("--- Activating Game Menu ---");  
-
         activated = true;
         gameObject.SetActive(true);
 

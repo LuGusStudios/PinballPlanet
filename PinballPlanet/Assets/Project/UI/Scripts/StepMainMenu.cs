@@ -9,6 +9,8 @@ public class StepMainMenu : IMenuStep
     protected Vector3 originalPosition = Vector3.zero;
 
     private float _fadeTime = 0.65f;
+    private float _rotationSpeed = 0.15f;
+    private GameObject _planet = null;
 
     public void SetupLocal()
     {
@@ -37,6 +39,19 @@ public class StepMainMenu : IMenuStep
         if (titleLogo == null)
         {
             Debug.Log("StepMainMenu: Missing title logo.");
+        }
+
+        // Only search these items when in main menu.
+        if (Application.loadedLevelName == "MainMenu")
+        {
+            if (_planet == null)
+            {
+                _planet = GameObject.Find("Planet");
+            }
+            if (_planet == null)
+            {
+                Debug.Log("StepLevelSelectMenu: Can't find planet.");
+            }
         }
 
         originalPosition = transform.position;
@@ -69,7 +84,9 @@ public class StepMainMenu : IMenuStep
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.LevelSelectMenu);
         }
-    }
+
+        _planet.transform.Rotate(Vector3.up, _rotationSpeed, Space.World);
+    } 
 
 
     public override void Activate(bool animate = true)

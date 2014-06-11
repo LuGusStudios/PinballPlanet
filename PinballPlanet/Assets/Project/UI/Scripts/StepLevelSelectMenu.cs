@@ -4,56 +4,112 @@ using System.Collections;
 
 public class StepLevelSelectMenu : IMenuStep
 {
-    protected Button helpButton = null;
-    protected Button backButton = null;
+    protected Button HelpButton = null;
+    protected Button BackButton = null;
+    protected Button PlayButton = null;
+    protected TextMesh LevelName = null;
+    protected SpriteRenderer Thumbnail = null;
     protected List<Button> LevelSelectButtons;
-    protected Vector3 originalPosition = Vector3.zero;
-    
+    protected List<GameObject> Highscores;
+
+    protected Vector3 OriginalPosition = Vector3.zero;
 
     private Button _selectedLevelButton = null;
     private GameObject _planet = null;
 
+    public float RotationSpeed = 0.15f;
+    public float DragSpeed = 1.0f;
+    private Vector3 _prevDragPoint;
+
+    public GameObject HighScorePrefab;
+    private int MaxHighScores = 5;
+
     public void SetupLocal()
     {
-        if (helpButton == null)
+        if (HelpButton == null)
         {
-            helpButton = transform.FindChild("HelpButton").GetComponent<Button>();
+            HelpButton = transform.FindChild("HelpButton").GetComponent<Button>();
         }
-        if (helpButton == null)
+        if (HelpButton == null)
         {
             Debug.Log("StepLevelSelectMenu: Missing help button.");
         }
 
-        if (backButton == null)
+        if (BackButton == null)
         {
-            backButton = transform.FindChild("BackButton").GetComponent<Button>();
+            BackButton = transform.FindChild("BackButton").GetComponent<Button>();
         }
-        if (backButton == null)
+        if (BackButton == null)
         {
             Debug.Log("StepLevelSelectMenu: Missing back button.");
         }
 
-        LevelSelectButtons = new List<Button>();
-        foreach (GameObject levelButton in GameObject.FindGameObjectsWithTag("LevelSelectButton"))
+        if (PlayButton == null)
         {
-            LevelSelectButtons.Add(levelButton.GetComponent<Button>());
+            PlayButton = transform.FindChild("PlayButton").GetComponent<Button>();
+        }
+        if (PlayButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing play button.");
         }
 
-        if (LevelSelectButtons.Count != Application.levelCount - 1)
+        if (LevelName == null)
         {
-            Debug.LogWarning("The number of level select buttons does not correspond to levels in build.");
+            LevelName = transform.FindChild("Text_LevelName").GetComponent<TextMesh>();
+        }
+        if (LevelName == null)
+        {
+            Debug.Log("StepGameMenu: Missing level name text mesh!");
         }
 
-        if (_planet == null)
+        if (Thumbnail == null)
         {
-            _planet = GameObject.Find("Planet");
+            Thumbnail = transform.FindChild("Thumbnail").GetComponent<SpriteRenderer>();
         }
-        if (_planet == null)
+        if (Thumbnail == null)
         {
-            Debug.Log("StepLevelSelectMenu: Can't find planet.");
+            Debug.Log("StepGameMenu: Missing thumbnail sprite!");
         }
 
-        originalPosition = transform.position;
+        // Only search these items when in main menu.
+        if (Application.loadedLevelName == "MainMenu")
+        {
+            LevelSelectButtons = new List<Button>();
+            foreach (GameObject levelButton in GameObject.FindGameObjectsWithTag("LevelSelectButton"))
+            {
+                LevelSelectButtons.Add(levelButton.GetComponent<Button>());
+            }
+
+            if (LevelSelectButtons.Count != Application.levelCount - 1)
+            {
+                Debug.LogWarning("The number of level select buttons does not correspond to levels in build.");
+            }
+
+            if (_planet == null)
+            {
+                _planet = GameObject.Find("Planet");
+            }
+            if (_planet == null)
+            {
+                Debug.Log("StepLevelSelectMenu: Can't find planet.");
+            }
+        }
+
+        Highscores = new List<GameObject>();
+        for (int i = 0; i < MaxHighScores; i++)
+        {
+            GameObject highscore = Instantiate(HighScorePrefab) as GameObject;
+            highscore.transform.parent = gameObject.transform;
+            highscore.transform.position = transform.FindChild("HighScore").position + Vector3.zero.yAdd(-0.6f * i);
+            highscore.SetActive(false);
+            Highscores.Add(highscore);
+        }
+
+        OriginalPosition = transform.position;
+
+        // Hide.
+        LevelName.gameObject.SetActive(false);
+        Thumbnail.gameObject.SetActive(false);
     }
 
     public void SetupGlobal()
@@ -75,13 +131,23 @@ public class StepLevelSelectMenu : IMenuStep
         if (!activated)
             return;
 
-        if (helpButton.pressed)
+        bool buttonPressed = false;
+
+        if (HelpButton.pressed)
         {
             //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu);
+            buttonPressed = true;
         }
-        else if (backButton.pressed)
+        else if (BackButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu);
+            buttonPressed = true;
+        }
+        else if (PlayButton.pressed)
+        {
+            string levelName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
+            Application.LoadLevel("Pinball_" + levelName);
+            buttonPressed = true;
         }
         else
         {
@@ -91,11 +157,11 @@ public class StepLevelSelectMenu : IMenuStep
                 {
                     // Store selected.
                     _selectedLevelButton = levelButton;
-               
+
+                    ShowLevel();
+
                     // Rotate to level.
                     string levelName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
-                    Debug.Log("--- Selected " + levelName + " level ---");
-
                     string targetName = "Planet_Rotation_" + levelName;
                     Transform target = GameObject.Find(targetName).transform;
                     if (target != null)
@@ -103,15 +169,51 @@ public class StepLevelSelectMenu : IMenuStep
                     else
                         Debug.LogError("--- Make sure the buttons follow the correct naming convention: Button_LevelName ---");
 
-                    // Put flag in right place.
-                    HideLevelButtonFlags();
-                    levelButton.transform.FindChild("LevelSelectFlag").gameObject.SetActive(true);
+                    // Set level name.
+                    LevelName.gameObject.SetActive(true);
+                    LevelName.GetComponent<TextMesh>().text = levelName;
 
                     // Exit loop.
+                    buttonPressed = true;
                     break;
                 }
             }
         }
+
+        // Allow dragging when no button was pressed.
+        if (!buttonPressed)
+        {
+            if (LugusInput.use.dragging)
+            {
+                if(_selectedLevelButton != null)
+                {
+                    _selectedLevelButton = null;
+                    HideLevel();
+                }
+                Vector3 dragVec = LugusInput.use.lastPoint - LugusInput.use.inputPoints[LugusInput.use.inputPoints.Count - 2];
+                float dragAmountX = dragVec.x;
+                float dragAmountY = dragVec.y;
+                _planet.transform.Rotate(Vector3.down, dragAmountX * DragSpeed, Space.World);
+                _planet.transform.Rotate(Vector3.right, dragAmountY * DragSpeed, Space.World);
+            }
+        }
+
+        // Slowly rotate when no level selected and not dragging.
+        if (_selectedLevelButton == null && !LugusInput.use.dragging)
+        {
+            _planet.transform.Rotate(Vector3.up, RotationSpeed, Space.World);
+        }
+        //else
+        //{
+        //    if (LugusInput.use.dragging)
+        //    {
+        //        Vector3 dragVec = LugusInput.use.lastPoint - LugusInput.use.inputPoints[LugusInput.use.inputPoints.Count - 2];
+        //        float dragAmountX = dragVec.x;
+        //        float dragAmountY = dragVec.y;
+        //        _planet.transform.Rotate(Vector3.down, dragAmountX * DragSpeed, Space.World);
+        //        _planet.transform.Rotate(Vector3.right, dragAmountY * DragSpeed, Space.World);
+        //    }
+        //}
     }
 
     private void HideLevelButtonFlags()
@@ -138,11 +240,16 @@ public class StepLevelSelectMenu : IMenuStep
         Camera.main.gameObject.MoveTo(target).Time(0.5f).EaseType(iTween.EaseType.easeInOutQuad).Execute();
     }
 
-
     public override void Deactivate(bool animate = true)
     {
         activated = false;
+
         gameObject.SetActive(false);
+
+        if (Application.loadedLevelName != "MainMenu")
+            return;
+
+        HideLevel();
 
         // Deactivate level select buttons.
         foreach (Button levelButton in LevelSelectButtons)
@@ -150,8 +257,46 @@ public class StepLevelSelectMenu : IMenuStep
             levelButton.gameObject.SetActive(false);
         }
 
-
         //iTween.Stop(gameObject);
         //gameObject.MoveTo(originalPosition + new Vector3(-30, 0, 0)).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
+    }
+
+    private void ShowLevel()
+    {
+        // Show level thumbnail.
+        string levelName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
+        Sprite thumbnail = Resources.Load<Sprite>("Shared/UI/Level" + levelName);
+        if (thumbnail != null)
+            Thumbnail.sprite = thumbnail;
+        else
+            Debug.LogError("--- Sprite with name: Shared/UI/Level" + levelName + " not found in resources. ---");
+
+        // Show high scores
+        foreach (GameObject highscore in Highscores)
+        {
+            highscore.SetActive(true);
+        }
+
+        Thumbnail.gameObject.SetActive(true);
+        PlayButton.gameObject.SetActive(true);
+
+        // Put flag in right place.
+        HideLevelButtonFlags();
+        _selectedLevelButton.transform.FindChild("LevelSelectFlag").gameObject.SetActive(true);
+    }
+
+    private void HideLevel()
+    {
+        HideLevelButtonFlags();
+        _selectedLevelButton = null;
+
+        foreach (GameObject highscore in Highscores)
+        {
+            highscore.SetActive(false);
+        }
+
+        LevelName.gameObject.SetActive(false);
+        Thumbnail.gameObject.SetActive(false);
+        PlayButton.gameObject.SetActive(false);
     }
 }
