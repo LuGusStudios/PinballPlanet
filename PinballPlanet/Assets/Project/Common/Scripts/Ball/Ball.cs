@@ -63,7 +63,10 @@ public class Ball : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag == "Launcher")
+        {
             TouchingLauncher = true;
+            GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp();  
+        }
     }
 
     void OnCollisionExit(Collision collision)

@@ -9,7 +9,7 @@ public class StepPauseMenu : IMenuStep
     protected Transform ExitConfirmation = null;
     protected Vector3 originalPosition = Vector3.zero;
 	
-	public void SetupLocal()
+	public override void SetupLocal()
 	{
         if (ResumeButton == null)
         {
@@ -66,11 +66,6 @@ public class StepPauseMenu : IMenuStep
 	{
 	}
 	
-	protected void Awake()
-	{
-		SetupLocal();
-	}
-
 	protected void Start () 
 	{
 		SetupGlobal();

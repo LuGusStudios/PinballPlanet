@@ -8,7 +8,7 @@ public class StepGameHelpMenu : IMenuStep
     protected Button pauseButton = null;
     protected Vector3 originalPosition = Vector3.zero;
 	
-	public void SetupLocal()
+	public override void SetupLocal()
 	{
         if (helpButton == null)
         {
@@ -35,11 +35,6 @@ public class StepGameHelpMenu : IMenuStep
 	{
 	}
 	
-	protected void Awake()
-	{
-		SetupLocal();
-	}
-
 	protected void Start () 
 	{
 		SetupGlobal();

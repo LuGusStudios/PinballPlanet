@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,20 @@ public class MenuManagerDefault: MonoBehaviour
 	public Sprite backgroundSprite = null;
 
 	protected bool firstFrame = true;
+
+    // Design width of the GUI
+    private const float _designWidth = 10.7f;
+    public static float DesignWidth
+    {
+        get { return _designWidth; }
+    }
+
+    // Design height of the GUI.
+    private const float _designHeight = 16.2f;
+    public static float DesignHeight
+    {
+        get { return _designHeight; }
+    }
 
 	public enum MenuTypes
 	{
@@ -63,6 +78,15 @@ public class MenuManagerDefault: MonoBehaviour
             menus.Add(MenuTypes.HelpGameMenu, gameHelpMenu);
         else
             Debug.LogError("MenuManager: Missing game help menu!");
+
+        foreach (MenuTypes key in Enum.GetValues(typeof(MenuTypes)))
+	    {
+            if(key != MenuTypes.NONE)
+            {
+                menus[key].SetupLocal();
+                menus[key].ScaleElements();
+            }
+	    }   
 	}
 	
 	public void SetupGlobal()
@@ -173,4 +197,21 @@ public class MenuManagerDefault: MonoBehaviour
 		Debug.LogError("MenuManagerDefault: Could not find child menu: " + menuName);
 		return null;
 	}
+
+    // Relative position in GUI according to design height.
+    public Vector3 CalculateRelativeUIPos(Vector3 pos)
+    {
+        return new Vector3(pos.x / (DesignWidth / 2.0f), pos.y / (DesignHeight / 2.0f));
+    }
+
+    // New position in GUI depending on screen ratio.
+    public Vector3 CalculateUIPos(Vector3 pos)
+    {    
+        float newXRatio = (Screen.width / (float)Screen.height);
+        float oldXRatio = (DesignWidth / DesignHeight);
+
+        pos.x *= newXRatio / oldXRatio;
+
+        return pos;
+    }
 }

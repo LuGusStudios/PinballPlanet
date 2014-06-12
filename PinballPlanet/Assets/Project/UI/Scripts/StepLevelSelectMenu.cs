@@ -24,7 +24,7 @@ public class StepLevelSelectMenu : IMenuStep
     public GameObject HighScorePrefab;
     private int MaxHighScores = 5;
 
-    public void SetupLocal()
+    public override void SetupLocal()
     {
         if (HelpButton == null)
         {
@@ -116,11 +116,6 @@ public class StepLevelSelectMenu : IMenuStep
     {
     }
 
-    protected void Awake()
-    {
-        SetupLocal();
-    }
-
     protected void Start()
     {
         SetupGlobal();
@@ -131,23 +126,18 @@ public class StepLevelSelectMenu : IMenuStep
         if (!activated)
             return;
 
-        bool buttonPressed = false;
-
         if (HelpButton.pressed)
         {
             //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu);
-            buttonPressed = true;
         }
         else if (BackButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu);
-            buttonPressed = true;
         }
         else if (PlayButton.pressed)
         {
             string levelName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
             Application.LoadLevel("Pinball_" + levelName);
-            buttonPressed = true;
         }
         else
         {
@@ -174,25 +164,24 @@ public class StepLevelSelectMenu : IMenuStep
                     LevelName.GetComponent<TextMesh>().text = levelName;
 
                     // Exit loop.
-                    buttonPressed = true;
                     break;
                 }
             }
         }
 
         // Allow dragging when no button was pressed.
-        if (!buttonPressed)
+        if (LugusInput.use.RayCastFromMouse() == null)
         {
             if (LugusInput.use.dragging)
             {
-                if(_selectedLevelButton != null)
+                if (_selectedLevelButton != null)
                 {
                     _selectedLevelButton = null;
                     HideLevel();
                 }
                 Vector3 dragVec = LugusInput.use.lastPoint - LugusInput.use.inputPoints[LugusInput.use.inputPoints.Count - 2];
-                float dragAmountX = dragVec.x;
-                float dragAmountY = dragVec.y;
+                float dragAmountX = dragVec.x / Screen.width;
+                float dragAmountY = dragVec.y / Screen.height;
                 _planet.transform.Rotate(Vector3.down, dragAmountX * DragSpeed, Space.World);
                 _planet.transform.Rotate(Vector3.right, dragAmountY * DragSpeed, Space.World);
             }
@@ -203,17 +192,6 @@ public class StepLevelSelectMenu : IMenuStep
         {
             _planet.transform.Rotate(Vector3.up, RotationSpeed, Space.World);
         }
-        //else
-        //{
-        //    if (LugusInput.use.dragging)
-        //    {
-        //        Vector3 dragVec = LugusInput.use.lastPoint - LugusInput.use.inputPoints[LugusInput.use.inputPoints.Count - 2];
-        //        float dragAmountX = dragVec.x;
-        //        float dragAmountY = dragVec.y;
-        //        _planet.transform.Rotate(Vector3.down, dragAmountX * DragSpeed, Space.World);
-        //        _planet.transform.Rotate(Vector3.right, dragAmountY * DragSpeed, Space.World);
-        //    }
-        //}
     }
 
     private void HideLevelButtonFlags()
@@ -243,7 +221,7 @@ public class StepLevelSelectMenu : IMenuStep
     public override void Deactivate(bool animate = true)
     {
         activated = false;
-
+        
         gameObject.SetActive(false);
 
         if (Application.loadedLevelName != "MainMenu")

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StepMainMenu : IMenuStep 
+public class StepMainMenu : IMenuStep
 {
     protected Button helpButton = null;
     protected Button playButton = null;
@@ -12,7 +12,7 @@ public class StepMainMenu : IMenuStep
     private float _rotationSpeed = 0.15f;
     private GameObject _planet = null;
 
-    public void SetupLocal()
+    public override void SetupLocal()
     {
         if (helpButton == null)
         {
@@ -61,11 +61,6 @@ public class StepMainMenu : IMenuStep
     {
     }
 
-    protected void Awake()
-    {
-        SetupLocal();
-    }
-
     protected void Start()
     {
         SetupGlobal();
@@ -86,7 +81,7 @@ public class StepMainMenu : IMenuStep
         }
 
         _planet.transform.Rotate(Vector3.up, _rotationSpeed, Space.World);
-    } 
+    }
 
 
     public override void Activate(bool animate = true)

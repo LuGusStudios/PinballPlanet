@@ -9,7 +9,7 @@ public class StepGameMenu : IMenuStep
     protected Vector3 originalPosition = Vector3.zero;
     protected Transform launchHelp = null;
 
-    public void SetupLocal()
+    public override void SetupLocal()
     {
         if (pauseButton == null)
         {
@@ -31,7 +31,7 @@ public class StepGameMenu : IMenuStep
 
         if (totalScore == null)
         {
-            totalScore = transform.FindChild("Text_TotalScore").GetComponent<TextMeshWrapper>();
+            totalScore = transform.FindChild("ScorePlane/Text_TotalScore").GetComponent<TextMeshWrapper>();
         }
         if (totalScore == null)
         {
@@ -40,7 +40,7 @@ public class StepGameMenu : IMenuStep
 
         if (ballsLeft == null)
         {
-            ballsLeft = transform.FindChild("Text_BallCount").GetComponent<TextMeshWrapper>();
+            ballsLeft = transform.FindChild("BallsLeftPlane/Text_BallCount").GetComponent<TextMeshWrapper>();
         }
         if (ballsLeft == null)
         {
@@ -64,11 +64,6 @@ public class StepGameMenu : IMenuStep
 
     public void SetupGlobal()
     {
-    }
-
-    protected void Awake()
-    {
-        SetupLocal();
     }
 
     protected void Start()
@@ -110,5 +105,10 @@ public class StepGameMenu : IMenuStep
 
         if (pauseButton != null) 
             pauseButton.scaleDownFactor = 1;
+    }
+
+    public void ShowLaunchHelp()
+    {
+        launchHelp.gameObject.SetActive(true);
     }
 }
