@@ -71,10 +71,10 @@ public class StepLevelSelectMenu : IMenuStep
             Debug.Log("StepGameMenu: Missing thumbnail sprite!");
         }
 
+        LevelSelectButtons = new List<Button>();
         // Only search these items when in main menu.
         if (Application.loadedLevelName == "MainMenu")
         {
-            LevelSelectButtons = new List<Button>();
             foreach (GameObject levelButton in GameObject.FindGameObjectsWithTag("LevelSelectButton"))
             {
                 LevelSelectButtons.Add(levelButton.GetComponent<Button>());
@@ -108,8 +108,7 @@ public class StepLevelSelectMenu : IMenuStep
         OriginalPosition = transform.position;
 
         // Hide.
-        LevelName.gameObject.SetActive(false);
-        Thumbnail.gameObject.SetActive(false);
+        HideLevel();
     }
 
     public void SetupGlobal()
@@ -128,11 +127,13 @@ public class StepLevelSelectMenu : IMenuStep
 
         if (HelpButton.pressed)
         {
-            //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu);
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.LevelSelectHelpMenu);
+            HelpButton.gameObject.SetActive(false);
         }
         else if (BackButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu);
+            HideLevel();
         }
         else if (PlayButton.pressed)
         {
@@ -187,11 +188,11 @@ public class StepLevelSelectMenu : IMenuStep
             }
         }
 
-        // Slowly rotate when no level selected and not dragging.
-        if (_selectedLevelButton == null && !LugusInput.use.dragging)
-        {
-            _planet.transform.Rotate(Vector3.up, RotationSpeed, Space.World);
-        }
+        //// Slowly rotate when no level selected and not dragging.
+        //if (_selectedLevelButton == null && !LugusInput.use.dragging)
+        //{
+        //    _planet.transform.Rotate(Vector3.up, RotationSpeed, Space.World);
+        //}
     }
 
     private void HideLevelButtonFlags()
@@ -207,6 +208,8 @@ public class StepLevelSelectMenu : IMenuStep
         activated = true;
         gameObject.SetActive(true);
 
+        HelpButton.gameObject.SetActive(true);
+
         // Activate level select buttons.
         foreach (Button levelButton in LevelSelectButtons)
         {
@@ -221,13 +224,11 @@ public class StepLevelSelectMenu : IMenuStep
     public override void Deactivate(bool animate = true)
     {
         activated = false;
-        
+
         gameObject.SetActive(false);
 
         if (Application.loadedLevelName != "MainMenu")
             return;
-
-        HideLevel();
 
         // Deactivate level select buttons.
         foreach (Button levelButton in LevelSelectButtons)
@@ -239,7 +240,7 @@ public class StepLevelSelectMenu : IMenuStep
         //gameObject.MoveTo(originalPosition + new Vector3(-30, 0, 0)).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
     }
 
-    private void ShowLevel()
+    public void ShowLevel()
     {
         // Show level thumbnail.
         string levelName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
@@ -263,10 +264,11 @@ public class StepLevelSelectMenu : IMenuStep
         _selectedLevelButton.transform.FindChild("LevelSelectFlag").gameObject.SetActive(true);
     }
 
-    private void HideLevel()
+    public void HideLevel()
     {
-        HideLevelButtonFlags();
-        _selectedLevelButton = null;
+        if(LevelSelectButtons.Count > 0)
+            HideLevelButtonFlags();
+        //_selectedLevelButton = null;
 
         foreach (GameObject highscore in Highscores)
         {

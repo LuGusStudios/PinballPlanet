@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class StepGameMenu : IMenuStep
@@ -79,10 +80,13 @@ public class StepGameMenu : IMenuStep
         if (pauseButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu);
+            helpButton.gameObject.SetActive(false);
+            pauseButton.gameObject.SetActive(false);
         }
         else if (helpButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.HelpGameMenu);
+            helpButton.gameObject.SetActive(false);
         }
         // Disable launch help.
         if (LugusInput.use.up)
@@ -95,6 +99,9 @@ public class StepGameMenu : IMenuStep
     {
         activated = true;
         gameObject.SetActive(true);
+
+        helpButton.gameObject.SetActive(true);
+        pauseButton.gameObject.SetActive(true);
 
         pauseButton.scaleDownFactor = 0.9f;
     }

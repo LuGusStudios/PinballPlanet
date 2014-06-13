@@ -3,10 +3,13 @@ using System.Collections;
 
 public class StepMainMenu : IMenuStep
 {
-    protected Button helpButton = null;
-    protected Button playButton = null;
-    protected GameObject titleLogo = null;
-    protected Vector3 originalPosition = Vector3.zero;
+    protected Button HelpButton = null;
+    protected Button PlayButton = null;
+    protected Button SocialButton = null;
+    protected Button SettingsButton = null;
+    protected Button TrophyButton = null;
+    protected GameObject TitleLogo = null;
+    protected Vector3 OriginalPosition = Vector3.zero;
 
     private float _fadeTime = 0.65f;
     private float _rotationSpeed = 0.15f;
@@ -14,29 +17,56 @@ public class StepMainMenu : IMenuStep
 
     public override void SetupLocal()
     {
-        if (helpButton == null)
+        if (HelpButton == null)
         {
-            helpButton = transform.FindChild("HelpButton").GetComponent<Button>();
+            HelpButton = transform.FindChild("HelpButton").GetComponent<Button>();
         }
-        if (helpButton == null)
+        if (HelpButton == null)
         {
             Debug.Log("StepMainMenu: Missing help button.");
         }
 
-        if (playButton == null)
+        if (PlayButton == null)
         {
-            playButton = transform.FindChild("PlayButton").GetComponent<Button>();
+            PlayButton = transform.FindChild("PlayButton").GetComponent<Button>();
         }
-        if (playButton == null)
+        if (PlayButton == null)
         {
             Debug.Log("StepMainMenu: Missing play button.");
         }
 
-        if (titleLogo == null)
+        if (SocialButton == null)
         {
-            titleLogo = transform.FindChild("PlanetPinballLogo").gameObject;
+            SocialButton = transform.FindChild("Button_Social").GetComponent<Button>();
         }
-        if (titleLogo == null)
+        if (SocialButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing social button.");
+        }
+
+        if (SettingsButton == null)
+        {
+            SettingsButton = transform.FindChild("Button_Settings").GetComponent<Button>();
+        }
+        if (SettingsButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing settings button.");
+        }
+
+        if (TrophyButton == null)
+        {
+            TrophyButton = transform.FindChild("Button_Trophy").GetComponent<Button>();
+        }
+        if (TrophyButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing trophy button.");
+        }
+
+        if (TitleLogo == null)
+        {
+            TitleLogo = transform.FindChild("PlanetPinballLogo").gameObject;
+        }
+        if (TitleLogo == null)
         {
             Debug.Log("StepMainMenu: Missing title logo.");
         }
@@ -54,7 +84,7 @@ public class StepMainMenu : IMenuStep
             }
         }
 
-        originalPosition = transform.position;
+        OriginalPosition = transform.position;
     }
 
     public void SetupGlobal()
@@ -71,33 +101,58 @@ public class StepMainMenu : IMenuStep
         if (!activated)
             return;
 
-        if (helpButton.pressed)
+        if (HelpButton.pressed)
         {
-            //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu);
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainHelpMenu, false);
+            HelpButton.gameObject.SetActive(false);
         }
-        else if (playButton.pressed)
+        else if (PlayButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.LevelSelectMenu);
+        }
+        else if (SocialButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+            SocialButton.gameObject.SetActive(false);
+        }
+        else if (SettingsButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
+            SettingsButton.gameObject.SetActive(false);
+        }
+        else if (TrophyButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
+            TrophyButton.gameObject.SetActive(false);
+            PlayButton.gameObject.SetActive(false);
         }
 
         _planet.transform.Rotate(Vector3.up, _rotationSpeed, Space.World);
     }
-
 
     public override void Activate(bool animate = true)
     {
         activated = true;
         gameObject.SetActive(true);
 
-        helpButton.gameObject.SetActive(true);
-        playButton.gameObject.SetActive(true);
+        HelpButton.gameObject.SetActive(true);
+        PlayButton.gameObject.SetActive(true);
+        SocialButton.gameObject.SetActive(true);
+        SettingsButton.gameObject.SetActive(true);
+        TrophyButton.gameObject.SetActive(true);
 
         // Move camera to main menu position.
         Vector3 target = GameObject.Find("Camera_MainMenu").transform.position;
         Camera.main.gameObject.MoveTo(target).Time(_fadeTime).EaseType(iTween.EaseType.easeInOutQuad).Execute();
 
+        TitleLogo.SetActive(true);
+
         // Pop in title.
-        titleLogo.ScaleTo(Vector3.one).Time(_fadeTime).EaseType(iTween.EaseType.easeOutElastic).Execute();
+        if (animate)
+        {
+            TitleLogo.transform.localScale = Vector3.zero;
+            TitleLogo.ScaleTo(Vector3.one).Time(_fadeTime).EaseType(iTween.EaseType.easeOutElastic).Execute();
+        }
     }
 
 
@@ -105,13 +160,16 @@ public class StepMainMenu : IMenuStep
     {
         activated = false;
 
-        helpButton.gameObject.SetActive(false);
-        playButton.gameObject.SetActive(false);
+        HelpButton.gameObject.SetActive(false);
+        PlayButton.gameObject.SetActive(false);
+        SocialButton.gameObject.SetActive(false);
+        SettingsButton.gameObject.SetActive(false);
+        TrophyButton.gameObject.SetActive(false);
 
         // Pop out title.
-        titleLogo.ScaleTo(Vector3.zero).Time(_fadeTime).EaseType(iTween.EaseType.easeInCubic).Execute();
-
-        //iTween.Stop(gameObject);
-        //gameObject.MoveTo(originalPosition + new Vector3(-30, 0, 0)).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
+        if (animate)
+            TitleLogo.ScaleTo(Vector3.zero).Time(_fadeTime).EaseType(iTween.EaseType.easeInCubic).Execute();
+        else
+            TitleLogo.SetActive(false);
     }
 }

@@ -9,8 +9,7 @@ public class MenuManager : LugusSingletonExisting<MenuManagerDefault>
 
 public class MenuManagerDefault: MonoBehaviour
 {
-	public Dictionary<MenuTypes, IMenuStep> menus = new Dictionary<MenuTypes, IMenuStep>();
-	public Sprite backgroundSprite = null;
+	public Dictionary<MenuTypes, IMenuStep> Menus = new Dictionary<MenuTypes, IMenuStep>();
 
 	protected bool firstFrame = true;
 
@@ -36,46 +35,82 @@ public class MenuManagerDefault: MonoBehaviour
         PauseMenu = 3,
         HelpGameMenu = 4,
         MainMenu = 5,
-        LevelSelectMenu = 6
+        LevelSelectMenu = 6,
+        SocialMenu = 7,
+        OptionsMenu = 8,
+        ChallengesMenu = 9,
+        MainHelpMenu = 10,
+        LevelSelectHelpMenu = 11,
 	}
 
-    public MenuTypes startMenu = MenuTypes.MainMenu;
+    public MenuTypes StartMenu = MenuTypes.MainMenu;
+    public MenuTypes ActiveMenu = MenuTypes.NONE;
 
 	public void SetupLocal()
 	{
         StepMainMenu mainMenu = transform.FindChild("MainMenu").GetComponent<StepMainMenu>();
         if (mainMenu != null)
-            menus.Add(MenuTypes.MainMenu, mainMenu);
+            Menus.Add(MenuTypes.MainMenu, mainMenu);
         else
             Debug.LogError("MenuManager: Missing main menu!");
 
+        StepMainHelpMenu mainHelpMenu = transform.FindChild("MainHelpMenu").GetComponent<StepMainHelpMenu>();
+        if (mainHelpMenu != null)
+            Menus.Add(MenuTypes.MainHelpMenu, mainHelpMenu);
+        else
+            Debug.LogError("MenuManager: Missing main help menu!");
+
         StepLevelSelectMenu levelSelectMenu = transform.FindChild("LevelSelectMenu").GetComponent<StepLevelSelectMenu>();
         if (levelSelectMenu != null)
-            menus.Add(MenuTypes.LevelSelectMenu, levelSelectMenu);
+            Menus.Add(MenuTypes.LevelSelectMenu, levelSelectMenu);
         else
             Debug.LogError("MenuManager: Missing level select menu!");
-        
+
+        IMenuStep levelSelectHelpMenu = transform.FindChild("LevelSelectHelpMenu").GetComponent<StepLevelSelectHelpMenu>();
+        if (levelSelectHelpMenu != null)
+            Menus.Add(MenuTypes.LevelSelectHelpMenu, levelSelectHelpMenu);
+        else
+            Debug.LogError("MenuManager: Missing level select help menu!");
+
+        StepSocialMenu socialMenu = transform.FindChild("SocialMenu").GetComponent<StepSocialMenu>();
+        if (socialMenu != null)
+            Menus.Add(MenuTypes.SocialMenu, socialMenu);
+        else
+            Debug.LogError("MenuManager: Missing social menu!");
+
+        StepOptionsMenu optionsMenu = transform.FindChild("OptionsMenu").GetComponent<StepOptionsMenu>();
+        if (optionsMenu != null)
+            Menus.Add(MenuTypes.OptionsMenu, optionsMenu);
+        else
+            Debug.LogError("MenuManager: Missing options menu!");
+
+        StepChallengesMenu challengesMenu = transform.FindChild("ChallengesMenu").GetComponent<StepChallengesMenu>();
+        if (optionsMenu != null)
+            Menus.Add(MenuTypes.ChallengesMenu, challengesMenu);
+        else
+            Debug.LogError("MenuManager: Missing challenges menu!");
+
         StepGameMenu gameMenu = transform.FindChild("GameMenu").GetComponent<StepGameMenu>();
 		if (gameMenu != null)
-			menus.Add(MenuTypes.GameMenu, gameMenu);
+			Menus.Add(MenuTypes.GameMenu, gameMenu);
 		else
 			Debug.LogError("MenuManager: Missing game menu!");
 
         StepGameOverMenu gameOverMenu = transform.FindChild("GameOverMenu").GetComponent<StepGameOverMenu>();
         if (gameOverMenu != null)
-            menus.Add(MenuTypes.GameOverMenu, gameOverMenu);
+            Menus.Add(MenuTypes.GameOverMenu, gameOverMenu);
         else
             Debug.LogError("MenuManager: Missing game over menu!");
 
         StepPauseMenu pauseMenu = transform.FindChild("PauseMenu").GetComponent<StepPauseMenu>();
         if (pauseMenu != null)
-            menus.Add(MenuTypes.PauseMenu, pauseMenu);
+            Menus.Add(MenuTypes.PauseMenu, pauseMenu);
         else
             Debug.LogError("MenuManager: Missing pause menu!");
 
-        StepGameHelpMenu gameHelpMenu = transform.FindChild("HelpMenu").GetComponent<StepGameHelpMenu>();
+        StepGameHelpMenu gameHelpMenu = transform.FindChild("GameHelpMenu").GetComponent<StepGameHelpMenu>();
         if (gameHelpMenu != null)
-            menus.Add(MenuTypes.HelpGameMenu, gameHelpMenu);
+            Menus.Add(MenuTypes.HelpGameMenu, gameHelpMenu);
         else
             Debug.LogError("MenuManager: Missing game help menu!");
 
@@ -83,19 +118,19 @@ public class MenuManagerDefault: MonoBehaviour
 	    {
             if(key != MenuTypes.NONE)
             {
-                menus[key].SetupLocal();
-                menus[key].ScaleElements();
+                Menus[key].SetupLocal();
+                Menus[key].ScaleElements();
             }
 	    }   
 	}
 	
 	public void SetupGlobal()
 	{
-        ActivateMenu(startMenu);
+        ActivateMenu(StartMenu);
 
         // Make sure to disable game menu in main menu.
         if(Application.loadedLevelName == "MainMenu")
-            menus[MenuTypes.GameMenu].gameObject.SetActive(false);
+            Menus[MenuTypes.GameMenu].gameObject.SetActive(false);
 	}
 	
 	protected void Awake()
@@ -114,9 +149,9 @@ public class MenuManagerDefault: MonoBehaviour
 			firstFrame = false;
 	}
 
-	protected void DeactivateAllMenus()
+    protected void DeactivateAllMenus(bool animate = true)
 	{
-		foreach(IMenuStep step in menus.Values)
+		foreach(IMenuStep step in Menus.Values)
 		{
 			if (firstFrame)
 			{
@@ -126,7 +161,7 @@ public class MenuManagerDefault: MonoBehaviour
 			{
 				if (step.IsActive())
 				{
-					step.Deactivate(true);
+					step.Deactivate(animate);
 				}
 				else
 				{
@@ -136,40 +171,31 @@ public class MenuManagerDefault: MonoBehaviour
 		}
 	}
 
-	public void ActivateMenu(MenuTypes type)
+    public void ActivateMenu(MenuTypes type, bool animate = true)
 	{
 		IMenuStep nextStep = null;
 
 		if (type == MenuTypes.NONE)
 		{
-			//background.gameObject.SetActive(false);
-			DeactivateAllMenus();
+            DeactivateAllMenus(animate);
 			return;
 		}
 
-		if (menus.ContainsKey(type))
+		if (Menus.ContainsKey(type))
 		{
-			nextStep = menus[type];
+			nextStep = Menus[type];
 		}
 
 		if (nextStep != null)
 		{
 			// if there is only one level, we want to bypass the level selection screen and go directly to the level
 			bool proceed = true;
-            //if( nextStep.GetComponent<StepLevelMenu>()!= null )
-            //{
-            //    proceed = !nextStep.GetComponent<StepLevelMenu>().LoadSingleLevel();
-            //}
-
-            //Debug.LogError("PROCEED " + proceed);
 
 			if( proceed )
 			{
-                //if (!background.gameObject.activeSelf)
-                //    background.gameObject.SetActive(true);
-
-				DeactivateAllMenus();
-				nextStep.Activate();
+                DeactivateAllMenus(animate);
+				nextStep.Activate(animate);
+			    ActiveMenu = type;
 			}
 		}
 		else

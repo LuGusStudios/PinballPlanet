@@ -6,6 +6,9 @@ public class StepPauseMenu : IMenuStep
     protected Button MainMenuButton = null;
     protected Button NoButton = null;
     protected Button YesButton = null;
+    protected Button SocialButton = null;
+    protected Button SettingsButton = null;
+    protected Button TrophyButton = null;
     protected Transform ExitConfirmation = null;
     protected Vector3 originalPosition = Vector3.zero;
 	
@@ -47,6 +50,33 @@ public class StepPauseMenu : IMenuStep
             Debug.Log("StepPauseMenu: Missing yes button.");
         }
 
+        if (SocialButton == null)
+        {
+            SocialButton = transform.FindChild("Button_Social").GetComponent<Button>();
+        }
+        if (SocialButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing social button.");
+        }
+
+        if (SettingsButton == null)
+        {
+            SettingsButton = transform.FindChild("Button_Settings").GetComponent<Button>();
+        }
+        if (SettingsButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing settings button.");
+        }
+
+        if (TrophyButton == null)
+        {
+            TrophyButton = transform.FindChild("Button_Trophy").GetComponent<Button>();
+        }
+        if (TrophyButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing trophy button.");
+        }
+
         if (ExitConfirmation == null)
         {
             ExitConfirmation = transform.FindChild("ExitConfirmation");
@@ -56,10 +86,7 @@ public class StepPauseMenu : IMenuStep
             Debug.Log("StepPauseMenu: Missing exit confirmation.");
         }
 
-
 		originalPosition = transform.position;
-
-
 	}
 	
 	public void SetupGlobal()
@@ -82,6 +109,7 @@ public class StepPauseMenu : IMenuStep
         }
         else if (MainMenuButton.pressed)
         {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
             ExitConfirmation.gameObject.SetActive(true);
             ResumeButton.gameObject.SetActive(false);
             MainMenuButton.gameObject.SetActive(false);
@@ -96,6 +124,24 @@ public class StepPauseMenu : IMenuStep
         {
             Application.LoadLevel("MainMenu");
         }
+        else if (SocialButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+            SocialButton.gameObject.SetActive(false);
+        }
+        else if (SettingsButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
+            SettingsButton.gameObject.SetActive(false);
+        }
+        else if (TrophyButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
+            TrophyButton.gameObject.SetActive(false);
+            ResumeButton.gameObject.SetActive(false);
+            MainMenuButton.gameObject.SetActive(false);
+        }
+
 	}
 
 
@@ -105,18 +151,17 @@ public class StepPauseMenu : IMenuStep
 
 		gameObject.SetActive(true);
 
-		iTween.Stop(gameObject);
-
-		transform.position = originalPosition + new Vector3(30, 0, 0);
-
-		gameObject.MoveTo(originalPosition).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
+        SocialButton.gameObject.SetActive(true);
+        SettingsButton.gameObject.SetActive(true);
+        TrophyButton.gameObject.SetActive(true);
+        ResumeButton.gameObject.SetActive(true);
+        MainMenuButton.gameObject.SetActive(true);
 	}
 
 	public override void Deactivate(bool animate = true)
 	{
 		activated = false;
 
-		iTween.Stop(gameObject);
-		gameObject.MoveTo(originalPosition + new Vector3(-30, 0, 0)).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
-	}
+        gameObject.SetActive(false);
+    }
 }
