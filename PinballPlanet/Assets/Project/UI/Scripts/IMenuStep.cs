@@ -8,10 +8,20 @@ public abstract class IMenuStep : MonoBehaviour
 	public abstract void Activate(bool animate = true);
 	public abstract void Deactivate(bool animate = true);
 
+    public abstract void SetupLocal();
+
 	public bool IsActive()
 	{
 		return activated;
 	}
+
+    public void ScaleElements()
+    {
+        foreach (Transform child in transform)
+        {
+            child.localPosition = MenuManager.use.CalculateUIPos(child.localPosition);
+        }
+    }
 }
 
 // Menu class template below

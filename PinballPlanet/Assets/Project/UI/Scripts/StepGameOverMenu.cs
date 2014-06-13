@@ -10,7 +10,7 @@ public class StepGameOverMenu : IMenuStep
     protected TextMeshWrapper HighScore = null;
     protected Vector3 OriginalPosition = Vector3.zero;
 	
-	public void SetupLocal()
+	public override void SetupLocal()
 	{
         if (RestartButton == null)
         {
@@ -55,11 +55,6 @@ public class StepGameOverMenu : IMenuStep
 	{
 	}
 	
-	protected void Awake()
-	{
-		SetupLocal();
-	}
-
 	protected void Start () 
 	{
 		SetupGlobal();

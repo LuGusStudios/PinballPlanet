@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class StepGameMenu : IMenuStep
@@ -9,7 +10,7 @@ public class StepGameMenu : IMenuStep
     protected Vector3 originalPosition = Vector3.zero;
     protected Transform launchHelp = null;
 
-    public void SetupLocal()
+    public override void SetupLocal()
     {
         if (pauseButton == null)
         {
@@ -31,7 +32,7 @@ public class StepGameMenu : IMenuStep
 
         if (totalScore == null)
         {
-            totalScore = transform.FindChild("Text_TotalScore").GetComponent<TextMeshWrapper>();
+            totalScore = transform.FindChild("ScorePlane/Text_TotalScore").GetComponent<TextMeshWrapper>();
         }
         if (totalScore == null)
         {
@@ -40,7 +41,7 @@ public class StepGameMenu : IMenuStep
 
         if (ballsLeft == null)
         {
-            ballsLeft = transform.FindChild("Text_BallCount").GetComponent<TextMeshWrapper>();
+            ballsLeft = transform.FindChild("BallsLeftPlane/Text_BallCount").GetComponent<TextMeshWrapper>();
         }
         if (ballsLeft == null)
         {
@@ -66,11 +67,6 @@ public class StepGameMenu : IMenuStep
     {
     }
 
-    protected void Awake()
-    {
-        SetupLocal();
-    }
-
     protected void Start()
     {
         SetupGlobal();
@@ -84,10 +80,13 @@ public class StepGameMenu : IMenuStep
         if (pauseButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu);
+            helpButton.gameObject.SetActive(false);
+            pauseButton.gameObject.SetActive(false);
         }
         else if (helpButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.HelpGameMenu);
+            helpButton.gameObject.SetActive(false);
         }
         // Disable launch help.
         if (LugusInput.use.up)
@@ -98,10 +97,11 @@ public class StepGameMenu : IMenuStep
 
     public override void Activate(bool animate = true)
     {
-        Debug.Log("--- Activating Game Menu ---");  
-
         activated = true;
         gameObject.SetActive(true);
+
+        helpButton.gameObject.SetActive(true);
+        pauseButton.gameObject.SetActive(true);
 
         pauseButton.scaleDownFactor = 0.9f;
     }
@@ -112,5 +112,10 @@ public class StepGameMenu : IMenuStep
 
         if (pauseButton != null) 
             pauseButton.scaleDownFactor = 1;
+    }
+
+    public void ShowLaunchHelp()
+    {
+        launchHelp.gameObject.SetActive(true);
     }
 }

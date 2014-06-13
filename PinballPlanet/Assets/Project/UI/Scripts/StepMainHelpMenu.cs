@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StepGameHelpMenu : IMenuStep 
+public class StepMainHelpMenu : IMenuStep 
 {
     protected Button helpButton = null;
     protected Vector3 originalPosition = Vector3.zero;
@@ -37,18 +37,21 @@ public class StepGameHelpMenu : IMenuStep
 
 	    if (helpButton.pressed)
 	    {
-	        MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu); 
+	        MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu); 
 	    }
         else if (LugusInput.use.up)
         {
-            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu); 
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu); 
         }
 	}
+
 
     public override void Activate(bool animate = true)
     {
         activated = true;
         gameObject.SetActive(true);
+
+        MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu].Activate(false);
     }
 
 

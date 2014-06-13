@@ -107,7 +107,7 @@ public class TextMeshWrapper : MonoBehaviour
 	{
 		//TextMeshWrapperHelper.use.WrapText(textMesh, width, allowSplit);
 		UpdateWrapping();
-	}
+    }
 
 	public void SetTextKey(string key)
 	{
@@ -116,9 +116,9 @@ public class TextMeshWrapper : MonoBehaviour
 
 	public void SetText(string text)
 	{
-		textMesh.text = text;
-		UpdateWrapping();
-	}
+        textMesh.text = text;
+        UpdateWrapping();
+    }
 
 	public void UpdateWrapping()
 	{
@@ -127,7 +127,7 @@ public class TextMeshWrapper : MonoBehaviour
 		savedText = textMesh.text;
 		
 		while( proceed )
-		{
+        {
 			textMesh.text = savedText;
 
 

@@ -1,24 +1,6 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Static class that holds all the data shared across each bumper chain score.
-/// Used to calculate the bonus score given for hitting multiple bumpers quickly.
-/// </summary>
-public static class ChainScore
-{
-    // Chaining barrel hits in quick succession gives bonus score for each one hit.
-    public static int ChainBonusScore = 50;
-    public static int ChainMultiplier = 0;
-    // Time chain stays active since last barrel hit.
-    public static float ChainResetTime = 2.0f;
-    public static float TimeSinceHit = 0;
-    // Time till actual reset: single chain reset time is added for every object that has a BumperChainScore script attached.
-    public static float ActualChainResetTime = 0;
-    // Last hit object used to check if last hit object was the same.
-    public static GameObject LastHitBumper;
-}
-
-/// <summary>
 /// Script for a bumper that gives more score for each other bumper that is hit in quick sucession.
 /// When the same bumper is hit before hitting another bumper the same score bonus is given
 /// without increasing, but the timer still resets.
@@ -36,24 +18,24 @@ public class BumperChainScore : MonoBehaviour
     void Start()
     {
         // Increase the 'actual' chain rest time for every instance of this script.
-        ChainScore.ActualChainResetTime += ChainScore.ChainResetTime;
+        ChainScore.use.ActualChainResetTime += ChainScore.use.ChainResetTime;
     }
 
     // Called every frame.
     void Update()
     {
         // Only update if barrels are hit at least once.
-        if (ChainScore.ChainMultiplier > 1)
+        if (ChainScore.use.ChainMultiplier > 1)
         {
             // Reset if the time since the last barrel hit exceeds the time to reset.
-            if (ChainScore.TimeSinceHit < ChainScore.ActualChainResetTime)
+            if (ChainScore.use.TimeSinceHit < ChainScore.use.ActualChainResetTime)
             {
-                ChainScore.TimeSinceHit += Time.deltaTime;
+                ChainScore.use.TimeSinceHit += Time.deltaTime;
             }
             else
             {
-                ChainScore.ChainMultiplier = 0;
-                ChainScore.TimeSinceHit = 0;
+                ChainScore.use.ChainMultiplier = 0;
+                ChainScore.use.TimeSinceHit = 0;
             }
         }
     }
@@ -69,19 +51,19 @@ public class BumperChainScore : MonoBehaviour
         GetComponent<Animation>().Play(AnimationName);
         
         // Don't increase score if hitting same bumper twice.
-        if(ChainScore.LastHitBumper != gameObject)
+        if(ChainScore.use.LastHitBumper != gameObject)
         {
             // Add to the score chain.
-            ++ChainScore.ChainMultiplier;         
+            ++ChainScore.use.ChainMultiplier;         
         }        
         
         // Store last hit bumper.
-        ChainScore.LastHitBumper = gameObject;
+        ChainScore.use.LastHitBumper = gameObject;
 
         // Reset time since last barrel hit.
-        ChainScore.TimeSinceHit = 0;
+        ChainScore.use.TimeSinceHit = 0;
 
         // Give score
-        ScoreManager.use.ShowScore(ScoreHit + ChainScore.ChainBonusScore * (ChainScore.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, Sound, Color.white);
+        ScoreManager.use.ShowScore(ScoreHit + ChainScore.use.ChainBonusScore * (ChainScore.use.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, Sound, Color.white);
     }
 }
