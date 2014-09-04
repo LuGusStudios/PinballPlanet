@@ -106,6 +106,7 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
         Transform scoreText = (Transform)Instantiate(ScoreTextPrefab, position, ScoreTextPrefab.transform.rotation);
         scoreText.GetComponent<TextMesh>().text = "" + score;
         scoreText.GetComponent<TextMesh>().renderer.material.color = color;
+        //scoreText.gameObject.AddComponent<Billboard>();
 
         Vector3 posAdd = new Vector3(0, 0, 25);
         if (!MoveScoreUp)

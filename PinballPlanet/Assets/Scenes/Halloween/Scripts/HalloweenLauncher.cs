@@ -56,7 +56,8 @@ public class HalloweenLauncher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.position = Vector3.Lerp(_animStartTransform.position, _animEndTransform.position, Mathf.PingPong(AnimPos, 1));
+        if(AnimSpeed > AnimMinSpeed)
+            gameObject.transform.position = Vector3.Lerp(_animStartTransform.position, _animEndTransform.position, Mathf.PingPong(AnimPos, 1));
 
         AnimSpeed = Mathf.Lerp(AnimMinSpeed, AnimMaxSpeed, Player.use.BallLaunchForce / Player.use.LaunchMaxForce);
         AnimPos += AnimSpeed;

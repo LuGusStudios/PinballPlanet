@@ -131,8 +131,6 @@ public class Player : LugusSingletonExisting<Player>
 
     void Start()
     {
-        LugusDebug.debug = false;
-
         ReleaseBall();
     }
 
@@ -173,9 +171,12 @@ public class Player : LugusSingletonExisting<Player>
             }
         }
 
-        // Unstuck ball.
-        if (Input.GetKeyDown(KeyCode.U))
-            BallsInPlay[0].transform.position = GameObject.Find("UnstuckPos").transform.position.z(BallsInPlay[0].transform.position.z);
+        if (LugusDebug.debug)
+        {
+            // Unstuck ball.
+            if (Input.GetKeyDown(KeyCode.U))
+                BallsInPlay[0].transform.position = GameObject.Find("UnstuckPos").transform.position.z(BallsInPlay[0].transform.position.z);
+        }
     }
 
     public bool IsSingleBallReadyForLaunch()
@@ -229,15 +230,16 @@ public class Player : LugusSingletonExisting<Player>
     public void LaunchBall()
     {
         var ball = GameObject.Find("Ball");
+        ball.rigidbody.velocity = Vector3.zero;
 
-        //Debug.Log("Launch force: " + BallLaunchForce);
+        Debug.Log("Launch force: " + BallLaunchForce);
         ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
 
         // Reset launch force.
         BallLaunchForce = 0;
 
         // Spawn fire particles.
-        if(LaunchParticlesPrefab != null)
+        if (LaunchParticlesPrefab != null)
             Instantiate(LaunchParticlesPrefab);
 
         // Play release sound.
@@ -249,7 +251,7 @@ public class Player : LugusSingletonExisting<Player>
             _launchSoundPlaying = false;
         }
         GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp(false);
-    } 
+    }
 
     // Play light on sound.
     public void PlayLightOnSound()
@@ -288,6 +290,17 @@ public class Player : LugusSingletonExisting<Player>
         {
             audio.loop = false;
             audio.PlayOneShot(RightFlipperSound);
+        }
+    }
+
+    void OnGUI()
+    {
+        if (LugusDebug.debug)
+        {
+            if (GUI.Button(new Rect(0, 75, 75, 25), "Reset Ball"))
+            {
+                BallsInPlay[0].transform.position = GameObject.Find("UnstuckPos").transform.position.z(BallsInPlay[0].transform.position.z);
+            }
         }
     }
 }
