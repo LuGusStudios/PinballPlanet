@@ -220,7 +220,6 @@ public class Player : LugusSingletonExisting<Player>
                 Ball ballScript = ball.GetComponent<Ball>();
                 if (ballScript.TouchingLauncher && _ballLaunchForce > 0)
                 {
-                    Debug.Log(transform.Path());
                     LaunchBall();
                 }
             }
@@ -231,7 +230,7 @@ public class Player : LugusSingletonExisting<Player>
     {
         var ball = GameObject.Find("Ball");
 
-        Debug.Log("Launch force: " + BallLaunchForce);
+        //Debug.Log("Launch force: " + BallLaunchForce);
         ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
 
         // Reset launch force.
