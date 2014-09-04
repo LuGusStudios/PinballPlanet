@@ -49,18 +49,20 @@ Transform:
   m_LocalScale: {x: .0100000007, y: .0100000016, z: .0100000016}
   m_Children: []
   m_Father: {fileID: 400002}
+  m_RootOrder: 0
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.8591824, y: -128.663712, z: -171.189575}
+  m_LocalRotation: {x: .881457269, y: .0337290131, z: .458862901, w: .106491193}
+  m_LocalPosition: {x: 65.6861038, y: -35.8736687, z: 3.17615032}
   m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children:
   - {fileID: 400000}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -79,9 +81,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -117,9 +118,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Paused: 0
   TouchingLauncher: 0
-  FireFadeMinSpeed: 300
-  FireFadeMaxSpeed: 350
+  FireFadeMinSpeed: 350
+  FireFadeMaxSpeed: 450
   KillHeight: -90
+  TrailParticle: {fileID: 100000}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1186,9 +1188,8 @@ ParticleSystemRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
   m_RenderMode: 0
   m_MaxParticleSize: .5
   m_CameraVelocityScale: 0

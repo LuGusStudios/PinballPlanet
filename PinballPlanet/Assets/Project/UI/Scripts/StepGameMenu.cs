@@ -113,8 +113,8 @@ public class StepGameMenu : IMenuStep
             pauseButton.scaleDownFactor = 1;
     }
 
-    public void ShowLaunchHelp()
+    public void ShowLaunchHelp(bool show)
     {
-        launchHelp.gameObject.SetActive(true);
+        launchHelp.gameObject.SetActive(show);
     }
 }

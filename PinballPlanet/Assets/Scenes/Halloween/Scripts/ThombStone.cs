@@ -16,25 +16,6 @@ public class ThombStone : MonoBehaviour
 		originalRotation = transform.eulerAngles;
 	}
 	
-	// Update is called once per frame
-	void Update () 
-	{
-		/*
-		if( Input.GetKeyDown(KeyCode.T) )
-		{
-			if( collider.enabled )
-				Open();
-			else
-			{
-				Close();
-				
-				if( onOpen != null )
-					onOpen();
-			}
-		}
-		*/
-	}
-	
 	void OnCollisionEnter(Collision collision) 
 	{
 		GameObject ball = collision.collider.gameObject;
@@ -43,12 +24,6 @@ public class ThombStone : MonoBehaviour
 		
 		
 		Open();
-		
-				//ball.rigidbody.AddForceAtPosition(Vector3(0,ballLaunchForce,0), ball.transform.position);			
-		
-		//exit.
-		
-		
     }
 	
 	protected Vector3 originalRotation;

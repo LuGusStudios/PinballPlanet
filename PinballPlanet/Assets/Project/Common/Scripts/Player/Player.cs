@@ -76,7 +76,7 @@ public class Player : LugusSingletonExisting<Player>
 
         // Now create a new ball
         GameObject newball;
-        newball = (GameObject)Instantiate(BallPrefab, BallLaunch.transform.position + new Vector3(0, 25, 0), Quaternion.identity);
+        newball = (GameObject)Instantiate(BallPrefab, BallLaunch.transform.position + new Vector3(0, 25, 0), BallPrefab.transform.rotation);
         newball.name = "Ball";
 
         // Update our ball array so other objects can quickly do a seek on all balls
@@ -172,6 +172,10 @@ public class Player : LugusSingletonExisting<Player>
                 }
             }
         }
+
+        // Unstuck ball.
+        if (Input.GetKeyDown(KeyCode.U))
+            BallsInPlay[0].transform.position = GameObject.Find("UnstuckPos").transform.position.z(BallsInPlay[0].transform.position.z);
     }
 
     public bool IsSingleBallReadyForLaunch()
@@ -216,6 +220,7 @@ public class Player : LugusSingletonExisting<Player>
                 Ball ballScript = ball.GetComponent<Ball>();
                 if (ballScript.TouchingLauncher && _ballLaunchForce > 0)
                 {
+                    Debug.Log(transform.Path());
                     LaunchBall();
                 }
             }
@@ -226,13 +231,15 @@ public class Player : LugusSingletonExisting<Player>
     {
         var ball = GameObject.Find("Ball");
 
-        //Debug.Log("Launch force: " + BallLaunchForce);
+        Debug.Log("Launch force: " + BallLaunchForce);
         ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
+
         // Reset launch force.
-        _ballLaunchForce = 0;
+        BallLaunchForce = 0;
 
         // Spawn fire particles.
-        Instantiate(LaunchParticlesPrefab);
+        if(LaunchParticlesPrefab != null)
+            Instantiate(LaunchParticlesPrefab);
 
         // Play release sound.
         if (audio != null)
@@ -242,6 +249,7 @@ public class Player : LugusSingletonExisting<Player>
             audio.PlayOneShot(ReleaseSound);
             _launchSoundPlaying = false;
         }
+        GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp(false);
     } 
 
     // Play light on sound.

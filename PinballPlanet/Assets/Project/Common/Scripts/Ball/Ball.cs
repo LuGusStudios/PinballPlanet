@@ -17,7 +17,12 @@ public class Ball : MonoBehaviour
     public float KillHeight = 0;
 
     // Particle trail that follows ball if it's over a certain speed.
-    public GameObject TrailParticle = null;
+    public GameObject TrailParticle;
+
+    void Start()
+    {
+        TrailParticle = transform.GetChild(0).gameObject;
+    }
 
     void Update()
     {
@@ -65,7 +70,7 @@ public class Ball : MonoBehaviour
         if (collision.collider.tag == "Launcher")
         {
             TouchingLauncher = true;
-            GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp();  
+            GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp(true);  
         }
     }
 

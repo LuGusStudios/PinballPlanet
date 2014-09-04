@@ -3,59 +3,34 @@ using System.Collections;
 
 public class BallShooter : MonoBehaviour
 {
+    // Animation start/end transform.
+    private Transform _animStartTransform;
+    private Transform _animEndTransform;
 
+    // Animation Speed.
+    public float AnimPos = 0;
+    public float AnimSpeed = 0.1f;
+    public float AnimAcceleration = 0.01f;
+    public float AnimMaxSpeed = 10;
+    
     // Use this for initialization
     void Start()
     {
+        _animStartTransform = transform.parent.FindChild("BallLaunch_Left");
+        _animEndTransform = transform.parent.FindChild("BallLaunch_Right");
 
+        Debug.Log(transform.parent.name);
     }
 
     // Update is called once per frame
     void Update()
     {
+        gameObject.transform.position = Vector3.Lerp(_animStartTransform.position, _animEndTransform.position, Mathf.PingPong(AnimPos, 1));
 
-    }
+        AnimSpeed += AnimSpeed * Time.deltaTime * AnimAcceleration;
+        AnimPos += AnimSpeed;
 
-    public void ShootBall(GameObject ball)
-    {
-        StartCoroutine(ShootBallRoutine(ball));
-    }
-
-    public IEnumerator ShootBallRoutine(GameObject ball)
-    {
-        //iTween.RotateTo( exit, new Vector3(40, 0, 0), 2.0f );
-
-        iTween.Stop(this.gameObject);
-
-        iTween.RotateAdd(this.gameObject, iTween.Hash("amount", new Vector3(-50, 0, 0), "time", 2.0f, "isLocal", true));
-
-        /*	
-        iTween.RotateTo( exit, 
-                iTween.Hash("rotation",new Vector3(40, exit.transform.localRotation.eulerAngles.y, exit.transform.localRotation.eulerAngles.z),
-                            "time", 2.0f,
-                            "islocal",true));
-        */
-
-        yield return new WaitForSeconds(2.0f);
-
-        iTween.Stop(this.gameObject);
-        //iTween.RotateTo( exit, new Vector3(90, 0, 0), 2.0f );
-
-        iTween.RotateAdd(this.gameObject,
-                iTween.Hash("amount", new Vector3(50, 0, 0),
-                            "time", 2.0f,
-                            "isLocal", true));
-
-        /*
-        iTween.RotateTo( exit, 
-                iTween.Hash("rotation",new Vector3(90, exit.transform.localRotation.eulerAngles.y, exit.transform.localRotation.eulerAngles.z),
-                            "time", 2.0f,
-                            "islocal",true));
-        */
-        ball.rigidbody.isKinematic = false;
-
-        ball.rigidbody.AddForce(this.transform.forward * 7000);
-
-        yield return null;
+        if (AnimSpeed > AnimMaxSpeed)
+            AnimSpeed = AnimMaxSpeed;
     }
 }

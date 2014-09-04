@@ -114,7 +114,7 @@ public class Bat : MonoBehaviour
 	protected IEnumerator DestroyRoutine()
 	{
 		
-		Vector3 newPos = transform.position + new Vector3(0, 0, -120);
+		Vector3 newPos = transform.position + new Vector3(0, 0, 120);
 		iTween.MoveTo( this.gameObject, newPos, 5.0f);
 		
 		yield return new WaitForSeconds(5f);

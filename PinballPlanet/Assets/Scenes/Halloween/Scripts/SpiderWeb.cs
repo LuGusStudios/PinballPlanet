@@ -84,7 +84,7 @@ public class SpiderWeb : MonoBehaviour
 		
 		yield return new WaitForSeconds(2.6f);
 		
-		Debug.Log(Time.frameCount + " Spider parent2 " + spider.parent.gameObject + " -> " + spiderStartPos);
+		//Debug.Log(Time.frameCount + " Spider parent2 " + spider.parent.gameObject + " -> " + spiderStartPos);
 		
 		iTween.Stop(spider.parent.gameObject);
 		
@@ -95,7 +95,7 @@ public class SpiderWeb : MonoBehaviour
 		hitter.rigidbody.isKinematic = false;
 		
 		// the spiderweb is on the LEFT side of the board
-		// we want it to shoot the ball out to the right in about 90 angles surrounding the 0 angle (so 45degrees in 1st and 4th quadrant)
+		// we want it to shoot the ball out to the right in about 90 angles surrounding the 0 angle (so 45 degrees in 1st and 4th quadrant)
 	
 		// Vector3.right is 1,0,0
 		// so if we add a random y component between -1 and 1, we should get the expected behaviour...

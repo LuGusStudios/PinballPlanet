@@ -71,6 +71,9 @@ public class Breakable : MonoBehaviour
     {
         if (GetComponent<ScoreHit>() != null)
             GetComponent<ScoreHit>().score = BrokenScore;
+
+        if (GetComponent<BumperChainScore>() != null)
+            GetComponent<BumperChainScore>().ScoreHit = BrokenScore;
     }
 
     // Call break event.
