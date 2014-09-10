@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Pentagram : BreakableMultiObjective
 {
+    // Ghost to spawn.
+    public GameObject Ghost;
+    public GameObject PathFollower;
+
     // Use this for initialization
     void Start()
     {
@@ -24,8 +28,12 @@ public class Pentagram : BreakableMultiObjective
         GameObject scorePopup = ScoreManager.use.ShowScore(BonusPoints, scorePos.zAdd(20), 1.5f, null, Color.white);
         scorePopup.transform.localScale = new Vector3(1.5f,1.5f,1.5f);
 
-        // Reset after a while.
-        Invoke("Unbreak", ResetDelay);
+        // Spawn ghost.
+        GameObject ghost = Instantiate(Ghost) as GameObject;
+        GameObject follower = Instantiate(PathFollower) as GameObject;
+
+        // Set ghost follow.
+        ghost.GetComponent<Follower>().ObjectToFollow = follower.transform;
     }
 
     public override void Unbreak()

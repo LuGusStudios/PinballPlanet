@@ -19,7 +19,7 @@ Material:
         second:
           m_Texture: {fileID: 2800000, guid: 3ed11e7e00b635e4f9e13ea36bd66caa, type: 3}
           m_Scale: {x: 2, y: 2}
-          m_Offset: {x: .400000006, y: .100000001}
+          m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
@@ -49,7 +49,7 @@ Material:
       data:
         first:
           name: _WiggleStrength
-        second: .029285714
+        second: .0148214279
     m_Colors:
       data:
         first:

@@ -61,7 +61,8 @@ public class ChestMultiObjective : BreakableMultiObjective
 
         // Play coins falling sound.
         if (audio != null)
-            audio.PlayOneShot(CoinsSound);
+            //audio.PlayOneShot(CoinsSound);
+            LugusAudio.use.SFX().Play(CoinsSound).Loop = false;
 
         // Activate gold particle effect.
         transform.FindChild("GoldShine").gameObject.SetActive(true);

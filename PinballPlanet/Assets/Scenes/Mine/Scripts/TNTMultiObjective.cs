@@ -33,7 +33,8 @@ public class TNTMultiObjective : BreakableMultiObjective
 
         // Play explosion sound.
         if (audio != null)
-            audio.PlayOneShot(ExplosionSound);
+            //audio.PlayOneShot(ExplosionSound);
+            LugusAudio.use.SFX().Play(ExplosionSound).Loop = false;
 
         Instantiate(ExplosionPrefab);
 

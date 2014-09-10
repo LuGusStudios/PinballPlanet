@@ -53,7 +53,7 @@ public class BatCave : MonoBehaviour
 		
 		if( destroyedBats == bats.Count )
 		{
-			Debug.Log("All bats destroyed: resetting the batcave!");
+            //Debug.Log("All bats destroyed: resetting the batcave!");
 			
 			thombStone.Close();
 			Close();

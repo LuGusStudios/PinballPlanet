@@ -34,10 +34,10 @@ public class FlowBackPreventer : Triggerable
         if (collider != null) 
             collider.isTrigger = false;
 
-        foreach (Transform child in transform)
-        {
-            child.gameObject.SetActive(true);
-        }
+        //foreach (Transform child in transform)
+        //{
+        //    child.gameObject.SetActive(true);
+        //}
 	}
 
     // Reset the flow back preventer so that a new ball can be launched.
@@ -54,10 +54,10 @@ public class FlowBackPreventer : Triggerable
         if (collider != null) 
             collider.isTrigger = true;
 
-        foreach (Transform child in transform)
-        {
-            child.gameObject.SetActive(false);
-        }
+        //foreach (Transform child in transform)
+        //{
+        //    child.gameObject.SetActive(false);
+        //}
     }
 
     void OnTriggerEnter(Collider other)

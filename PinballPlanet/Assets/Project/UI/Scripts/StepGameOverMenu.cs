@@ -71,7 +71,7 @@ public class StepGameOverMenu : IMenuStep
         }
         else if (MainMenuButton.pressed)
         {
-            Application.LoadLevel("MainMenu");
+            Application.LoadLevel("Pinball_MainMenu");
         }
 	}
 

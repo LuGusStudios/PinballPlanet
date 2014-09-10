@@ -47,15 +47,15 @@ public class GhostPathFollower : Breakable
                                             , "easetype", iTween.EaseType.linear));
     }
 
-    // Makes ghost go to wall.
-    public void WallMove()
-    {
-        iTween.Stop(gameObject);
+    //// Makes ghost go to wall.
+    //public void WallMove()
+    //{
+    //    iTween.Stop(gameObject);
 
-        iTween.MoveTo(gameObject, iTween.Hash("position", GameObject.Find("Ghost_HoverPos").transform.position
-                                            , "movetopath", false
-                                            , "orienttopath", true
-                                            , "speed", Speed
-                                            , "easetype", iTween.EaseType.easeInOutCubic));
-    }
+    //    iTween.MoveTo(gameObject, iTween.Hash("position", GameObject.Find("Ghost_HoverPos").transform.position
+    //                                        , "movetopath", false
+    //                                        , "orienttopath", true
+    //                                        , "speed", Speed
+    //                                        , "easetype", iTween.EaseType.easeInOutCubic));
+    //}
 }

@@ -97,7 +97,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   serializedVersion: 2
-  m_Mass: .100000001
+  m_Mass: .200000003
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 1
@@ -118,8 +118,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Paused: 0
   TouchingLauncher: 0
-  FireFadeMinSpeed: 350
-  FireFadeMaxSpeed: 450
+  FireFadeMinSpeed: 300
+  FireFadeMaxSpeed: 420
   KillHeight: -90
   TrailParticle: {fileID: 100000}
 --- !u!114 &11400002

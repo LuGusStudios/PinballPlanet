@@ -35,6 +35,9 @@ public class MineCart : MonoBehaviour
     {
         _upsideDownTransform = transform.Find("MineCart02_UpsideDown").transform;
 
+        // Play travel sound.
+        LugusAudio.use.SFX().Play(TravelSound).Loop = true;
+
         // Play start path animation.
         StartPathMove();
     }
@@ -281,8 +284,9 @@ public class MineCart : MonoBehaviour
         // Play crash sound.
         if (CrashSound != null)
         {
-            audio.Stop();
-            audio.PlayOneShot(CrashSound);         
+            //audio.Stop();
+            //audio.PlayOneShot(CrashSound);
+            LugusAudio.use.SFX().Play(CrashSound).Loop = false;
         }
     }
 }

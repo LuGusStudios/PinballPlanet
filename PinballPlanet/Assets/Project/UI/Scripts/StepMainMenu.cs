@@ -72,7 +72,7 @@ public class StepMainMenu : IMenuStep
         }
 
         // Only search these items when in main menu.
-        if (Application.loadedLevelName == "MainMenu")
+        if (Application.loadedLevelName == "Pinball_MainMenu")
         {
             if (_planet == null)
             {

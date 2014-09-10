@@ -81,27 +81,12 @@ public class Bat : MonoBehaviour
 			renderer.material = state2; 
 		}
 	}
-	
-	/*
-	void OnCollisionEnter(Collision collision) 
-	{
-		GameObject ball = collision.collider.gameObject;
-		if( ball.tag != "Ball" )
-			return;
 		
-		GameObject.Destroy(this.gameObject);
-    }
-    */
-	
 	void OnTriggerEnter(Collider collider)
 	{
 		GameObject ball = collider.gameObject;
 		if( ball.tag != "Ball" )
 			return;
-		
-		//ScoreHit s = GetComponent<ScoreHit>();
-		//if( s != null )
-		//	s.DoScore();
 		
 		this.collider.enabled = false;
 		StartCoroutine( DestroyRoutine() );
@@ -117,7 +102,7 @@ public class Bat : MonoBehaviour
 		Vector3 newPos = transform.position + new Vector3(0, 0, 120);
 		iTween.MoveTo( this.gameObject, newPos, 5.0f);
 		
-		yield return new WaitForSeconds(5f);
+		yield return new WaitForSeconds(2.5f);
 		
 		GameObject.Destroy(this.gameObject);
 	}

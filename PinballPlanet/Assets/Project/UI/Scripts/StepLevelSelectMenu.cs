@@ -22,7 +22,8 @@ public class StepLevelSelectMenu : IMenuStep
     private Vector3 _prevDragPoint;
 
     public GameObject HighScorePrefab;
-    private int MaxHighScores = 5;
+
+    public string _lvlName;
 
     public override void SetupLocal()
     {
@@ -73,7 +74,7 @@ public class StepLevelSelectMenu : IMenuStep
 
         LevelSelectButtons = new List<Button>();
         // Only search these items when in main menu.
-        if (Application.loadedLevelName == "MainMenu")
+        if (Application.loadedLevelName == "Pinball_MainMenu")
         {
             foreach (GameObject levelButton in GameObject.FindGameObjectsWithTag("LevelSelectButton"))
             {
@@ -96,14 +97,6 @@ public class StepLevelSelectMenu : IMenuStep
         }
 
         Highscores = new List<GameObject>();
-        for (int i = 0; i < MaxHighScores; i++)
-        {
-            GameObject highscore = Instantiate(HighScorePrefab) as GameObject;
-            highscore.transform.parent = gameObject.transform;
-            highscore.transform.position = transform.FindChild("HighScore").position + Vector3.zero.yAdd(-0.6f * i);
-            highscore.SetActive(false);
-            Highscores.Add(highscore);
-        }
 
         OriginalPosition = transform.position;
 
@@ -137,8 +130,8 @@ public class StepLevelSelectMenu : IMenuStep
         }
         else if (PlayButton.pressed)
         {
-            string levelName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
-            Application.LoadLevel("Pinball_" + levelName);
+            _lvlName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
+            Invoke("LoadLevel", PlayButton.clickAnimationTime);
         }
         else
         {
@@ -250,11 +243,24 @@ public class StepLevelSelectMenu : IMenuStep
         else
             Debug.LogError("--- Sprite with name: Shared/UI/Level" + levelName + " not found in resources. ---");
 
-        // Show high scores
-        foreach (GameObject highscore in Highscores)
+
+        int i = 0;
+        foreach (int score in PlayerData.use.LevelsHighscores["Pinball_" + levelName])
         {
-            highscore.SetActive(true);
+            GameObject highscore = Instantiate(HighScorePrefab) as GameObject;
+            highscore.transform.parent = gameObject.transform;
+            highscore.transform.position = transform.FindChild("HighScore").position + Vector3.zero.yAdd(-0.6f * i);
+            highscore.transform.FindChild("Text_Score").GetComponent<TextMesh>().text = score.ToString();
+            Highscores.Add(highscore);
+
+            ++i;
         }
+
+        //// Show high scores
+        //foreach (GameObject highscore in Highscores)
+        //{
+        //    highscore.SetActive(true);
+        //}
 
         Thumbnail.gameObject.SetActive(true);
         PlayButton.gameObject.SetActive(true);
@@ -266,17 +272,24 @@ public class StepLevelSelectMenu : IMenuStep
 
     public void HideLevel()
     {
-        if(LevelSelectButtons.Count > 0)
+        if (LevelSelectButtons.Count > 0)
             HideLevelButtonFlags();
         //_selectedLevelButton = null;
 
+        // Destroy all highscores.
         foreach (GameObject highscore in Highscores)
         {
-            highscore.SetActive(false);
+            Destroy(highscore);
         }
+        Highscores.Clear();
 
         LevelName.gameObject.SetActive(false);
         Thumbnail.gameObject.SetActive(false);
         PlayButton.gameObject.SetActive(false);
+    }
+
+    void LoadLevel()
+    {
+        Application.LoadLevel("Pinball_" + _lvlName);
     }
 }

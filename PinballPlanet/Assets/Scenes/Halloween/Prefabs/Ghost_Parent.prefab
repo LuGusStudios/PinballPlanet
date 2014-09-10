@@ -155,7 +155,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0bde62455f496a48a57dea6726a0328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GhostBallMaterial: {fileID: 2100000, guid: f656af0add87c324983558e9471bfa02, type: 2}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -167,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52cac72912655cb459455f3ce87aa3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 500
+  score: 600
   sound: {fileID: 0}
   color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!136 &13600000

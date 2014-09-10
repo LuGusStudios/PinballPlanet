@@ -35,10 +35,10 @@ public class HalloweenLauncher : MonoBehaviour
         gameObject.renderer.enabled = true;
 
         // Disable Multiball.
-        GameObject.Find("MultiBall").GetComponent<MultiBall>().DeactivateMultiBall();
+        //GameObject.Find("MultiBall").GetComponent<MultiBall>().DeactivateMultiBall();
 
         // Disallow ball through wall.
-        GameObject.Find("Ghost_Wall").collider.enabled = true;
+        //GameObject.Find("Ghost_Wall").collider.enabled = true;
 
         Player.use.BallLaunchForce = 0;
     }

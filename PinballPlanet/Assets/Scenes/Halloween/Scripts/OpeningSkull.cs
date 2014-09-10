@@ -3,28 +3,21 @@ using System.Collections;
 
 public class OpeningSkull : BreakableMultiObjective
 {
-    public float OpenDelay = 0.5f;
-
-    // Ghost to spawn.
-    public GameObject Ghost;
-    public GameObject PathFollower;
-
     private bool _opened = false;
+    public Ball Ball;
 
-    // Called when all subobjectives break.
     public override void Activate()
     {
-        // Add delay to activation.
-        Invoke("OpenSkull", OpenDelay);
+        OpenSkull();
+        
+        collider.enabled = false;
+        GameObject.Find("Skull_BallCatch").collider.enabled = true;
     }
 
     public override void Unbreak()
     {
-        // Close Animation.
-        CloseSkull();
-
-        // Enable collision.
-        transform.GetChild(0).collider.enabled = true;
+        collider.enabled = true;
+        GameObject.Find("Skull_BallCatch").collider.enabled = false;
 
         base.Unbreak();
     }
@@ -42,18 +35,6 @@ public class OpeningSkull : BreakableMultiObjective
             _opened = true;
         }
 
-        // Disable collision.
-        transform.GetChild(0).collider.enabled = false;
-
-        // Spawn ghost.
-        GameObject ghost = Instantiate(Ghost) as GameObject;
-        GameObject follower = Instantiate(PathFollower) as GameObject;
-
-        // Set ghost follow.
-        ghost.GetComponent<Follower>().ObjectToFollow = follower.transform;
-
-        // Reset after a while.
-        //Invoke("Unbreak", ResetDelay);
     }
 
     public void CloseSkull()
@@ -63,10 +44,47 @@ public class OpeningSkull : BreakableMultiObjective
             iTween.Stop(this.gameObject);
             iTween.RotateAdd(this.gameObject,
                     iTween.Hash("amount", new Vector3(50, 0, 0),
-                                "time", 2.0f,
-                                "isLocal", true));
+                                "time", 1.0f,
+                                "isLocal", true,
+                                "oncomplete", "OnSkullClosed"));
 
             _opened = false;
         }
+    }
+
+    void OnSkullClosed()
+    {
+        iTween.RotateTo(gameObject,
+            iTween.Hash("rotation", GameObject.Find("Skull_End").transform.eulerAngles,
+                        "time", 2.0f,
+                        "oncomplete", "OnSkullAimed"));
+    }
+
+    void OnSkullAimed()
+    {
+        Ball.rigidbody.velocity = Vector3.zero;
+        Ball.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
+
+        GameObject.Find("CollisionBox_Skull").collider.enabled = false;
+
+        Transform shooter = GameObject.Find("Skull_BallShoot").transform;
+        Ball.transform.position = new Vector3(shooter.position.x, shooter.position.y, Ball.transform.position.z);
+
+        Vector3 randVec = Vector3.zero.zAdd(Random.RandomRange(-10, 10));
+        Ball.rigidbody.AddForce((shooter.up.normalized + randVec) * 3000);
+
+        iTween.RotateTo(gameObject,
+        iTween.Hash("rotation", GameObject.Find("Skull_Start").transform.eulerAngles,
+                    "time", 2.0f,
+                    "oncomplete", "OnSkullReset"));
+    }
+
+    void OnSkullReset()
+    {
+        GameObject.Find("CollisionBox_Skull").collider.enabled = true;
+
+        Ball = null;
+
+        Invoke("Unbreak", ResetDelay);
     }
 }

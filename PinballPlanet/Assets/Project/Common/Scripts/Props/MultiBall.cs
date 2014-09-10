@@ -77,7 +77,7 @@ public class MultiBall : MonoBehaviour
         foreach (Transform exit in Exits)
         {
             GameObject newBall = Instantiate(BallPrefab, exit.position, exit.rotation) as GameObject;
-            Debug.Log("New ball at: " + newBall.transform.position + " from " + exit.position);
+            //Debug.Log("New ball at: " + newBall.transform.position + " from " + exit.position);
             //newBall.transform.position = newBall.transform.position.z(5);
             newBall.rigidbody.velocity = exit.up.normalized * LaunchForce;
             ScoreManager.use.AddBalls(1);

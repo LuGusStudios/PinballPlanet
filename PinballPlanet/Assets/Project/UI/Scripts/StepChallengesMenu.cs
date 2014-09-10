@@ -80,7 +80,7 @@ public class StepChallengesMenu : IMenuStep
 
         if (ChallengesButton.pressed)
         {
-            if(Application.loadedLevelName == "MainMenu")
+            if(Application.loadedLevelName == "Pinball_MainMenu")
                 MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu, false);
             else
                 MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
@@ -92,7 +92,7 @@ public class StepChallengesMenu : IMenuStep
         activated = true;
         gameObject.SetActive(true);
 
-        if (Application.loadedLevelName == "MainMenu")
+        if (Application.loadedLevelName == "Pinball_MainMenu")
             MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu].Activate(false);
         else
             MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu].Activate(false);

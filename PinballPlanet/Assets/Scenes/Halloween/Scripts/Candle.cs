@@ -28,4 +28,23 @@ public class Candle : Breakable
 
         base.Unbreak();
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag != "Ball")
+            return;
+
+        if (!IsBroken)
+            Break();
+        else
+        {
+            transform.FindChild("Flame").GetComponent<ParticleSystem>().enableEmission = false;
+            Invoke("EnableParticles", 0.3f);
+        }
+    }
+
+    void EnableParticles()
+    {
+        transform.FindChild("Flame").GetComponent<ParticleSystem>().enableEmission = true;
+    }
 }

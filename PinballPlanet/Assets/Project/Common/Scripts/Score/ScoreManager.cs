@@ -77,10 +77,11 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
     // Instantiates a score popup and awards the player points.
     public GameObject ShowScore(int score, Vector3 position, float time, AudioClip sound, Color color)
     {
+        // If no score this can also be used to just play a sound.
         if (score == 0)
         {
             if (sound != null)
-                audio.PlayOneShot(sound);
+                LugusAudio.use.SFX().Play(sound).Loop = false;
 
             return null;
         }
@@ -106,7 +107,6 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
         Transform scoreText = (Transform)Instantiate(ScoreTextPrefab, position, ScoreTextPrefab.transform.rotation);
         scoreText.GetComponent<TextMesh>().text = "" + score;
         scoreText.GetComponent<TextMesh>().renderer.material.color = color;
-        //scoreText.gameObject.AddComponent<Billboard>();
 
         Vector3 posAdd = new Vector3(0, 0, 25);
         if (!MoveScoreUp)
@@ -116,7 +116,7 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
         Destroy(scoreText.gameObject, time);
 
         if (sound != null)
-            audio.PlayOneShot(sound);
+            LugusAudio.use.SFX().Play(sound).Loop = false;
 
         int newScore = TotalScore + score;
         if (newScore >= 0)
