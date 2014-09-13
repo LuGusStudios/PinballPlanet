@@ -89,7 +89,7 @@ public class StepGameOverMenu : IMenuStep
 
         // Fill in score text.
         Score.SetText(ScoreManager.use.TotalScore.ToString());
-        HighScore.SetText(ScoreManager.use.TotalScore.ToString());
+        HighScore.SetText(PlayerData.use.GetHighestScore(Application.loadedLevelName).ToString());
 	}
 
 	public override void Deactivate(bool animate = true)

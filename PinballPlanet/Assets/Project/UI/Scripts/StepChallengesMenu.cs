@@ -6,7 +6,7 @@ public class StepChallengesMenu : IMenuStep
 {
     protected Button ChallengesButton = null;
     protected Vector3 OriginalPosition = Vector3.zero;
-    protected TextMeshWrapper Stars = null;
+    public TextMeshWrapper Stars = null;
 
     private const int _maxChallenges = 4;
     protected List<GameObject> Challenges;
@@ -28,6 +28,9 @@ public class StepChallengesMenu : IMenuStep
         if (Stars == null)
         {
             Stars = transform.FindChild("Text_Stars").GetComponent<TextMeshWrapper>();
+
+            Stars.textMesh.text = PlayerData.use.Stars.ToString();
+            PlayerData.use.ChallengesMenuStars = Stars.textMesh;
         }
         if (Stars == null)
         {

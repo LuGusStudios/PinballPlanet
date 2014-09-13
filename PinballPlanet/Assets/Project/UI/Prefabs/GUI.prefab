@@ -832,7 +832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100098
 GameObject:
   m_ObjectHideFlags: 1
@@ -2264,7 +2264,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 359.992432, y: 347.883301, z: 376.251984}
+  m_LocalPosition: {x: 5077.96729, y: -2607.20117, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400096}
@@ -2883,7 +2883,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100098}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.48828125, y: -3.9675293, z: -1}
+  m_LocalPosition: {x: 2.51171875, y: -4.87255859, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400132}
@@ -6124,6 +6124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd39d296a3ca32e4fb99c256cf35e096, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StarPrefab: {fileID: 100000, guid: f9a4ee3217dbad94a91467f858adf58e, type: 2}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6736,6 +6737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbacbe7bc2afd7646958ce5dbf320abc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThemeMusic: {fileID: 8300000, guid: d622fdf5acba0764ab71293608203a57, type: 3}
 --- !u!114 &11400086
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6807,7 +6809,7 @@ MonoBehaviour:
   autoUpdate: 0
   allowSmallerCharacterSize: 1
   allowSplit: 1
-  textMesh: {fileID: 0}
+  textMesh: {fileID: 10200052}
 --- !u!114 &11400096
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6833,6 +6835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d01c0dc23dc818e4b9df7b11fa141a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Stars: {fileID: 0}
   ChallengePrefab: {fileID: 100002, guid: edb13004220c4924295598a629a07fdb, type: 2}
 --- !u!114 &11400100
 MonoBehaviour:

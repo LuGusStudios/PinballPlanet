@@ -6,10 +6,21 @@ public class OpeningSkull : BreakableMultiObjective
     private bool _opened = false;
     public Ball Ball;
 
+    private Vector3 _closedEulAngles;
+    private Vector3 _openEulAngles;
+
+    protected override void Start()
+    {
+        _closedEulAngles = gameObject.transform.eulerAngles;
+        _openEulAngles = GameObject.Find("Skull_Open").transform.eulerAngles;
+
+        base.Start();
+    }
+
     public override void Activate()
     {
         OpenSkull();
-        
+
         collider.enabled = false;
         GameObject.Find("Skull_BallCatch").collider.enabled = true;
     }
@@ -27,10 +38,9 @@ public class OpeningSkull : BreakableMultiObjective
         if (!_opened)
         {
             iTween.Stop(this.gameObject);
-            iTween.RotateAdd(this.gameObject,
-                iTween.Hash("amount", new Vector3(-50, 0, 0),
-                            "time", 2.0f,
-                            "isLocal", true));
+            iTween.RotateTo(this.gameObject,
+                iTween.Hash("rotation", _openEulAngles,
+                            "time", 2.0f));
 
             _opened = true;
         }
@@ -42,10 +52,9 @@ public class OpeningSkull : BreakableMultiObjective
         if (_opened)
         {
             iTween.Stop(this.gameObject);
-            iTween.RotateAdd(this.gameObject,
-                    iTween.Hash("amount", new Vector3(50, 0, 0),
+            iTween.RotateTo(this.gameObject,
+                    iTween.Hash("rotation", _closedEulAngles,
                                 "time", 1.0f,
-                                "isLocal", true,
                                 "oncomplete", "OnSkullClosed"));
 
             _opened = false;
@@ -70,7 +79,7 @@ public class OpeningSkull : BreakableMultiObjective
         Transform shooter = GameObject.Find("Skull_BallShoot").transform;
         Ball.transform.position = new Vector3(shooter.position.x, shooter.position.y, Ball.transform.position.z);
 
-        Vector3 randVec = Vector3.zero.zAdd(Random.RandomRange(-10, 10));
+        Vector3 randVec = Vector3.zero.zAdd(Random.Range(-10, 10));
         Ball.rigidbody.AddForce((shooter.up.normalized + randVec) * 3000);
 
         iTween.RotateTo(gameObject,

@@ -42,7 +42,6 @@ public class TrainHandle : Triggerable
 
         animation.Sample();
         animation.Play(AnimationName);
-
     }
 
     public void SetBridge()

@@ -64,7 +64,7 @@ public class Button : MonoBehaviour
 	
 	// postpone the pressed-event by 1 frame
 	// this makes sure the button is not triggered on the same frame as the actual MouseUp event
-	protected IEnumerator PressRoutine()
+	protected virtual IEnumerator PressRoutine()
 	{
 		transform.localScale = originalScale * scaleDownFactor;
 		gameObject.ScaleTo(originalScale).IgnoreTimeScale(true).Time(clickAnimationTime).EaseType(iTween.EaseType.easeOutBack).Execute();

@@ -8,6 +8,10 @@ public class StepGameMenu : IMenuStep
     protected TextMeshWrapper ballsLeft = null;
     protected Vector3 originalPosition = Vector3.zero;
     protected Transform launchHelp = null;
+    protected Button StarButton = null;
+
+    public GameObject StarPrefab = null;
+    public int StarsEarned = 0;
 
     public override void SetupLocal()
     {
@@ -87,10 +91,18 @@ public class StepGameMenu : IMenuStep
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.HelpGameMenu);
             helpButton.gameObject.SetActive(false);
         }
+
         // Disable launch help.
         if (LugusInput.use.up)
         {
             launchHelp.gameObject.SetActive(false);
+        }
+
+        // Give star when enough points are earned.
+        if (ScoreManager.use.TotalScore / PlayerData.use.ScorePerStar > StarsEarned)
+        {
+            ++StarsEarned;
+            SpawnStar();
         }
     }
 
@@ -116,5 +128,15 @@ public class StepGameMenu : IMenuStep
     public void ShowLaunchHelp(bool show)
     {
         launchHelp.gameObject.SetActive(show);
+    }
+
+    public void SpawnStar()
+    {
+        Debug.Log("Spawning Star");
+
+        GameObject star = Instantiate(StarPrefab) as GameObject;
+        StarButton = star.transform.GetChild(0).GetComponent<Button>();
+        star.transform.parent = transform;
+        star.transform.localPosition = Vector3.zero.zAdd(-2.0f);
     }
 }

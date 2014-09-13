@@ -19,7 +19,7 @@ public class StepLevelSelectMenu : IMenuStep
 
     public float RotationSpeed = 0.15f;
     public float DragSpeed = 1.0f;
-    private Vector3 _prevDragPoint;
+    //private Vector3 _prevDragPoint;
 
     public GameObject HighScorePrefab;
 
@@ -212,10 +212,6 @@ public class StepLevelSelectMenu : IMenuStep
         // Move camera to level select position.
         Vector3 target = GameObject.Find("Camera_LevelSelect").transform.position;
         Camera.main.gameObject.MoveTo(target).Time(0.5f).EaseType(iTween.EaseType.easeInOutQuad).Execute();
-
-        // Load high scores.
-        if(PlayerData.use.LevelsHighscores == null)
-            PlayerData.use.Load();
     }
 
     public override void Deactivate(bool animate = true)
