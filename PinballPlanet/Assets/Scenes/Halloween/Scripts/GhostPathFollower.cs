@@ -9,10 +9,12 @@ public class GhostPathFollower : Breakable
     public float Speed = 80;
 
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
         // Play exit path animation.
         ExitPathMove();
+
+        base.Start();
     }
 
     public override void Break()

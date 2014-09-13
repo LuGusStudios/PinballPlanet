@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 // TODO:
 // OnEnable and OnDisable implementation so Singleton links are re-made on re-compilation
@@ -50,12 +51,17 @@ public class LugusSingletonExisting<T> : MonoBehaviour where T : MonoBehaviour
 		_instance = newInstance;
 	}
 
+	void OnDisable()
+	{
+		_instance = null;
+	}
+
 	public static bool Exists()
 	{
 		if( _instance != null )
 			return true;
-		
-		
+
+
 		T[] instances = (T[]) GameObject.FindObjectsOfType( typeof(T) );
 		return instances.Length != 0;
 	}
@@ -121,6 +127,11 @@ public class LugusSingletonRuntime<T> : MonoBehaviour where T : MonoBehaviour
 	public void Change(T newInstance)
 	{
 		_instance = newInstance;
+	}
+	
+	void OnDisable()
+	{
+		_instance = null;
 	}
 }
 

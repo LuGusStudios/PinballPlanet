@@ -112,20 +112,11 @@ public class Player : LugusSingletonExisting<Player>
         if (BallsInPlay.Count == 0)
         {
             // Play release sound.
-            if (audio != null)
-            {
-                //audio.loop = false;
-                //audio.Stop();
-                LugusAudio.use.SFX().Play(BallLostSound, true).Loop = false;
-            }
+            LugusAudio.use.SFX().Play(BallLostSound, true).Loop = false;
 
             // Release ball after short while.
             ReleaseBallDelayed();
         }
-        //else
-        //{
-        //    Debug.Log("--- Balls remaining: " + BallsInPlay.Count + " ---");
-        //}
 
         //Debug.Log("Ball Destroyed! nr balls remaining : " + ballsInPlay.Length );
         ScoreManager.use.BallDestroyed();
@@ -157,12 +148,10 @@ public class Player : LugusSingletonExisting<Player>
             // Play launch sound if launched.
             if (BallLaunchForce > 0)
             {
-                if (audio != null && !_launchSoundPlaying)
+                if (!_launchSoundPlaying)
                 {
+                    Debug.Log("Playing LaunchSound");
                     LugusAudio.use.SFX().Play(LaunchSound, true).Loop = true;
-                    //audio.clip = LaunchSound;
-                    //audio.Play();
-                    //audio.loop = true;
                     _launchSoundPlaying = true;
                 }
             }
@@ -170,12 +159,7 @@ public class Player : LugusSingletonExisting<Player>
             // Stop sound when max reached.
             if (BallLaunchForce >= LaunchMaxForce)
             {
-                if (audio != null)
-                {
-                    //audio.loop = false;
-                    //audio.Stop();
-                    LugusAudio.use.SFX().StopAll();
-                }
+                LugusAudio.use.SFX().StopAll();
             }
         }
 
@@ -251,59 +235,33 @@ public class Player : LugusSingletonExisting<Player>
             Instantiate(LaunchParticlesPrefab);
 
         // Play release sound.
-        if (audio != null)
-        {
-            //audio.loop = false;
-            //audio.Stop();
-            //audio.PlayOneShot(ReleaseSound);
-            LugusAudio.use.SFX().Play(ReleaseSound, true).Loop = false;
-            _launchSoundPlaying = false;
-        }
+        Debug.Log("Playing ReleaseSound");
+        LugusAudio.use.SFX().Play(ReleaseSound, true).Loop = false;
+        _launchSoundPlaying = false;
+
         GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp(false);
     }
 
     // Play light on sound.
     public void PlayLightOnSound()
     {
-        if (audio != null)
-        {
-            //audio.loop = false;
-            //audio.Stop();
-            //audio.PlayOneShot(LightOnSound);
-            LugusAudio.use.SFX().Play(LightOnSound).Loop = false;
-        }
+        LugusAudio.use.SFX().Play(LightOnSound).Loop = false;
     }
 
     // Play light off sound.
     public void PlayLightOffSound()
     {
-        if (audio != null)
-        {
-            //audio.loop = false;
-            //audio.Stop();
-            //audio.PlayOneShot(LightOffSound);
-            LugusAudio.use.SFX().Play(LightOffSound).Loop = false;
-        }
+        LugusAudio.use.SFX().Play(LightOffSound).Loop = false;
     }
 
     public void PlayLeftFlipperSound()
     {
-        if (audio != null)
-        {
-            //audio.loop = false;
-            //audio.PlayOneShot(LeftFlipperSound);
-            LugusAudio.use.SFX().Play(LeftFlipperSound).Loop = false;
-        }
+        LugusAudio.use.SFX().Play(LeftFlipperSound).Loop = false;
     }
 
     public void PlayRightFlipperSound()
     {
-        if (audio != null)
-        {
-            //audio.loop = false;
-            //audio.PlayOneShot(RightFlipperSound);
-            LugusAudio.use.SFX().Play(RightFlipperSound).Loop = false;
-        }
+        LugusAudio.use.SFX().Play(RightFlipperSound).Loop = false;
     }
 
     void OnGUI()

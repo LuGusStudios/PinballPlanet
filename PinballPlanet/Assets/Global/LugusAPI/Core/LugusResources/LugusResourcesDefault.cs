@@ -1,6 +1,7 @@
 ﻿#define DEBUG_RESOURCES
 
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Lugus
@@ -15,7 +16,7 @@ public class LugusResources : LugusSingletonExisting<LugusResourcesDefault>
 	
 	public static ILugusResources use 
 	{ 
-		get 
+		get  
 		{
 			if ( _instance == null )
 			{
@@ -48,11 +49,14 @@ public class LugusResourcesDefault : MonoBehaviour
 	
 	public LugusResourceCollectionDefault Shared = null;
 	public LugusResourceCollectionLocalized Localized = null;
+	public LugusResourceCollectionLocalized Levels = null;
 	
 	public Texture2D errorTexture = null;
 	public AudioClip errorAudio = null;
 	public Sprite errorSprite = null;
 	public TextAsset errorTextAsset = null;
+
+	protected string languageTemp = ""; 
 	
 	protected void LoadDefaultCollections()
 	{ 
@@ -60,9 +64,11 @@ public class LugusResourcesDefault : MonoBehaviour
 		
 		this.Shared = new LugusResourceCollectionDefault("Shared/");
 		this.Localized = new LugusResourceCollectionLocalized("Languages/");
+		this.Levels = new LugusResourceCollectionLocalized("Levels/");
 		
 		collections.Add ( Localized );
 		collections.Add ( Shared );
+		collections.Add ( Levels );
 		
 		foreach( ILugusResourceCollection collection in collections )
 		{
@@ -80,10 +86,22 @@ public class LugusResourcesDefault : MonoBehaviour
 		
 		if( errorTextAsset == null )
 			errorTextAsset = Shared.GetTextAsset("error");
+
+		if( !string.IsNullOrEmpty(languageTemp) )
+			ChangeLanguage( languageTemp );
 	}
 
 	public void ChangeLanguage(string langKey)
 	{
+		// Quick and dirty fix. We want to set the language key as soon as possible, but this means Awake()s on other objects might run before
+		// the collections below have been initialized. If this is the case, the setting of the langID on the collections is delayed until
+		// LoadDefaultCollections().
+		if(collections == null || collections.Count == 0)
+		{
+			languageTemp = langKey;
+			return;
+		}
+	
 		foreach( ILugusResourceCollection collection in collections )
 		{
 			if( collection is LugusResourceCollectionLocalized )
@@ -92,7 +110,44 @@ public class LugusResourcesDefault : MonoBehaviour
 			}
 		}
 	}
-	
+
+	public string GetLocalizedLangID()
+	{
+		if(collections == null || collections.Count == 0)
+		{
+			Debug.LogError("LugusResources: Localized resources collected has not yet been initialized.");
+			return "";
+		}
+
+		foreach( ILugusResourceCollection collection in collections )
+		{
+			if( collection is LugusResourceCollectionLocalized )
+			{
+				return ( (LugusResourceCollectionLocalized) collection).LangID;
+			}
+		}
+
+		Debug.LogError("LugusResources: No localized resource collection available.");
+		return "";
+	}
+
+	// Translates system language string to two-character language id.
+	// System language can for instance be used as fallback language setting if no language setting has been saved yet.
+	public string GetSystemLanguageID()
+	{
+		switch ( Application.systemLanguage )
+		{
+			case SystemLanguage.Dutch:
+				return "nl";
+		
+			case SystemLanguage.English:
+				return "en";
+
+			default:			// English seems like a sensible pick for a potential international product if the system language isn't supported.
+				return "en";
+		}
+	}
+
 	protected void CollectionReloaded()
 	{
 		if( onResourcesReloaded != null )
@@ -179,5 +234,5 @@ public class LugusResourcesDefault : MonoBehaviour
 		
 		return output;
 	}
-
+	
 }

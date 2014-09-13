@@ -14,7 +14,9 @@ public class BatCave : MonoBehaviour
 	public Transform BatTarget = null;
 	
 	public int spawnCount = 2;
-	
+
+    public AudioClip SpawnSound;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -80,7 +82,9 @@ public class BatCave : MonoBehaviour
 			
 			bats.Add( newBat );
 		}
-	}
+
+        LugusAudio.use.SFX().Play(SpawnSound).Loop = false;
+    }
 	
 	public void Close()
 	{

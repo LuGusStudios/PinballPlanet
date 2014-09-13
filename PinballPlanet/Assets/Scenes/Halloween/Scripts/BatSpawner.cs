@@ -7,6 +7,8 @@ public class BatSpawner : MonoBehaviour
     public Transform BatTarget = null;
     public int SpawnCount = 2;
 
+    public AudioClip SpawnSound;
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag != "Ball")
@@ -20,6 +22,8 @@ public class BatSpawner : MonoBehaviour
             Vector3 target = BatTarget.position + new Vector3(Random.Range(-15, 15), Random.Range(-25, 25), 0);
 
             iTween.MoveTo(newBat.gameObject, target, 2.0f);
+
+            LugusAudio.use.SFX().Play(SpawnSound).Loop = false;
         }
     }
 }

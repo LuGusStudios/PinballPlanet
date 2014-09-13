@@ -2,6 +2,7 @@
 #define Physics2D
 
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class LugusInput : LugusSingletonRuntime<LugusInputDefault>
@@ -92,10 +93,9 @@ public class LugusInputDefault : MonoBehaviour
 	
 	public Transform RaycastFromScreenPoint(Camera camera, Vector3 screenPoint)
 	{
-		
 		//if( inputPoints.Count == 0 ) 
 		//	return null;
-		
+
 		Ray ray = camera.ScreenPointToRay( screenPoint );
 		RaycastHit hit;
 		if ( Physics.Raycast(ray, out hit) )
@@ -168,6 +168,8 @@ public class LugusInputDefault : MonoBehaviour
 		return LuGusCamera.ui.ScreenToWorldPoint( mousePos );
 		*/	
 	}
+	
+	
 	
 	public Vector3 ScreenTo3DPointOnPlane( Vector3 screenPoint, Plane plane)
 	{
@@ -291,11 +293,13 @@ public class LugusInputDefault : MonoBehaviour
 	void Update () 
 	{
 		ProcessMouse();
-		
-		if( Input.GetKeyDown(KeyCode.Tab) )
+
+
+		if( Input.GetKeyDown(KeyCode.Tab) )   
 		{
 			LugusDebug.debug = !LugusDebug.debug;
 		}
+
 	}
 	
 	public bool KeyDown(KeyCode key)
@@ -312,6 +316,13 @@ public class LugusInputDefault : MonoBehaviour
 	{
 		return Input.GetKey(key);
 	}
+
+	void Awake()
+	{
+		if( GetComponent<DebugByTaps>() == null )
+			this.gameObject.AddComponent<DebugByTaps>();
+	}
+	
 	
 	void OnGUI()
 	{	

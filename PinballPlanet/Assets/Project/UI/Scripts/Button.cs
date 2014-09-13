@@ -38,7 +38,7 @@ public class Button : MonoBehaviour
 	{
 	    if (gameObject.layer == LayerMask.NameToLayer("GUI"))
 	    {
-            if (LugusInput.use.RayCastFromMouseUp() == this.transform)
+            if (LugusInput.use.RayCastFromMouseUp(LugusCamera.ui) == this.transform)
             {
                 if (!string.IsNullOrEmpty(pressSoundKey))
                 {
@@ -50,7 +50,7 @@ public class Button : MonoBehaviour
 	    }
 	    else
 	    {
-            if (LugusInput.use.RayCastFromMouseUp(Camera.main) == this.transform)
+            if (LugusInput.use.RayCastFromMouseUp(LugusCamera.game) == this.transform)
             {
                 if (!string.IsNullOrEmpty(pressSoundKey))
                 {

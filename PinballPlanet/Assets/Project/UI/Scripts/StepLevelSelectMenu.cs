@@ -212,6 +212,10 @@ public class StepLevelSelectMenu : IMenuStep
         // Move camera to level select position.
         Vector3 target = GameObject.Find("Camera_LevelSelect").transform.position;
         Camera.main.gameObject.MoveTo(target).Time(0.5f).EaseType(iTween.EaseType.easeInOutQuad).Execute();
+
+        // Load high scores.
+        if(PlayerData.use.LevelsHighscores == null)
+            PlayerData.use.Load();
     }
 
     public override void Deactivate(bool animate = true)
@@ -243,10 +247,13 @@ public class StepLevelSelectMenu : IMenuStep
         else
             Debug.LogError("--- Sprite with name: Shared/UI/Level" + levelName + " not found in resources. ---");
 
-
+        // Show high scores.
         int i = 0;
+        Debug.Log("Showing " + PlayerData.use.LevelsHighscores["Pinball_" + levelName].Count + " high scores.");
         foreach (int score in PlayerData.use.LevelsHighscores["Pinball_" + levelName])
         {
+            Debug.Log("Showing score: " + score + " of level Pinball_" + levelName);
+
             GameObject highscore = Instantiate(HighScorePrefab) as GameObject;
             highscore.transform.parent = gameObject.transform;
             highscore.transform.position = transform.FindChild("HighScore").position + Vector3.zero.yAdd(-0.6f * i);

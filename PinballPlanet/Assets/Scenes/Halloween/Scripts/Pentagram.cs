@@ -8,7 +8,7 @@ public class Pentagram : BreakableMultiObjective
     public GameObject PathFollower;
 
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
         // Hide Pentagram.
         renderer.enabled = false;
