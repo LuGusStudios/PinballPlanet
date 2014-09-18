@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+public enum LevelKey
+{
+    MainMenu = 0, Halloween = 1, Pirate = 2, Mine = 3
+}
+
 public class PlayerData : MonoBehaviour
 {
     // Singleton Instance.
@@ -28,6 +33,15 @@ public class PlayerData : MonoBehaviour
                 _instance.LevelsHighscores.Add(PirateLvlName, new List<int>());
                 _instance.LevelsHighscores.Add(MineLvlName, new List<int>());
 
+                _instance.LevelsUnlocked.Add(HalloweenLvlName, false);
+                _instance.LevelsUnlocked.Add(PirateLvlName, false);
+                _instance.LevelsUnlocked.Add(MineLvlName, false);
+
+                _instance._unlockCosts.Add(10);
+                _instance._unlockCosts.Add(20);
+                _instance._unlockCosts.Add(50);
+                _instance._unlockCosts.Add(100);
+
                 _instance.Load();
             }
 
@@ -42,8 +56,39 @@ public class PlayerData : MonoBehaviour
     // Level strings.
     public const string MainLvlName = "Pinball_MainMenu";
     public const string HalloweenLvlName = "Pinball_Halloween";
-    public const string PirateLvlName = "Pinball_Ship";
+    public const string PirateLvlName = "Pinball_Pirate";
     public const string MineLvlName = "Pinball_Mine";
+
+    // Level keys.
+    public static string MainLvlKey
+    {
+        get
+        {
+            return LevelKey.MainMenu.ToString();
+        }
+    }
+    public static string HalloweenLvlKey
+    {
+        get
+        {
+            return LevelKey.Halloween.ToString();
+        }
+    }
+    public static string PirateLvlKey
+    {
+        get
+        {
+            return LevelKey.Pirate.ToString();
+        }
+    }
+    public static string MineLvlKey
+    {
+        get
+        {
+            return LevelKey.Mine.ToString();
+        }
+    }
+
 
     // Total stars earned.
     private int _stars = 0;
@@ -54,24 +99,39 @@ public class PlayerData : MonoBehaviour
         {
             _stars = value;
 
-            if (ChallengesMenuStars != null)
+            foreach (TextMesh starText in StarTextMeshes)
             {
-                Debug.Log("Updating star count text.");
-                ChallengesMenuStars.text = value.ToString();
+                if (starText != null)
+                    starText.text = value.ToString();
             }
-            else
-                Debug.Log("ChallengesMenuStars text mesh not set.");
         }
     }
-    
-    public TextMesh ChallengesMenuStars;
+
+    // Text meshes linked to star count.
+    public List<TextMesh> StarTextMeshes = new List<TextMesh>();
+
+    // Score needed to get a star.
     public int ScorePerStar = 5000;
 
-    // Initialization.
-    void Start()
+    // Unlock costs.
+    public int UnlockCost
     {
+        get
+        {
+            int nrLvlsUnlocked = 0;
+            foreach (var lvlUnlocked in LevelsUnlocked)
+            {
+                if (lvlUnlocked.Value)
+                    ++nrLvlsUnlocked;
+            }
 
+            return _unlockCosts[nrLvlsUnlocked];
+        }
     }
+    private List<int> _unlockCosts = new List<int>();
+
+    // Levels that have been unlocked.
+    public Dictionary<string, bool> LevelsUnlocked = new Dictionary<string, bool>();
 
     // Sort highscores.
     public void Sort(string lvlName)
@@ -106,6 +166,14 @@ public class PlayerData : MonoBehaviour
         // Save stars.
         LugusConfig.use.User.SetInt("Stars", Stars, true);
 
+        // Save levels unlocked.
+        foreach (var lvlUnlocked in LevelsUnlocked)
+        {
+            Debug.Log("Saving level " + lvlUnlocked.Key + " unlocked = " + lvlUnlocked.Value);
+
+            LugusConfig.use.User.SetBool(lvlUnlocked.Key + "_Unlocked", lvlUnlocked.Value, true);
+        }
+
         // Save to files.
         Debug.Log("Saving High Scores");
         LugusConfig.use.SaveProfiles();
@@ -114,13 +182,6 @@ public class PlayerData : MonoBehaviour
     // Load Data.
     public void Load()
     {
-        Debug.Log("Loading High Scores");
-
-        //// Initialize lists.
-        //if (LevelsHighscores == null)
-        //{
-        //}
-
         // Load scores.
         foreach (KeyValuePair<string, List<int>> lvlHighScores in LevelsHighscores)
         {
@@ -132,15 +193,24 @@ public class PlayerData : MonoBehaviour
                 if (score > 0)
                 {
                     lvlHighScores.Value.Add(score);
-                    Debug.Log("Loaded High Score: " + key + ", " + score);
+                    //Debug.Log("Loaded High Score: " + key + ", " + score);
                 }
             }
             Sort(lvlHighScores.Key);
         }
 
         // Load stars.
-        Debug.Log("Loading Stars");
+        //Debug.Log("Loading Stars");
         Stars = LugusConfig.use.User.GetInt("Stars", 0);
+
+        // Load levels unlocked.
+        string[] lvlNames = new string[LevelsUnlocked.Count];
+        LevelsUnlocked.Keys.CopyTo(lvlNames, 0);
+        foreach (string lvlName in lvlNames)
+        {
+            LevelsUnlocked[lvlName] = LugusConfig.use.User.GetBool(lvlName + "_Unlocked", false);
+            //Debug.Log("Loading: Level " + lvlName + " unlocked = " + LevelsUnlocked[lvlName]);
+        }
     }
 
     // Adds a highscore if high enough.

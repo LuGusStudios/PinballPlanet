@@ -14,9 +14,20 @@ public class Spider : MonoBehaviour
     // Time stuck to camera.
     public float StickTime = 1.0f;
 
+    // Animator.
+    private Animator _animator;
+
     void Start()
     {
         _originalPos = transform.position;
+
+        _animator = transform.GetChild(0).GetComponent<Animator>();
+
+        //JumpTarget = GameObject.Find("Spider_Target");
+        //Stick();
+
+        // Play idle animation.
+        _animator.Play("OpenLegs", 0);
     }
 
     void Update()
@@ -44,9 +55,15 @@ public class Spider : MonoBehaviour
     {
         _timeJumping = 0;
 
+        // Set position to camera target.
         transform.parent = JumpTarget.transform;
         transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
 
+        // Remove spider after delay.
         Destroy(gameObject, StickTime);
+
+        // Play animation.
+        _animator.Play("OnFace", 0);
     }
 }

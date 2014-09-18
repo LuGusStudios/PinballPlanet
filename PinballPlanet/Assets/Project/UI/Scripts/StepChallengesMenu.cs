@@ -6,10 +6,9 @@ public class StepChallengesMenu : IMenuStep
 {
     protected Button ChallengesButton = null;
     protected Vector3 OriginalPosition = Vector3.zero;
-    public TextMeshWrapper Stars = null;
+    protected TextMesh StarsText = null;
 
-    private const int _maxChallenges = 4;
-    protected List<GameObject> Challenges;
+    public static int MaxChallenges = 4;
     protected Transform ChallengesTopTransform = null;
     protected Transform ChallengesBotTransform = null;
     public GameObject ChallengePrefab;
@@ -25,14 +24,14 @@ public class StepChallengesMenu : IMenuStep
             Debug.Log("StepMainMenu: Missing trophy button.");
         }
 
-        if (Stars == null)
+        if (StarsText == null)
         {
-            Stars = transform.FindChild("Text_Stars").GetComponent<TextMeshWrapper>();
+            StarsText = transform.FindChild("Text_Stars").GetComponent<TextMesh>();
 
-            Stars.textMesh.text = PlayerData.use.Stars.ToString();
-            PlayerData.use.ChallengesMenuStars = Stars.textMesh;
+            StarsText.text = PlayerData.use.Stars.ToString();
+            PlayerData.use.StarTextMeshes.Add(StarsText);
         }
-        if (Stars == null)
+        if (StarsText == null)
         {
             Debug.Log("StepGameOverMenu: Missing stars mesh!");
         }
@@ -55,16 +54,10 @@ public class StepChallengesMenu : IMenuStep
             Debug.Log("StepMainMenu: Missing challenge bottom transform button.");
         }
 
-        // Spawn 4 challenges.
-        Challenges = new List<GameObject>();
-        for (int i = 0; i < _maxChallenges; i++)
-        {
-            Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position)/(_maxChallenges - 1)*i;
-            GameObject challenge = Instantiate(ChallengePrefab, pos, Quaternion.identity) as GameObject;
-            challenge.transform.parent = gameObject.transform;
-        }
-
         OriginalPosition = transform.position;
+
+        // Initialize challenge manager by calling it.
+        ChallengeManager.use.enabled = true;
     }
 
     public void SetupGlobal()
@@ -99,6 +92,18 @@ public class StepChallengesMenu : IMenuStep
             MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu].Activate(false);
         else
             MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu].Activate(false);
+
+        // Show challenges.
+        int i = 0;
+        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
+        {
+            Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (MaxChallenges - 1) * i;
+            GameObject challengeGameObj = Instantiate(ChallengePrefab, pos, Quaternion.identity) as GameObject;
+            challengeGameObj.transform.parent = gameObject.transform;
+            challengeGameObj.transform.FindChild("Text_Challenge").GetComponent<TextMesh>().text = challenge.Description;
+
+            ++i;
+        }
     }
 
     public override void Deactivate(bool animate = true)

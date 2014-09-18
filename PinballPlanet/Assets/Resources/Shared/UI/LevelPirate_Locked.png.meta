@@ -3,6 +3,7 @@ guid: c81d7049ce0860e4d82cd4cdba6065ba
 TextureImporter:
   fileIDToRecycleName:
     21300000: LevelShip_Locked
+    21300002: LevelPirate_Locked
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

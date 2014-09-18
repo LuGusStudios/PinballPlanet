@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Challenges>
+
+  <Challenge>
+    <TextKey>Score more than 3000 points.</TextKey>
+    <Condition>
+      <Type>Score</Type>
+      <Parameters>
+        <Value>3000</Value>
+        <Comparer>Greater</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
+    <TextKey>Score more than 5000 points in the mine level.</TextKey>
+    <Condition>
+      <Type>Score</Type>
+      <Parameters>
+        <Value>5000</Value>
+        <Comparer>Greater</Comparer>
+      </Parameters>
+    </Condition>
+    <Condition>
+      <Type>Level</Type>
+      <Parameters>
+        <Name>Pinball_Mine</Name>
+        <Comparer>Equal</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
+    <TextKey>Lose 3 balls in a single level.</TextKey>
+    <Condition>
+      <Type>BallsInPlay</Type>
+      <Parameters>
+        <Value>0</Value>
+        <Comparer>Equal</Comparer>
+        <CountToMeet>3</CountToMeet>
+        <CountChangedOnly>true</CountChangedOnly>
+        <LevelLoadReset>true</LevelLoadReset>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <!--Example Conditions-->
+  <!--
+  <Condition>
+    <Type>All</Type>
+    <Parameters>
+      <MeetOnce>false</MeetOnce>
+      <CountToMeet>1</CountToMeet>
+      <CountChangedOnly>false</CountChangedOnly>
+      <LevelLoadReset>false</LevelLoadReset>
+    </Parameters>
+  </Condition>
+  -->
+
+</Challenges>
+

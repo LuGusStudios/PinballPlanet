@@ -60,6 +60,7 @@ GameObject:
   - 23: {fileID: 2300002}
   - 102: {fileID: 10200002}
   - 114: {fileID: 11400002}
+  - 65: {fileID: 6500000}
   m_Layer: 22
   m_Name: Text_Challenge
   m_TagString: Untagged
@@ -158,6 +159,18 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!65 &6500000
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 9.05448437, y: 1.83911145, z: 0}
+  m_Center: {x: 4.52709627, y: 0, z: 0}
 --- !u!102 &10200000
 TextMesh:
   serializedVersion: 3

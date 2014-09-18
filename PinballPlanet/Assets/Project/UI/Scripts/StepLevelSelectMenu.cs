@@ -7,10 +7,14 @@ public class StepLevelSelectMenu : IMenuStep
     protected Button HelpButton = null;
     protected Button BackButton = null;
     protected Button PlayButton = null;
+    protected Button LockButton = null;
     protected TextMesh LevelName = null;
     protected SpriteRenderer Thumbnail = null;
     protected List<Button> LevelSelectButtons;
-    protected List<GameObject> Highscores;
+    protected List<GameObject> Highscores = new List<GameObject>();
+    protected TextMesh StarsText = null;
+    protected GameObject StarCost = null;
+    protected TextMesh StarCostText = null;
 
     protected Vector3 OriginalPosition = Vector3.zero;
 
@@ -19,7 +23,6 @@ public class StepLevelSelectMenu : IMenuStep
 
     public float RotationSpeed = 0.15f;
     public float DragSpeed = 1.0f;
-    //private Vector3 _prevDragPoint;
 
     public GameObject HighScorePrefab;
 
@@ -43,6 +46,15 @@ public class StepLevelSelectMenu : IMenuStep
         if (BackButton == null)
         {
             Debug.Log("StepLevelSelectMenu: Missing back button.");
+        }
+
+        if (LockButton == null)
+        {
+            LockButton = transform.FindChild("LockButton").GetComponent<Button>();
+        }
+        if (LockButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing lock button.");
         }
 
         if (PlayButton == null)
@@ -72,6 +84,36 @@ public class StepLevelSelectMenu : IMenuStep
             Debug.Log("StepGameMenu: Missing thumbnail sprite!");
         }
 
+        if (StarsText == null)
+        {
+            StarsText = transform.FindChild("Text_Stars").GetComponent<TextMesh>();
+
+            StarsText.text = PlayerData.use.Stars.ToString();
+            PlayerData.use.StarTextMeshes.Add(StarsText);
+        }
+        if (StarsText == null)
+        {
+            Debug.Log("StepGameOverMenu: Missing stars text mesh!");
+        }
+
+        if (StarCost == null)
+        {
+            StarCost = transform.FindChild("StarCost").gameObject;
+        }
+        if (StarCost == null)
+        {
+            Debug.Log("StepGameOverMenu: Missing star cost game object!");
+        }
+
+        if (StarCostText == null)
+        {
+            StarCostText = transform.FindChild("StarCost/Text_Cost").GetComponent<TextMesh>();
+        }
+        if (StarCostText == null)
+        {
+            Debug.Log("StepGameOverMenu: Missing star cost text mesh!");
+        }
+
         LevelSelectButtons = new List<Button>();
         // Only search these items when in main menu.
         if (Application.loadedLevelName == "Pinball_MainMenu")
@@ -96,9 +138,14 @@ public class StepLevelSelectMenu : IMenuStep
             }
         }
 
-        Highscores = new List<GameObject>();
-
+        // Store original position.
         OriginalPosition = transform.position;
+
+        // Turn of unneeded objects.
+        PlayButton.gameObject.SetActive(false);
+        LockButton.gameObject.SetActive(false);
+        StarCost.SetActive(false);
+        Thumbnail.gameObject.SetActive(false);
 
         // Hide.
         HideLevel();
@@ -130,8 +177,34 @@ public class StepLevelSelectMenu : IMenuStep
         }
         else if (PlayButton.pressed)
         {
-            _lvlName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
             Invoke("LoadLevel", PlayButton.clickAnimationTime);
+        }
+        else if (LockButton.pressed)
+        {
+            // Unlock level if player has enough stars.
+            if (PlayerData.use.Stars >= PlayerData.use.UnlockCost)
+            {
+                Debug.Log("Unlocked " + _lvlName);
+
+                // Remove stars.
+                PlayerData.use.Stars -= PlayerData.use.UnlockCost;
+
+                // Set level to unlocked.
+                PlayerData.use.LevelsUnlocked["Pinball_" + _lvlName] = true;
+
+                // Show play button.
+                PlayButton.gameObject.SetActive(true);
+
+                // Hide lock.
+                LockButton.gameObject.SetActive(false);
+                StarCost.SetActive(false);
+                _selectedLevelButton.transform.FindChild("LevelSelectLock").gameObject.SetActive(false);
+
+                // Build thumbnail name.
+                string thumbnailPath = "Shared/UI/Level" + _lvlName;
+                Sprite thumbnail = Resources.Load<Sprite>(thumbnailPath);
+                Thumbnail.sprite = thumbnail;
+            }
         }
         else
         {
@@ -141,6 +214,7 @@ public class StepLevelSelectMenu : IMenuStep
                 {
                     // Store selected.
                     _selectedLevelButton = levelButton;
+                    _lvlName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
 
                     ShowLevel();
 
@@ -207,6 +281,10 @@ public class StepLevelSelectMenu : IMenuStep
         foreach (Button levelButton in LevelSelectButtons)
         {
             levelButton.gameObject.SetActive(true);
+
+            // Show lock if level is not yet unlocked.
+            //Debug.Log("Showing lock of level " + levelButton.name.Split('_')[1] + ": " + PlayerData.use.LevelsUnlocked["Pinball_" + levelButton.name.Split('_')[1]]);
+            levelButton.transform.FindChild("LevelSelectLock").gameObject.SetActive(!PlayerData.use.LevelsUnlocked["Pinball_" + levelButton.name.Split('_')[1]]);
         }
 
         // Move camera to level select position.
@@ -220,13 +298,14 @@ public class StepLevelSelectMenu : IMenuStep
 
         gameObject.SetActive(false);
 
-        if (Application.loadedLevelName != "MainMenu")
+        if (Application.loadedLevelName != "Pinball_MainMenu")
             return;
 
         // Deactivate level select buttons.
         foreach (Button levelButton in LevelSelectButtons)
         {
             levelButton.gameObject.SetActive(false);
+            levelButton.transform.FindChild("LevelSelectLock").gameObject.SetActive(true);
         }
 
         //iTween.Stop(gameObject);
@@ -235,20 +314,15 @@ public class StepLevelSelectMenu : IMenuStep
 
     public void ShowLevel()
     {
-        // Show level thumbnail.
+        // Get level name.
         string levelName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
-        Sprite thumbnail = Resources.Load<Sprite>("Shared/UI/Level" + levelName);
-        if (thumbnail != null)
-            Thumbnail.sprite = thumbnail;
-        else
-            Debug.LogError("--- Sprite with name: Shared/UI/Level" + levelName + " not found in resources. ---");
-
+     
         // Show high scores.
         int i = 0;
-        Debug.Log("Showing " + PlayerData.use.LevelsHighscores["Pinball_" + levelName].Count + " high scores.");
+        //Debug.Log("Showing " + PlayerData.use.LevelsHighscores["Pinball_" + levelName].Count + " high scores.");
         foreach (int score in PlayerData.use.LevelsHighscores["Pinball_" + levelName])
         {
-            Debug.Log("Showing score: " + score + " of level Pinball_" + levelName);
+            //Debug.Log("Showing score: " + score + " of level Pinball_" + levelName);
 
             GameObject highscore = Instantiate(HighScorePrefab) as GameObject;
             highscore.transform.parent = gameObject.transform;
@@ -258,15 +332,32 @@ public class StepLevelSelectMenu : IMenuStep
 
             ++i;
         }
+        
+        // Build thumbnail name.
+        string thumbnailPath = "Shared/UI/Level" + levelName;
 
-        //// Show high scores
-        //foreach (GameObject highscore in Highscores)
-        //{
-        //    highscore.SetActive(true);
-        //}
+        // Show either play button or unlock button.
+        if (PlayerData.use.LevelsUnlocked["Pinball_" + levelName])
+        {
+            PlayButton.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            LockButton.gameObject.SetActive(true);
+            StarCost.SetActive(true);
+            StarCostText.text = "-" + PlayerData.use.UnlockCost;
+            thumbnailPath += "_Locked";
+        }
+
+        // Show thumbnail picture.
+        Sprite thumbnail = Resources.Load<Sprite>(thumbnailPath);
+        if (thumbnail != null)
+            Thumbnail.sprite = thumbnail;
+        else
+            Debug.LogError("--- Sprite with name: Shared/UI/Level" + levelName + " not found in resources. ---");
 
         Thumbnail.gameObject.SetActive(true);
-        PlayButton.gameObject.SetActive(true);
 
         // Put flag in right place.
         HideLevelButtonFlags();
@@ -289,10 +380,21 @@ public class StepLevelSelectMenu : IMenuStep
         LevelName.gameObject.SetActive(false);
         Thumbnail.gameObject.SetActive(false);
         PlayButton.gameObject.SetActive(false);
+        LockButton.gameObject.SetActive(false);
+        StarCost.SetActive(false);
     }
 
     void LoadLevel()
     {
         Application.LoadLevel("Pinball_" + _lvlName);
+    }
+
+    void OnGUI()
+    {
+        if (LugusDebug.debug)
+        {
+            if (GUI.Button(new Rect(10, 50, 120, 24), "Add 10 Stars"))
+                PlayerData.use.Stars += 10;
+        }
     }
 }
