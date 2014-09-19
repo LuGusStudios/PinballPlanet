@@ -22,13 +22,14 @@ public class TrainHandle : Triggerable
         if (other.name != "Ball")
             return;
 
-        if(_setDefault)
+        if (_setDefault)
             SetBridge();
         else
             SetDefault();
 
         if (Sound != null)
-            audio.PlayOneShot(Sound);
+            //audio.PlayOneShot(Sound);
+            LugusAudio.use.SFX().Play(Sound).Loop = false;
     }
 
     public void SetDefault()
@@ -41,13 +42,12 @@ public class TrainHandle : Triggerable
 
         animation.Sample();
         animation.Play(AnimationName);
-
     }
 
     public void SetBridge()
     {
         _setDefault = false;
-        
+
         AnimationState animState = animation[AnimationName];
         animState.time = animState.length;
         animState.speed = -1;

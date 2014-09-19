@@ -1,7 +1,10 @@
 using UnityEngine;
+using System.Collections;
 
 public class LugusTime 
 {
+	// TODO: make more robust by adding TimeHelper itself!
+	/*
 	public static float deltaTime
 	{
 		get{ return Time.deltaTime; }
@@ -21,4 +24,5 @@ public class LugusTime
 				return Time.deltaTime; 
 		}
 	}
+	*/
 }

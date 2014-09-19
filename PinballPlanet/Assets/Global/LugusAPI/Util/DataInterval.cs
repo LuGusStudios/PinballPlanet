@@ -1,5 +1,7 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using System;
 
 // keeps a history of data so it can be processed afterwards
 // primarily made for use in signal processing (ex. extracting average value over a series of frames)

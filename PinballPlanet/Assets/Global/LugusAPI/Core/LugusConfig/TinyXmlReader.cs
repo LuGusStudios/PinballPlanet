@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+
 /* 
 	Source: http://wiki.unity3d.com/index.php?title=TinyXmlReader 
 	See site for usage.

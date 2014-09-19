@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
-#if !UNITY_WEBPLAYER
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
 using System.IO;
-using System.Text;
 #endif
+using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 
 public interface ILugusConfigProvider
@@ -16,7 +17,7 @@ public interface ILugusConfigProvider
 	void Store(Dictionary<string, string> data, string key);
 }
 
-#if !UNITY_WEBPLAYER
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
 public class LugusConfigProviderDefault : ILugusConfigProvider
 {
 
@@ -236,6 +237,5 @@ public class LugusConfigProviderPlayerPrefs : ILugusConfigProvider
 	{
 		Debug.LogWarning("PlayerPrefs : storing " + key + " as " + _parsers[0].ParseTo(data) );
 		PlayerPrefs.SetString(URL, _parsers[0].ParseTo(data) );
-	}
-	
+	}	
 }

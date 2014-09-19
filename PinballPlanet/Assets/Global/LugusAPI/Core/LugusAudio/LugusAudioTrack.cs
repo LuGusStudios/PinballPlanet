@@ -10,7 +10,8 @@ public interface ILugusAudioTrack
 	
 	float Volume { get; set; }
 	bool Loop{ get; set; }
-	
+
+	float OriginalVolume { get; set; }
 	
 	// Load the clip and apply the settings, but don't start playing the clip just yet
 	bool Load(AudioClip clip, LugusAudioTrackSettings settings = null);
@@ -64,6 +65,13 @@ public class LugusAudioTrack : MonoBehaviour, ILugusAudioTrack
 	{
 		get{ return Source.loop; }
 		set{ Source.loop = value; }
+	}
+
+	protected float _originalVolume = 1;
+	public float OriginalVolume
+	{
+		get{ return _originalVolume; }
+		set{ _originalVolume = value; }
 	}
 	
 	public bool Playing
@@ -125,14 +133,14 @@ public class LugusAudioTrack : MonoBehaviour, ILugusAudioTrack
 		
 		Source.clip = clip;
 		Source.time = 0.0f;
-		
+
 		// reset the settings 
 		// otherwhise, if the previous PLay had for example Loop set
 		// but the baseSettings didn't have loop set... loop would remain set on the next Play
 		// TODO: make this more decent...
 		this.Loop = false;
 		this.Volume = 1.0f;
-		
+
 		if( settings != null )
 		{
 			settings.Merge( _channel.BaseTrackSettings );
@@ -146,13 +154,13 @@ public class LugusAudioTrack : MonoBehaviour, ILugusAudioTrack
 		if( settings != null )
 		{
 			settings.ApplyTo( this );
-			
+		
 			if( settings.Position() == LugusUtil.DEFAULTVECTOR )
 			{
 				transform.localPosition = Vector3.zero;//position = LugusCamera.game.transform.position;//LugusAudio.use.transform.position;
 			}
 		}
-		
+
 		return true;
 	}
 	
@@ -169,6 +177,8 @@ public class LugusAudioTrack : MonoBehaviour, ILugusAudioTrack
 		Stop ();
 		
 		_paused = false;
+
+		OriginalVolume = Source.volume;
 		
 		Source.Play();
 	}
@@ -270,7 +280,7 @@ public class LugusAudioTrackSettings
 	{
 		if( volume_set )
 			target.Volume = volume;
-		
+
 		if( loop_set )
 			target.Loop = loop;
 		

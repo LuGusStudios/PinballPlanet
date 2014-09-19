@@ -128,8 +128,12 @@ public class MenuManagerDefault: MonoBehaviour
 	{
         ActivateMenu(StartMenu);
 
+        //Debug.Log("Saving");
+        //LugusConfig.use.User.SetBool(Application.loadedLevelName, true, true);
+        //LugusConfig.use.SaveProfiles();
+
         // Make sure to disable game menu in main menu.
-        if(Application.loadedLevelName == "MainMenu")
+        if(Application.loadedLevelName == "Pinball_MainMenu")
             Menus[MenuTypes.GameMenu].gameObject.SetActive(false);
 	}
 	
@@ -200,7 +204,7 @@ public class MenuManagerDefault: MonoBehaviour
 		}
 		else
 		{
-			Debug.LogError("MenuManagerDefault: Unknown menu!");
+			Debug.LogError("MenuManagerDefault: Unknown menu:" + type + "!");
 		}
 	}
 

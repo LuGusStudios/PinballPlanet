@@ -20,6 +20,7 @@ public class Player : LugusSingletonExisting<Player>
     public AudioClip LightOffSound;
     public AudioClip LeftFlipperSound;
     public AudioClip RightFlipperSound;
+    public AudioClip Music;
 
     // The force when launching the ball.
     public float LaunchMaxForce;
@@ -33,7 +34,6 @@ public class Player : LugusSingletonExisting<Player>
         set { _ballLaunchForce = value; }
     }
 
-    // Whether launch button is being held.
     private bool _launchSoundPlaying = false;
 
     // True when game is paused.
@@ -54,6 +54,7 @@ public class Player : LugusSingletonExisting<Player>
 
     public void UpdateBallArray()
     {
+        BallsInPlay.Clear();
         BallsInPlay = GameObject.FindGameObjectsWithTag("Ball").ToList();
     }
 
@@ -66,17 +67,19 @@ public class Player : LugusSingletonExisting<Player>
     // Releases a ball into the playfield
     public Ball ReleaseBall()
     {
+        // Game Over.
         if (ScoreManager.use.BallCount <= 0)
         {
-            //GameObject.Find("GOD").GetComponent<KetnetController>().AddScore(totalScore);
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameOverMenu);
+
+            PlayerData.use.AddHighScore(Application.loadedLevelName, ScoreManager.use.TotalScore);
 
             return null;
         }
 
         // Now create a new ball
         GameObject newball;
-        newball = (GameObject)Instantiate(BallPrefab, BallLaunch.transform.position + new Vector3(0, 25, 0), Quaternion.identity);
+        newball = (GameObject)Instantiate(BallPrefab, BallLaunch.transform.position + new Vector3(0, 25, 0), BallPrefab.transform.rotation);
         newball.name = "Ball";
 
         // Update our ball array so other objects can quickly do a seek on all balls
@@ -101,6 +104,7 @@ public class Player : LugusSingletonExisting<Player>
         // Untag ball so that he can't be found again by his tag.
         ball.tag = "Untagged";
         Destroy(ball.gameObject);
+        ball = null;
 
         // Update our ball array so other objects can quickly do a seek on all balls
         UpdateBallArray();
@@ -108,20 +112,11 @@ public class Player : LugusSingletonExisting<Player>
         if (BallsInPlay.Count == 0)
         {
             // Play release sound.
-            if (audio != null)
-            {
-                audio.loop = false;
-                audio.Stop();
-                audio.PlayOneShot(BallLostSound);
-            }
+            LugusAudio.use.SFX().Play(BallLostSound, true).Loop = false;
 
             // Release ball after short while.
             ReleaseBallDelayed();
         }
-        //else
-        //{
-        //    Debug.Log("--- Balls remaining: " + BallsInPlay.Count + " ---");
-        //}
 
         //Debug.Log("Ball Destroyed! nr balls remaining : " + ballsInPlay.Length );
         ScoreManager.use.BallDestroyed();
@@ -131,9 +126,9 @@ public class Player : LugusSingletonExisting<Player>
 
     void Start()
     {
-        LugusDebug.debug = false;
-
         ReleaseBall();
+
+        LugusAudio.use.Music().Play(Music, true).Loop = true;
     }
 
     protected virtual void Update()
@@ -153,11 +148,10 @@ public class Player : LugusSingletonExisting<Player>
             // Play launch sound if launched.
             if (BallLaunchForce > 0)
             {
-                if (audio != null && !_launchSoundPlaying)
+                if (!_launchSoundPlaying)
                 {
-                    audio.clip = LaunchSound;
-                    audio.Play();
-                    audio.loop = true;
+                    Debug.Log("Playing LaunchSound");
+                    LugusAudio.use.SFX().Play(LaunchSound, true).Loop = true;
                     _launchSoundPlaying = true;
                 }
             }
@@ -165,12 +159,15 @@ public class Player : LugusSingletonExisting<Player>
             // Stop sound when max reached.
             if (BallLaunchForce >= LaunchMaxForce)
             {
-                if (audio != null)
-                {
-                    audio.loop = false;
-                    audio.Stop();
-                }
+                LugusAudio.use.SFX().StopAll();
             }
+        }
+
+        if (LugusDebug.debug)
+        {
+            // Unstuck ball.
+            if (Input.GetKeyDown(KeyCode.U))
+                BallsInPlay[0].transform.position = GameObject.Find("UnstuckPos").transform.position.z(BallsInPlay[0].transform.position.z);
         }
     }
 
@@ -225,62 +222,56 @@ public class Player : LugusSingletonExisting<Player>
     public void LaunchBall()
     {
         var ball = GameObject.Find("Ball");
+        ball.rigidbody.velocity = Vector3.zero;
 
         //Debug.Log("Launch force: " + BallLaunchForce);
         ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
+
         // Reset launch force.
-        _ballLaunchForce = 0;
+        BallLaunchForce = 0;
 
         // Spawn fire particles.
-        Instantiate(LaunchParticlesPrefab);
+        if (LaunchParticlesPrefab != null)
+            Instantiate(LaunchParticlesPrefab);
 
         // Play release sound.
-        if (audio != null)
-        {
-            audio.loop = false;
-            audio.Stop();
-            audio.PlayOneShot(ReleaseSound);
-            _launchSoundPlaying = false;
-        }
-    } 
+        Debug.Log("Playing ReleaseSound");
+        LugusAudio.use.SFX().Play(ReleaseSound, true).Loop = false;
+        _launchSoundPlaying = false;
+
+        GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp(false);
+    }
 
     // Play light on sound.
     public void PlayLightOnSound()
     {
-        if (audio != null)
-        {
-            audio.loop = false;
-            //audio.Stop();
-            audio.PlayOneShot(LightOnSound);
-        }
+        LugusAudio.use.SFX().Play(LightOnSound).Loop = false;
     }
 
     // Play light off sound.
     public void PlayLightOffSound()
     {
-        if (audio != null)
-        {
-            audio.loop = false;
-            //audio.Stop();
-            audio.PlayOneShot(LightOffSound);
-        }
+        LugusAudio.use.SFX().Play(LightOffSound).Loop = false;
     }
 
     public void PlayLeftFlipperSound()
     {
-        if (audio != null)
-        {
-            audio.loop = false;
-            audio.PlayOneShot(LeftFlipperSound);
-        }
+        LugusAudio.use.SFX().Play(LeftFlipperSound).Loop = false;
     }
 
     public void PlayRightFlipperSound()
     {
-        if (audio != null)
+        LugusAudio.use.SFX().Play(RightFlipperSound).Loop = false;
+    }
+
+    void OnGUI()
+    {
+        if (LugusDebug.debug)
         {
-            audio.loop = false;
-            audio.PlayOneShot(RightFlipperSound);
+            if (GUI.Button(new Rect(0, 75, 75, 25), "Reset Ball"))
+            {
+                BallsInPlay[0].transform.position = GameObject.Find("UnstuckPos").transform.position.z(BallsInPlay[0].transform.position.z);
+            }
         }
     }
 }

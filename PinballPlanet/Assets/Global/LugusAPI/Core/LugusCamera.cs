@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class LugusCamera 
 {
@@ -9,12 +10,12 @@ public class LugusCamera
 	{
 		get
 		{
-            if (_frontCamera == null && GameObject.Find ("UICamera") != null )
-                _frontCamera = GameObject.Find("UICamera").camera;
+            if (_frontCamera == null && GameObject.Find ("GUICamera") != null )
+                _frontCamera = GameObject.Find("GUICamera").camera;
 			
 			if( _frontCamera == null )
 				_frontCamera = game;
-			
+
 			return _frontCamera; 
 		}
 	}
@@ -59,6 +60,8 @@ public static class LugusCameraExtensions
 			displacement =  new Vector3(0.5f, 0.0f, 0.5f);
 			
 		
-		iTween.ShakePosition(camera.transform.parent.gameObject, displacement, 0.3f );				
+		//iTween.ShakePosition(camera.transform.parent.gameObject, displacement, 0.3f );
+
+		//camera.transform.shake( 0.3f, displacement );
 	}
 }

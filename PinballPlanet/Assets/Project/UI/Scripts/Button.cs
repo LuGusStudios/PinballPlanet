@@ -38,7 +38,7 @@ public class Button : MonoBehaviour
 	{
 	    if (gameObject.layer == LayerMask.NameToLayer("GUI"))
 	    {
-            if (LugusInput.use.RayCastFromMouseUp() == this.transform)
+            if (LugusInput.use.RayCastFromMouseUp(LugusCamera.ui) == this.transform)
             {
                 if (!string.IsNullOrEmpty(pressSoundKey))
                 {
@@ -50,7 +50,7 @@ public class Button : MonoBehaviour
 	    }
 	    else
 	    {
-            if (LugusInput.use.RayCastFromMouseUp(Camera.main) == this.transform)
+            if (LugusInput.use.RayCastFromMouseUp(LugusCamera.game) == this.transform)
             {
                 if (!string.IsNullOrEmpty(pressSoundKey))
                 {
@@ -64,7 +64,7 @@ public class Button : MonoBehaviour
 	
 	// postpone the pressed-event by 1 frame
 	// this makes sure the button is not triggered on the same frame as the actual MouseUp event
-	protected IEnumerator PressRoutine()
+	protected virtual IEnumerator PressRoutine()
 	{
 		transform.localScale = originalScale * scaleDownFactor;
 		gameObject.ScaleTo(originalScale).IgnoreTimeScale(true).Time(clickAnimationTime).EaseType(iTween.EaseType.easeOutBack).Execute();

@@ -14,7 +14,7 @@ public class TNTMultiObjective : BreakableMultiObjective
 
     protected override void Start()
     {
-        // Replace bridge with broken version.
+        // Hide bridge broken version.
         _bridge = GameObject.Find("Bridge");
         _bridgeDestroyed = GameObject.Find("BridgeDestroyed");
         _bridgeDestroyed.SetActive(false);
@@ -27,12 +27,14 @@ public class TNTMultiObjective : BreakableMultiObjective
 
     public override void Activate()
     {
+        // Replace bridge with broken version.
         _bridgeDestroyed.SetActive(true);
         _bridge.SetActive(false);
 
-        // Play coins falling sound.
+        // Play explosion sound.
         if (audio != null)
-            audio.PlayOneShot(ExplosionSound);
+            //audio.PlayOneShot(ExplosionSound);
+            LugusAudio.use.SFX().Play(ExplosionSound).Loop = false;
 
         Instantiate(ExplosionPrefab);
 

@@ -1,30 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LaunchPoint_Mine : MonoBehaviour {
+public class LaunchPoint_Mine : MonoBehaviour
+{
+    private FlowBackPreventer_02 _flowBack = null;
+    private Logs _logs = null;
+    private FloorLight_Link _lightFirstLink = null;
+    private FloorLight_Toggle _trainHandleLight = null;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-	
-	void OnCollisionEnter(Collision collision)
-	{
-		if (collision.collider.name != "Ball")
-			return;
-		
+    // Use this for initialization
+    void Start()
+    {
+        _flowBack = GameObject.Find("FlowBackPreventer_02").GetComponent<FlowBackPreventer_02>();
+        _logs = GameObject.Find("Logs").GetComponent<Logs>();
+        _lightFirstLink = GameObject.Find("FloorLight_Launch_Link1").GetComponent<FloorLight_Link>();
+        _trainHandleLight = GameObject.Find("MineCart_FloorLight_Toggle").GetComponent<FloorLight_Toggle>();
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.name != "Ball")
+            return;
+
         // Reset flowback preventer.
-		GameObject.Find("FlowBackPreventer_02").GetComponent<FlowBackPreventer_02>().Reset();
-	
+        _flowBack.Reset();
+
         // Reset logs.
-        GameObject.Find("Logs").GetComponent<Logs>().Unbreak();
+        _logs.Unbreak();
 
         // Reset launch lights.
-        GameObject.Find("FloorLight_Launch_Link1").GetComponent<FloorLight_Link>().Unbreak();
+        _lightFirstLink.Unbreak();
+
+        // Reset track.
+        _trainHandleLight.Unbreak();
     }
 }

@@ -13,7 +13,6 @@ public class MultiBall : MonoBehaviour
     // Can only start multiball once activated.
     public bool Activated = false;
 
-
     // How hard the new balls launch.
     public float LaunchForce = 500;
 
@@ -52,6 +51,24 @@ public class MultiBall : MonoBehaviour
         if (collision.collider.gameObject.tag != "Ball")
             return;
 
+        SpawnBalls();
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // Return if not activated.
+        if (!Activated)
+            return;
+
+        // Return if not colliding with ball.
+        if (other.gameObject.tag != "Ball")
+            return;
+
+        SpawnBalls();
+    }
+
+    void SpawnBalls()
+    {
         // Check if there are exits.
         if (Exits.Count == 0)
             return;
@@ -59,12 +76,10 @@ public class MultiBall : MonoBehaviour
         // Spawn a new ball at each exit.
         foreach (Transform exit in Exits)
         {
-            //Debug.Log("--- New ball! ---");
-            
             GameObject newBall = Instantiate(BallPrefab, exit.position, exit.rotation) as GameObject;
-            newBall.transform.position = newBall.transform.position.z(5);
-            newBall.rigidbody.velocity = exit.up.normalized*LaunchForce;
-            //newBall.rigidbody.isKinematic = true;
+            //Debug.Log("New ball at: " + newBall.transform.position + " from " + exit.position);
+            //newBall.transform.position = newBall.transform.position.z(5);
+            newBall.rigidbody.velocity = exit.up.normalized * LaunchForce;
             ScoreManager.use.AddBalls(1);
         }
 

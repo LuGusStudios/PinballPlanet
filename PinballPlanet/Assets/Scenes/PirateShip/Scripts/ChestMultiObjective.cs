@@ -10,7 +10,6 @@ public class ChestMultiObjective : BreakableMultiObjective
     public int CoinsAmount = 10;
 
     // Sounds
-    public AudioClip OpenSound;
     public AudioClip CoinsSound;
 
     // Use this for initialization.
@@ -60,8 +59,7 @@ public class ChestMultiObjective : BreakableMultiObjective
         }
 
         // Play coins falling sound.
-        if (audio != null)
-            audio.PlayOneShot(CoinsSound);
+        LugusAudio.use.SFX().Play(CoinsSound).Loop = false;
 
         // Activate gold particle effect.
         transform.FindChild("GoldShine").gameObject.SetActive(true);

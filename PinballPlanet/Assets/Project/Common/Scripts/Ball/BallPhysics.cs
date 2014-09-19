@@ -55,8 +55,8 @@ public class BallPhysics : MonoBehaviour
 
     private Collider _leftFlipperBuffer;
     private Collider _rightFlipperBuffer;
-    private Flipper _leftFlipper;
-    private Flipper _rightFlipper;
+    private FlipperNew _leftFlipper;
+    private FlipperNew _rightFlipper;
     private Transform _objTransform; // Cache the transform (optimization)
 
     private void DontGoThroughThings_Awake()
@@ -145,9 +145,9 @@ public class BallPhysics : MonoBehaviour
         _leftFlipperBuffer = GameObject.Find("LeftFlipperBuffer").collider;
         _rightFlipperBuffer = GameObject.Find("RightFlipperBuffer").collider;
         Transform t = GameObject.Find("LeftFlipper").transform;
-        _leftFlipper = t.GetComponent<Flipper>();
+        _leftFlipper = t.GetComponent<FlipperNew>();
         t = GameObject.Find("RightFlipper").transform;
-        _rightFlipper = t.GetComponent<Flipper>();
+        _rightFlipper = t.GetComponent<FlipperNew>();
         _objTransform = transform;
     }
 
@@ -175,8 +175,8 @@ public class BallPhysics : MonoBehaviour
 
             if (_leftFlipperBuffer.bounds.Contains(_objTransform.position))
             {
-                if ((_leftFlipper.IsGoingToPressedPosition || _leftFlipper.IsAtRest) && Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0)
-                //if (Mathf.Abs(leftFlipper.rigidbody.angularVelocity.z) > 2.0) 
+                //if ((_leftFlipper.IsGoingToPressedPosition || _leftFlipper.IsAtRest) && Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0)
+                if (Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0) 
                 {
                     // We're near the left flipper and it's in motion. Set the layer mask to that of the correction tangents of the left flipper
                     layerMask = _leftFlipper.transform.FindChild("FlipperTangent").gameObject.layer;
@@ -184,7 +184,8 @@ public class BallPhysics : MonoBehaviour
             }
             else if (_rightFlipperBuffer.bounds.Contains(_objTransform.position))
             {
-                if ((_rightFlipper.IsGoingToPressedPosition || _rightFlipper.IsAtRest) && Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0)
+                //if ((_rightFlipper.IsGoingToPressedPosition || _rightFlipper.IsAtRest) && Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0)
+                if (Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0)
                 {
                     // We're near the right flipper and it's in motion. Set the layer mask to that of the correction tangents of the right flipper
                     layerMask = _rightFlipper.transform.FindChild("FlipperTangent").gameObject.layer;

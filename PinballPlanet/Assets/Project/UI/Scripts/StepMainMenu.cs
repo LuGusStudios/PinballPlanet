@@ -15,6 +15,8 @@ public class StepMainMenu : IMenuStep
     private float _rotationSpeed = 0.15f;
     private GameObject _planet = null;
 
+    public AudioClip ThemeMusic;
+
     public override void SetupLocal()
     {
         if (HelpButton == null)
@@ -72,7 +74,7 @@ public class StepMainMenu : IMenuStep
         }
 
         // Only search these items when in main menu.
-        if (Application.loadedLevelName == "MainMenu")
+        if (Application.loadedLevelName == "Pinball_MainMenu")
         {
             if (_planet == null)
             {
@@ -94,6 +96,7 @@ public class StepMainMenu : IMenuStep
     protected void Start()
     {
         SetupGlobal();
+        LugusAudio.use.Music().Play(ThemeMusic).Loop = true;
     }
 
     protected void Update()

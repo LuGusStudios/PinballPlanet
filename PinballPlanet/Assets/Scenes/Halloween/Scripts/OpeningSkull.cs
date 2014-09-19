@@ -1,114 +1,99 @@
 using UnityEngine;
 using System.Collections;
 
-public class OpeningSkull : BreakableMultiObjective 
+public class OpeningSkull : BreakableMultiObjective
 {
-	public Hole hole = null;
-	
-	public int holePassedThroughCount = 0;
-	public int holePassedCountBeforeReset = 3;
-	
-	// Use this for initialization
-    protected override void Start () 
-	{			
-		if( hole == null )
-			hole = transform.FindChild("Hole").GetComponent<Hole>();
-		
-		if( hole == null )
-			Debug.LogError("OpeningSkull : hole was undefined!");
-		
-		//hole.gameObject.SetActiveRecursively(false);
-		
-		hole.Deactivate();
-		
-		hole.passedThrough += OnHolePassedThrough;
-		
-		originalRotation = transform.eulerAngles;
+    private bool _opened = false;
+    public Ball Ball;
+
+    private Vector3 _closedEulAngles;
+    private Vector3 _openEulAngles;
+
+    protected override void Start()
+    {
+        _closedEulAngles = gameObject.transform.eulerAngles;
+        _openEulAngles = GameObject.Find("Skull_Open").transform.eulerAngles;
 
         base.Start();
-	}
-	
-	public void OnHolePassedThrough()
-	{
-		holePassedThroughCount++;
-		
-		if( holePassedThroughCount == holePassedCountBeforeReset )
-		{
-			holePassedThroughCount = 0;
-			ResetBreakables();
-		}
-	}
-	
-	public void ResetBreakables()
-	{	
-		Debug.LogError("Resetting breakables!");
-		
-		CloseSkull();
-		
-		foreach( Breakable breakable in Objectives )
-		{
-			breakable.Unbreak();
-		}
-	}
-	
-	public void OnBreakableBroken(GameObject sender)
-	{
-		bool allbroken = true;
-		
-		Debug.LogError("OnBreakableBroken!");
+    }
 
-        foreach (Breakable breakable in Objectives)
-		{
-			if( !breakable.IsBroken )	
-			{
-				allbroken = false;
-				break;
-			}
-		}
-		
-		if( allbroken )
-			OpenSkull();
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		//if( Input.GetKeyDown(KeyCode.C) )
-		//	ResetBreakables();
-	}
-	
-	protected Vector3 originalRotation;
-	
-	public void OpenSkull()
-	{
-		transform.eulerAngles = originalRotation;
-		
-		//iTween.RotateTo( this.gameObject, new Vector3(18.81357f, 189.9967f, 28.66025f), 2.0f );
-		
-		iTween.Stop(this.gameObject);
-			iTween.RotateAdd( this.gameObject, 
-				iTween.Hash("amount",new Vector3(-50, 0, 0),
-							"time", 2.0f,
-							"isLocal",true));
-		
-		collider.enabled = false;
-		
-		hole.Activate();
-		//hole.gameObject.SetActiveRecursively(true);
-	}
-	
-	public void CloseSkull()
-	{
-		
-		iTween.Stop(this.gameObject);
-		iTween.RotateAdd( this.gameObject, 
-				iTween.Hash("amount",new Vector3(50, 0, 0),
-							"time", 2.0f,
-							"isLocal",true));
-		
-		collider.enabled = true;
-		
-		hole.Deactivate();
-		//hole.gameObject.SetActiveRecursively(false);
-	}
+    public override void Activate()
+    {
+        OpenSkull();
+
+        collider.enabled = false;
+        GameObject.Find("Skull_BallCatch").collider.enabled = true;
+    }
+
+    public override void Unbreak()
+    {
+        collider.enabled = true;
+        GameObject.Find("Skull_BallCatch").collider.enabled = false;
+
+        base.Unbreak();
+    }
+
+    public void OpenSkull()
+    {
+        if (!_opened)
+        {
+            iTween.Stop(this.gameObject);
+            iTween.RotateTo(this.gameObject,
+                iTween.Hash("rotation", _openEulAngles,
+                            "time", 2.0f));
+
+            _opened = true;
+        }
+
+    }
+
+    public void CloseSkull()
+    {
+        if (_opened)
+        {
+            iTween.Stop(this.gameObject);
+            iTween.RotateTo(this.gameObject,
+                    iTween.Hash("rotation", _closedEulAngles,
+                                "time", 1.0f,
+                                "oncomplete", "OnSkullClosed"));
+
+            _opened = false;
+        }
+    }
+
+    void OnSkullClosed()
+    {
+        iTween.RotateTo(gameObject,
+            iTween.Hash("rotation", GameObject.Find("Skull_End").transform.eulerAngles,
+                        "time", 2.0f,
+                        "oncomplete", "OnSkullAimed"));
+    }
+
+    void OnSkullAimed()
+    {
+        Ball.rigidbody.velocity = Vector3.zero;
+        Ball.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
+
+        GameObject.Find("CollisionBox_Skull").collider.enabled = false;
+
+        Transform shooter = GameObject.Find("Skull_BallShoot").transform;
+        Ball.transform.position = new Vector3(shooter.position.x, shooter.position.y, Ball.transform.position.z);
+
+        Vector3 randVec = Vector3.zero.zAdd(Random.Range(-10, 10));
+        Ball.rigidbody.AddForce((shooter.up.normalized + randVec) * 3000);
+
+        iTween.RotateTo(gameObject,
+        iTween.Hash("rotation", GameObject.Find("Skull_Start").transform.eulerAngles,
+                    "time", 2.0f,
+                    "oncomplete", "OnSkullReset"));
+    }
+
+    void OnSkullReset()
+    {
+        GameObject.Find("CollisionBox_Skull").collider.enabled = true;
+
+        Ball = null;
+
+        Invoke("Unbreak", ResetDelay);
+    }
 }

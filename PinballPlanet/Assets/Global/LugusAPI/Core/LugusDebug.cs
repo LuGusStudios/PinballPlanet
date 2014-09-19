@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class LugusDebug : MonoBehaviour 
 {
-	public static bool debug = true;
+	public static bool debug = false;
 }

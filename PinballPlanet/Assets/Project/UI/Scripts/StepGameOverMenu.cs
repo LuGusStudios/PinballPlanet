@@ -9,7 +9,11 @@ public class StepGameOverMenu : IMenuStep
     protected TextMeshWrapper Score = null;
     protected TextMeshWrapper HighScore = null;
     protected Vector3 OriginalPosition = Vector3.zero;
-	
+    protected Transform ChallengesTopTransform = null;
+    protected Transform ChallengesBotTransform = null;
+
+    public GameObject CompletedChallengePrefab;
+
 	public override void SetupLocal()
 	{
         if (RestartButton == null)
@@ -48,6 +52,24 @@ public class StepGameOverMenu : IMenuStep
             Debug.Log("StepGameOverMenu: Missing high score text mesh!");
         }
 
+        if (ChallengesTopTransform == null)
+        {
+            ChallengesTopTransform = transform.FindChild("Challenge_Top");
+        }
+        if (ChallengesTopTransform == null)
+        {
+            Debug.Log("StepGameOverMenu: Missing challenge top transform button.");
+        }
+
+        if (ChallengesBotTransform == null)
+        {
+            ChallengesBotTransform = transform.FindChild("Challenge_Bot");
+        }
+        if (ChallengesBotTransform == null)
+        {
+            Debug.Log("StepGameOverMenu: Missing challenge bottom transform button.");
+        }
+
 		OriginalPosition = transform.position;
 	}
 	
@@ -71,7 +93,7 @@ public class StepGameOverMenu : IMenuStep
         }
         else if (MainMenuButton.pressed)
         {
-            Application.LoadLevel("MainMenu");
+            Application.LoadLevel("Pinball_MainMenu");
         }
 	}
 
@@ -89,7 +111,20 @@ public class StepGameOverMenu : IMenuStep
 
         // Fill in score text.
         Score.SetText(ScoreManager.use.TotalScore.ToString());
-        HighScore.SetText(ScoreManager.use.TotalScore.ToString());
+        HighScore.SetText(PlayerData.use.GetHighestScore(Application.loadedLevelName).ToString());
+
+        // Show completed challenges.
+        int i = 0;
+        foreach (Challenge challenge in ChallengeManager.use.CompletedLvlChallenges)
+        {
+            Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (StepChallengesMenu.MaxChallenges - 1) * i;
+            GameObject challengeGameObj = Instantiate(CompletedChallengePrefab, pos, Quaternion.identity) as GameObject;
+            challengeGameObj.transform.parent = gameObject.transform;
+            challengeGameObj.transform.FindChild("Text_Challenge").GetComponent<TextMeshWrapper>().SetText(challenge.Description);
+
+            ++i;
+        }
+
 	}
 
 	public override void Deactivate(bool animate = true)

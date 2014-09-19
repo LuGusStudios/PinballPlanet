@@ -99,7 +99,7 @@ public class Hole : MonoBehaviour
 			
 			
 			//StartCoroutine( ExitRoutine(ball, exit.gameObject) );
-			exit.GetComponent<BallShooter>().ShootBall( ball.gameObject );
+			//exit.GetComponent<BallShooter>().ShootBall( ball.gameObject );
 		}
 		else
 		{
@@ -119,7 +119,7 @@ public class Hole : MonoBehaviour
 				balls[i].rigidbody.isKinematic = true;
 				
 				
-				exits[i].GetComponent<BallShooter>().ShootBall( balls[i] );
+				//exits[i].GetComponent<BallShooter>().ShootBall( balls[i] );
 				
 				//StartCoroutine( ExitRoutine(balls[i], exits[i].gameObject) );
 			}

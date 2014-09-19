@@ -73,59 +73,60 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	{
 	    _timeSinceScore += Time.deltaTime;
 	}
-	
-	// Instantiates a score popup and awards the player points.
-	public GameObject ShowScore( int score, Vector3 position, float time, AudioClip sound, Color color )
-	{
-		if( score == 0 )
-		{
-			if( sound != null )
-				audio.PlayOneShot( sound );
-			
-			return null;
-		}
-		
+
+    // Instantiates a score popup and awards the player points.
+    public GameObject ShowScore(int score, Vector3 position, float time, AudioClip sound, Color color)
+    {
+        // If no score this can also be used to just play a sound.
+        if (score == 0)
+        {
+            if (sound != null)
+                LugusAudio.use.SFX().Play(sound).Loop = false;
+
+            return null;
+        }
+
         // Randomize position.
         position.xAdd(Random.Range(-5, 5));
         position.yAdd(Random.Range(-5, 5));
         //position.zAdd(Random.Range(-5, 5));
 
         // Put score slightly higher if scoring in quick sucession.
-	    if (_timeSinceScore <= _scoreComboTime)
-	    {
-	        position.z += _scoreComboHeight * _scoreCombo;
-	        ++_scoreCombo;
-	    }
-	    else
-	    {
-	        _scoreCombo = 0;
-	    }
+        if (_timeSinceScore <= _scoreComboTime)
+        {
+            position.z += _scoreComboHeight * _scoreCombo;
+            ++_scoreCombo;
+        }
+        else
+        {
+            _scoreCombo = 0;
+        }
         // Reset time since score.
-	    _timeSinceScore = 0;
+        _timeSinceScore = 0;
 
         Transform scoreText = (Transform)Instantiate(ScoreTextPrefab, position, ScoreTextPrefab.transform.rotation);
-		scoreText.GetComponent<TextMesh>().text = "" + score;
-		scoreText.GetComponent<TextMesh>().renderer.material.color = color;
+        scoreText.GetComponent<TextMesh>().text = "" + score;
+        scoreText.GetComponent<TextMesh>().renderer.material.color = color;
 
-	    Vector3 posAdd = new Vector3(0, 0, 25);
-	    if (!MoveScoreUp)
-	        posAdd *= -1;
+        Vector3 posAdd = new Vector3(0, 0, 25);
+        if (!MoveScoreUp)
+            posAdd *= -1;
 
         iTween.MoveTo(scoreText.gameObject, position + posAdd, time);
-		Destroy(scoreText.gameObject, time);
-		
-		if( sound != null )
-			 audio.PlayOneShot( sound );
-		
-		int newScore = TotalScore + score;
-		if( newScore >= 0 )
-			TotalScore += score;
-		else
-			TotalScore = 0;
-		
-		ShowTotalScore();
+        Destroy(scoreText.gameObject, time);
 
-	    return scoreText.gameObject;
-	}
+        if (sound != null)
+            LugusAudio.use.SFX().Play(sound).Loop = false;
+
+        int newScore = TotalScore + score;
+        if (newScore >= 0)
+            TotalScore += score;
+        else
+            TotalScore = 0;
+
+        ShowTotalScore();
+
+        return scoreText.gameObject;
+    }
 	
 }

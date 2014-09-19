@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 // TODO:
 // OnEnable and OnDisable implementation so Singleton links are re-made on re-compilation
@@ -40,8 +41,14 @@ public class LugusSingletonExisting<T> : MonoBehaviour where T : MonoBehaviour
 		{
 			Debug.LogError ("LuGusSingletonExisting:CheckInstance : " + typeof (T).Name + " exists multiple times! " + instances.Length);
 		}
-		
+
 		_instance = instances[0];
+
+        if(_instance is ISingletonInitializer)
+        {
+            (_instance as ISingletonInitializer).InitializeSingleton();
+        }
+
 		return true;
 	}
 	
@@ -50,12 +57,17 @@ public class LugusSingletonExisting<T> : MonoBehaviour where T : MonoBehaviour
 		_instance = newInstance;
 	}
 
+	void OnDisable()
+	{
+		_instance = null;
+	}
+
 	public static bool Exists()
 	{
 		if( _instance != null )
 			return true;
-		
-		
+
+
 		T[] instances = (T[]) GameObject.FindObjectsOfType( typeof(T) );
 		return instances.Length != 0;
 	}
@@ -105,8 +117,13 @@ public class LugusSingletonRuntime<T> : MonoBehaviour where T : MonoBehaviour
 			}
 			
 			_instance = JESUS.AddComponent<T>();
-			
-			return true;
+
+            if (_instance is ISingletonInitializer)
+            {
+                (_instance as ISingletonInitializer).InitializeSingleton();
+            }
+            
+            return true;
 		}
 		if( instances.Length > 1 )
 		{
@@ -114,13 +131,19 @@ public class LugusSingletonRuntime<T> : MonoBehaviour where T : MonoBehaviour
 		}
 		
 		_instance = instances[0];
-		return true;
+
+        return true;
 	}
 	
 	
 	public void Change(T newInstance)
 	{
 		_instance = newInstance;
+	}
+	
+	void OnDisable()
+	{
+		_instance = null;
 	}
 }
 
@@ -136,4 +159,9 @@ public class LugusSingletonVolatile<T> : MonoBehaviour where T : MonoBehaviour
 			return (T) GameObject.FindObjectOfType( typeof(T) ); 
 		}
 	}
+}
+
+public interface ISingletonInitializer
+{
+    void InitializeSingleton();
 }

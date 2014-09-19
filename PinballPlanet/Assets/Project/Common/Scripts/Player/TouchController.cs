@@ -40,9 +40,9 @@ public class TouchController : MonoBehaviour
             {
                 // Move flippers if touched/clicked.
                 if (clickedObject == _leftFlipperClickBoxTransform)
-                    _leftFlipperTransform.GetComponent<Flipper>().TouchPressed = true;
+                    _leftFlipperTransform.GetComponent<FlipperNew>().SetPressed();
                 if (clickedObject == _rightFlipperClickBoxTransform)
-                    _rightFlipperTransform.GetComponent<Flipper>().TouchPressed = true;
+                    _rightFlipperTransform.GetComponent<FlipperNew>().SetPressed();
             }
         }
     }
@@ -72,7 +72,7 @@ public class TouchController : MonoBehaviour
                 // Set launch force.
                 Player.use.BallLaunchForce = Mathf.Lerp(0, Player.use.LaunchMaxForce, Mathf.Abs(dragDist) / MaxDragDistance);
             }
-        } 
+        }
 
         // Calculate how hard to launch the ball.
         if (LugusInput.use.up)

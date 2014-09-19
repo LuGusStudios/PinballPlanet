@@ -1,0 +1,243 @@
+fileFormatVersion: 2
+guid: 839288cd2c9794b4d9ee9ce0f174d8bd
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: back_body_joint
+    100002: body_back_joint_END
+    100004: front_body_joint
+    100006: head_joint
+    100008: head_joint_END
+    100010: left_leg_A_joint_01
+    100012: left_leg_A_joint_02
+    100014: left_leg_A_joint_03
+    100016: left_leg_A_joint_END
+    100018: left_leg_B_joint_01
+    100020: left_leg_B_joint_02
+    100022: left_leg_B_joint_03
+    100024: left_leg_B_joint_END
+    100026: left_leg_C_joint_01
+    100028: left_leg_C_joint_02
+    100030: left_leg_C_joint_03
+    100032: left_leg_C_joint_END
+    100034: left_leg_D_joint_01
+    100036: left_leg_D_joint_02
+    100038: left_leg_D_joint_03
+    100040: left_leg_D_joint_END
+    100042: right_leg_A_joint_01
+    100044: right_leg_A_joint_02
+    100046: right_leg_A_joint_03
+    100048: right_leg_A_joint_END
+    100050: right_leg_B_joint_01
+    100052: right_leg_B_joint_02
+    100054: right_leg_B_joint_03
+    100056: right_leg_B_joint_END
+    100058: right_leg_C_joint_01
+    100060: right_leg_C_joint_02
+    100062: right_leg_C_joint_03
+    100064: right_leg_C_joint_END
+    100066: right_leg_D_joint_01
+    100068: right_leg_D_joint_02
+    100070: right_leg_D_joint_03
+    100072: right_leg_D_joint_END
+    100074: root_joint
+    100076: //RootNode
+    400000: back_body_joint
+    400002: body_back_joint_END
+    400004: front_body_joint
+    400006: head_joint
+    400008: head_joint_END
+    400010: left_leg_A_joint_01
+    400012: left_leg_A_joint_02
+    400014: left_leg_A_joint_03
+    400016: left_leg_A_joint_END
+    400018: left_leg_B_joint_01
+    400020: left_leg_B_joint_02
+    400022: left_leg_B_joint_03
+    400024: left_leg_B_joint_END
+    400026: left_leg_C_joint_01
+    400028: left_leg_C_joint_02
+    400030: left_leg_C_joint_03
+    400032: left_leg_C_joint_END
+    400034: left_leg_D_joint_01
+    400036: left_leg_D_joint_02
+    400038: left_leg_D_joint_03
+    400040: left_leg_D_joint_END
+    400042: right_leg_A_joint_01
+    400044: right_leg_A_joint_02
+    400046: right_leg_A_joint_03
+    400048: right_leg_A_joint_END
+    400050: right_leg_B_joint_01
+    400052: right_leg_B_joint_02
+    400054: right_leg_B_joint_03
+    400056: right_leg_B_joint_END
+    400058: right_leg_C_joint_01
+    400060: right_leg_C_joint_02
+    400062: right_leg_C_joint_03
+    400064: right_leg_C_joint_END
+    400066: right_leg_D_joint_01
+    400068: right_leg_D_joint_02
+    400070: right_leg_D_joint_03
+    400072: right_leg_D_joint_END
+    400074: root_joint
+    400076: //RootNode
+    7400000: onFace
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: onFace
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 16
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: root_joint
+        weight: 1
+      - path: root_joint/back_body_joint
+        weight: 1
+      - path: root_joint/back_body_joint/body_back_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint
+        weight: 1
+      - path: root_joint/front_body_joint/head_joint
+        weight: 1
+      - path: root_joint/front_body_joint/head_joint/head_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_A_joint_01
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_A_joint_01/left_leg_A_joint_02
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_A_joint_01/left_leg_A_joint_02/left_leg_A_joint_03
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_A_joint_01/left_leg_A_joint_02/left_leg_A_joint_03/left_leg_A_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_B_joint_01
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_B_joint_01/left_leg_B_joint_02
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_B_joint_01/left_leg_B_joint_02/left_leg_B_joint_03
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_B_joint_01/left_leg_B_joint_02/left_leg_B_joint_03/left_leg_B_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_C_joint_01
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_C_joint_01/left_leg_C_joint_02
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_C_joint_01/left_leg_C_joint_02/left_leg_C_joint_03
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_C_joint_01/left_leg_C_joint_02/left_leg_C_joint_03/left_leg_C_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_D_joint_01
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_D_joint_01/left_leg_D_joint_02
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_D_joint_01/left_leg_D_joint_02/left_leg_D_joint_03
+        weight: 1
+      - path: root_joint/front_body_joint/left_leg_D_joint_01/left_leg_D_joint_02/left_leg_D_joint_03/left_leg_D_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_A_joint_01
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_A_joint_01/right_leg_A_joint_02
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_A_joint_01/right_leg_A_joint_02/right_leg_A_joint_03
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_A_joint_01/right_leg_A_joint_02/right_leg_A_joint_03/right_leg_A_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_B_joint_01
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_B_joint_01/right_leg_B_joint_02
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_B_joint_01/right_leg_B_joint_02/right_leg_B_joint_03
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_B_joint_01/right_leg_B_joint_02/right_leg_B_joint_03/right_leg_B_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_C_joint_01
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_C_joint_01/right_leg_C_joint_02
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_C_joint_01/right_leg_C_joint_02/right_leg_C_joint_03
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_C_joint_01/right_leg_C_joint_02/right_leg_C_joint_03/right_leg_C_joint_END
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_D_joint_01
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_D_joint_01/right_leg_D_joint_02
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_D_joint_01/right_leg_D_joint_02/right_leg_D_joint_03
+        weight: 1
+      - path: root_joint/front_body_joint/right_leg_D_joint_01/right_leg_D_joint_02/right_leg_D_joint_03/right_leg_D_joint_END
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 

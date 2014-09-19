@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-#if !UNITY_WEBPLAYER
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
 using System.IO;
 #endif
+using System.Collections;
 using System.Collections.Generic;
 
 public class LugusConfig : LugusSingletonRuntime<LugusConfigDefault>
@@ -51,7 +52,7 @@ public class LugusConfigDefault : MonoBehaviour
 			_profiles = value;
 		}
 	}
-	#endregion
+	#endregion 
 
 	#region Protected
 	protected ILugusConfigProfile _systemProfile = null;	// Profile holding system variables, i.e. graphics and sound options.
@@ -59,7 +60,7 @@ public class LugusConfigDefault : MonoBehaviour
 	protected List<ILugusConfigProfile> _profiles = new List<ILugusConfigProfile>();	// All profiles registered in this configuration, incl. system profile.
 	#endregion
 
-	#if !UNITY_WEBPLAYER
+	#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
 	// Reload all profiles found in the Config folder.
 	public void ReloadDefaultProfiles()
 	{

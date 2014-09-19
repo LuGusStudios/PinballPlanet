@@ -10,7 +10,7 @@ public class TNT : Breakable
         base.Start();
     }
 
-    // Breaks the game object by opening the lock.
+    // Breaks the tnt by doing an animation.
     public override void Break()
     {
         // Play animation on child lock.
@@ -26,15 +26,12 @@ public class TNT : Breakable
     // Reset.
     public override void Unbreak()
     {
-        // Reverse lock open animation.
+        // Reverse push animation.
         transform.FindChild("DetonatorPlunger").GetComponent<Animation>().Play("TNTPush");
         AnimationState animState = transform.FindChild("DetonatorPlunger").animation["TNTPush"];
         animState.time = animState.length;
         const float animSpeed = -0.5f;
         animState.speed = animSpeed;
-
-        // Turn on collider.
-        collider.enabled = true;
 
         // Reset completed after animation is done.
         Invoke("UnbreakBase", animState.length / animSpeed);
@@ -44,6 +41,9 @@ public class TNT : Breakable
     private void UnbreakBase()
     {
         ResetAnimation();
+
+        // Turn on collider.
+        collider.enabled = true;
 
         // Call inherited unbreak function.
         base.Unbreak();

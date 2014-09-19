@@ -1,8 +1,9 @@
 using UnityEngine;
+using System.Collections;
 
 public class LugusTimeHelper : MonoBehaviour 
 {
-
+	/*
 	// Use this for initialization
 	void Start () {
 	
@@ -32,6 +33,7 @@ public class LugusTimeHelper : MonoBehaviour
 		
 		lastTime = Time.realtimeSinceStartup; 
 	}
+	*/
 	
 	
 }
