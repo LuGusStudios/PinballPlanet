@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class Challenge
 {
+    // Unique ID
+    public string ID = "";
+
     // Description
     public string Description = "";
 
@@ -12,9 +15,13 @@ public class Challenge
 
     // Completed
     public bool Completed = false;
+    public bool Done = false;
+
+    // Has been viewed by player.
+    public bool Viewed = false;
 
     // Required level key.
-    public LevelKey LvlKey;
+    public LevelKey LevelKey = LevelKey.None;
 
     // Conditions
     public List<Condition> Conditions = new List<Condition>();

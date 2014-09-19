@@ -204,7 +204,7 @@ public class MenuManagerDefault: MonoBehaviour
 		}
 		else
 		{
-			Debug.LogError("MenuManagerDefault: Unknown menu!");
+			Debug.LogError("MenuManagerDefault: Unknown menu:" + type + "!");
 		}
 	}
 

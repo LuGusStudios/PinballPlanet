@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class ChallengeManager : MonoBehaviour
 {
@@ -30,12 +31,13 @@ public class ChallengeManager : MonoBehaviour
 
     // List of current challenges.
     public List<Challenge> CurrentChallenges = new List<Challenge>();
+    private List<Challenge> _uncompletedChallenges = new List<Challenge>();
 
     // Dictionary of all possible challenges, with a bool indicating completion.
     public List<Challenge> AllChallenges = new List<Challenge>();
 
-    // Challenges menu.
-    private StepChallengesMenu _challengesMenu;
+    // Completed challenges in a level.
+    public List<Challenge> CompletedLvlChallenges = new List<Challenge>();
 
     // Initialization.
     public void SetupLocal()
@@ -52,24 +54,66 @@ public class ChallengeManager : MonoBehaviour
             return;
         }
 
-        // Read challenges file.
+        // Parse challenges file.
+        ParseChallenges(ref challengesText);
+    }
+
+    // Loads in all challenges.
+    private void ParseChallenges(ref TextAsset challengesText)
+    {
         TinyXmlReader reader = new TinyXmlReader(challengesText.text);
+
+        // Start read.
         while (reader.Read("Challenges"))
         {
             // Read challenge.
             if (reader.tagName == "Challenge" && reader.tagType == TinyXmlReader.TagType.OPENING)
             {
                 Challenge newChallenge = new Challenge();
+                Debug.Log("--------Reading challenge--------");
 
                 while (reader.Read("Challenge"))
                 {
                     if (reader.tagType == TinyXmlReader.TagType.OPENING)
                     {
+                        // Read unique ID
+                        if (reader.tagName == "ID")
+                        {
+                            if (!HasID(reader.content))
+                            {
+                                newChallenge.ID = reader.content;
+                                Debug.Log("Challenge ID: " + newChallenge.ID);
+                            }
+                            else
+                                Debug.LogError("Challenge ID: " + reader.content + " is not unique!.");
+                        }
+
+                        // Read stars.
+                        else if (reader.tagName == "Stars")
+                        {
+                            int result;
+                            if (int.TryParse(reader.content, out result))
+                            {
+                                newChallenge.StarsReward = result;
+                                Debug.Log("Stars: " + result);
+                            }
+                            else
+                                Debug.LogError("Stars parameter value invalid.");
+                        }
+
+                        // Read required level.
+                        else if (reader.tagName == "Level")
+                        {
+                            LevelKey key = (LevelKey)Enum.Parse(typeof(LevelKey), reader.content);
+                            newChallenge.LevelKey = key;
+                            Debug.Log("Level: " + key);
+                        }
+
                         // Read description.
-                        if (reader.tagName == "TextKey")
+                        else if (reader.tagName == "TextKey")
                         {
                             newChallenge.Description = reader.content;
-                            Debug.Log("New challenge read: " + newChallenge.Description);
+                            Debug.Log("Description: " + newChallenge.Description);
                         }
 
                         // Read conditions.
@@ -82,30 +126,8 @@ public class ChallengeManager : MonoBehaviour
 
                 // Add challenges.
                 AllChallenges.Add(newChallenge);
-
-                if (CurrentChallenges.Count < 4)
-                    CurrentChallenges.Add(newChallenge);
             }
         }
-
-        // Fill in challenges.
-        //Condition scoreCondition = new ScoreCondition(Functor.Greater<int>(), 5000);
-
-        //Condition levelCondition = new LevelCondition(Functor.Equal<string>(), PlayerData.MineLvlName);
-
-        //Condition ballsLostCondition = new BallsInPlayCondition(Functor.Equal<int>(), 0);
-        //ballsLostCondition.CountChangedOnly = true;
-        //ballsLostCondition.CountToMeet = 2;
-        //ballsLostCondition.LevelLoadReset = true;
-
-        //Challenge scoreChallenge = new Challenge("Score more than 5000 points in the mine level.", scoreCondition, levelCondition);
-        //Challenge ballsLostChallenge = new Challenge("Lose 3 balls.", ballsLostCondition);
-
-        //AllChallenges.Add(scoreChallenge, false);
-        //AllChallenges.Add(ballsLostChallenge, false);
-
-        //CurrentChallenges.Add(scoreChallenge);
-        //CurrentChallenges.Add(ballsLostChallenge);
     }
 
     // Fill in condition with TinyXmlReader.
@@ -167,13 +189,16 @@ public class ChallengeManager : MonoBehaviour
     // Called every frame.
     void Update()
     {
-        // Loop backwards over challenges so we can safely remove them.
-        for (int i = CurrentChallenges.Count - 1; i > 0; i--)
+        // Looping backwards over uncompleted challenges to safely remove completed ones.
+        for (int i = _uncompletedChallenges.Count - 1; i > 0; i--)
         {
-            if (CurrentChallenges[i].IsCompleted())
+            if (_uncompletedChallenges[i].IsCompleted())
             {
-                Debug.Log("--- Challenge completed: " + CurrentChallenges[i].Description + " ---");
-                CurrentChallenges.Remove(CurrentChallenges[i]);
+                // Store completed challenge.
+                CompletedLvlChallenges.Add(_uncompletedChallenges[i]);
+                _uncompletedChallenges.Remove(_uncompletedChallenges[i]);
+
+                //TODO: Show particle effect/message.
             }
         }
     }
@@ -181,6 +206,9 @@ public class ChallengeManager : MonoBehaviour
     // Called when a new level was loaded.
     void OnLevelWasLoaded(int level)
     {
+        // Clear completed challenges in level.
+        CompletedLvlChallenges.Clear();
+
         // Call 'OnLevelWasLoaded' function on all active conditions.
         foreach (Challenge challenge in CurrentChallenges)
         {
@@ -189,6 +217,60 @@ public class ChallengeManager : MonoBehaviour
                 condition.OnLevelWasLoaded();
             }
         }
+    }
+
+    // Removes a current challenge and adds the next one.
+    public void ReplaceChallenge(Challenge challengeToRemove)
+    {
+        CurrentChallenges.Remove(challengeToRemove);
+
+        AddNewChallenge();
+    }
+
+    // Adds an uncompleted challenge to the current challenges list.
+    public void AddNewChallenge()
+    {
+        // Find next uncompleted challenge.
+        foreach (Challenge challenge in AllChallenges)
+        {
+            if (!CurrentChallenges.Contains(challenge))
+            {
+                // Look for uncompleted challenge.
+                if (!challenge.Done)
+                {
+                    // No required level, just add challenge.
+                    if (challenge.LevelKey == LevelKey.None)
+                    {
+                        Debug.Log("--- New challenge added. ---");
+                        CurrentChallenges.Add(challenge);
+                        _uncompletedChallenges.Add(challenge);
+                        return;
+                    }
+
+                    // Check if required level is unlocked.
+                    //Debug.Log("--- Checking if challenge required level " + challenge.LevelKey.ToString() + " is unlocked. ---");
+                    if (PlayerData.use.LevelsUnlocked["Pinball_" + challenge.LevelKey.ToString()])
+                    {
+                        Debug.Log("--- New challenge added. ---");
+                        CurrentChallenges.Add(challenge);
+                        _uncompletedChallenges.Add(challenge);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    // Check if a challenge exists with a given ID.
+    public bool HasID(string id)
+    {
+        foreach (Challenge challenge in AllChallenges)
+        {
+            if (challenge.ID == id)
+                return true;
+        }
+
+        return false;
     }
 
     void OnDestroy()

@@ -3,6 +3,7 @@
 <Challenges>
 
   <Challenge>
+    <ID>Score3000</ID>
     <TextKey>Score more than 3000 points.</TextKey>
     <Condition>
       <Type>Score</Type>
@@ -14,7 +15,10 @@
   </Challenge>
 
   <Challenge>
-    <TextKey>Score more than 5000 points in the mine level.</TextKey>
+    <ID>Score5000LvlPirate</ID>
+    <Stars>3</Stars>
+    <Level>Pirate</Level>
+    <TextKey>Score more than 5000 points in the pirate level.</TextKey>
     <Condition>
       <Type>Score</Type>
       <Parameters>
@@ -25,13 +29,14 @@
     <Condition>
       <Type>Level</Type>
       <Parameters>
-        <Name>Pinball_Mine</Name>
+        <Name>Pinball_Pirate</Name>
         <Comparer>Equal</Comparer>
       </Parameters>
     </Condition>
   </Challenge>
 
   <Challenge>
+    <ID>BallsLost3</ID>
     <TextKey>Lose 3 balls in a single level.</TextKey>
     <Condition>
       <Type>BallsInPlay</Type>
@@ -45,8 +50,35 @@
     </Condition>
   </Challenge>
 
-  <!--Example Conditions-->
+  <Challenge>
+    <ID>Multiball1</ID>
+    <TextKey>Get a multiball.</TextKey>
+    <Condition>
+      <Type>BallsInPlay</Type>
+      <Parameters>
+        <Value>3</Value>
+        <Comparer>Greater</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
+    <ID>Score6000</ID>
+    <TextKey>Score more than 6000 points.</TextKey>
+    <Condition>
+      <Type>Score</Type>
+      <Parameters>
+        <Value>6000</Value>
+        <Comparer>Greater</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
   <!--
+  
+  Example Conditions
+  ******************
+  
   <Condition>
     <Type>All</Type>
     <Parameters>
@@ -56,6 +88,10 @@
       <LevelLoadReset>false</LevelLoadReset>
     </Parameters>
   </Condition>
+  
+  Level Keys
+  **********
+  Mine, Pirate, Halloween, MainMenu
   -->
 
 </Challenges>

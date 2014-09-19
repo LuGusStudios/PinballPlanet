@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public enum LevelKey
 {
-    MainMenu = 0, Halloween = 1, Pirate = 2, Mine = 3
+    None = 0, MainMenu = 1, Halloween = 2, Pirate = 3, Mine = 4
 }
 
 public class PlayerData : MonoBehaviour
@@ -104,6 +104,9 @@ public class PlayerData : MonoBehaviour
                 if (starText != null)
                     starText.text = value.ToString();
             }
+
+            // Save data.
+            Save();
         }
     }
 
@@ -174,6 +177,13 @@ public class PlayerData : MonoBehaviour
             LugusConfig.use.User.SetBool(lvlUnlocked.Key + "_Unlocked", lvlUnlocked.Value, true);
         }
 
+        // Save completed challenges.
+        foreach (Challenge challenge in ChallengeManager.use.AllChallenges)
+        {
+            if (challenge.Completed)
+                LugusConfig.use.User.SetBool("Challenge_" + challenge.ID + "_Done", challenge.Done, true);
+        }
+
         // Save to files.
         Debug.Log("Saving High Scores");
         LugusConfig.use.SaveProfiles();
@@ -193,14 +203,12 @@ public class PlayerData : MonoBehaviour
                 if (score > 0)
                 {
                     lvlHighScores.Value.Add(score);
-                    //Debug.Log("Loaded High Score: " + key + ", " + score);
                 }
             }
             Sort(lvlHighScores.Key);
         }
 
         // Load stars.
-        //Debug.Log("Loading Stars");
         Stars = LugusConfig.use.User.GetInt("Stars", 0);
 
         // Load levels unlocked.
@@ -209,7 +217,19 @@ public class PlayerData : MonoBehaviour
         foreach (string lvlName in lvlNames)
         {
             LevelsUnlocked[lvlName] = LugusConfig.use.User.GetBool(lvlName + "_Unlocked", false);
-            //Debug.Log("Loading: Level " + lvlName + " unlocked = " + LevelsUnlocked[lvlName]);
+        }
+
+        // Load completed challenges.
+        foreach (Challenge challenge in ChallengeManager.use.AllChallenges)
+        {
+            if (LugusConfig.use.User.Exists("Challenge_" + challenge.ID + "_Done"))
+            {
+                challenge.Completed = true;
+                if (LugusConfig.use.User.GetBool("Challenge_" + challenge.ID + "_Done", false))
+                {
+                    challenge.Done = true;
+                }
+            }
         }
     }
 

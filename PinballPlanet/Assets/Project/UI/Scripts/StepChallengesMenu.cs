@@ -13,6 +13,10 @@ public class StepChallengesMenu : IMenuStep
     protected Transform ChallengesBotTransform = null;
     public GameObject ChallengePrefab;
 
+    public List<Pair<Button, Challenge>> CompletedChallengeButtons = null;
+
+    public Sprite MissionIconCheck = null;
+
     public override void SetupLocal()
     {
         if (ChallengesButton == null)
@@ -81,6 +85,27 @@ public class StepChallengesMenu : IMenuStep
             else
                 MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
         }
+
+        if (CompletedChallengeButtons != null)
+        {
+            foreach (var buttonChallenge in CompletedChallengeButtons)
+            {
+                // Check if challenge button is pressed.
+                if (buttonChallenge.First.pressed)
+                {
+                    Debug.Log("Replacing completed challenge.");
+
+                    // Remove challenge and add new one.
+                    buttonChallenge.Second.Done = true;
+                    ChallengeManager.use.ReplaceChallenge(buttonChallenge.Second);
+
+                    // Add stars.
+                    PlayerData.use.Stars += buttonChallenge.Second.StarsReward;
+
+                    UpdateChallenges();
+                }
+            }
+        }
     }
 
     public override void Activate(bool animate = true)
@@ -88,21 +113,74 @@ public class StepChallengesMenu : IMenuStep
         activated = true;
         gameObject.SetActive(true);
 
+        // Hide correct menu.
         if (Application.loadedLevelName == "Pinball_MainMenu")
+        {
             MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu].Activate(false);
+        }
         else
+        {
             MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu].Activate(false);
+        }
 
         // Show challenges.
-        int i = 0;
+        UpdateChallenges();
+    }
+
+    private void UpdateChallenges()
+    {
+        // Destroy all challenge objects.
+        foreach (Transform child in transform)
+        {
+            if (child.name == "Challenge(Clone)")
+                Destroy(child.gameObject);
+        }
+
+        // Add challenges when some are empty.
+        int nrChallenges = ChallengeManager.use.CurrentChallenges.Count;
+        if (nrChallenges < MaxChallenges)
+        {
+            for (int i = 0; i < MaxChallenges - nrChallenges; i++)
+            {
+                ChallengeManager.use.AddNewChallenge();
+            }
+        }
+
+        // Add new challenge object.
+        int count = 0;
+        CompletedChallengeButtons = new List<Pair<Button, Challenge>>();
         foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
         {
-            Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (MaxChallenges - 1) * i;
+            Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (MaxChallenges - 1) * count;
             GameObject challengeGameObj = Instantiate(ChallengePrefab, pos, Quaternion.identity) as GameObject;
             challengeGameObj.transform.parent = gameObject.transform;
-            challengeGameObj.transform.FindChild("Text_Challenge").GetComponent<TextMesh>().text = challenge.Description;
+            challengeGameObj.transform.FindChild("Challenge/Text_Challenge").GetComponent<TextMesh>().text = challenge.Description;
 
-            ++i;
+            // Show new text.
+            if (challenge.Viewed)
+                challengeGameObj.transform.FindChild("Challenge/Text_New").gameObject.SetActive(false);
+            else
+                challenge.Viewed = true;
+
+            if (challenge.Completed)
+            {
+                // Set icon sprite.
+                challengeGameObj.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
+
+                // Allow to remove completed challenges in main menu.
+                if (Application.loadedLevelName == PlayerData.MainLvlName)
+                {
+                    // Enable button.
+                    Button challengeButton = challengeGameObj.transform.FindChild("Challenge").GetComponent<Button>();
+                    challengeButton.enabled = true;
+                    CompletedChallengeButtons.Add(new Pair<Button, Challenge>(challengeButton, challenge));
+
+                    // Enable animation.
+                    challengeGameObj.transform.FindChild("Challenge").GetComponent<Animator>().enabled = true;
+                }
+            }
+
+            ++count;
         }
     }
 
