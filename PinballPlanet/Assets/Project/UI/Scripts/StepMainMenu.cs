@@ -116,18 +116,14 @@ public class StepMainMenu : IMenuStep
         else if (SocialButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
-            SocialButton.gameObject.SetActive(false);
         }
         else if (SettingsButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
-            SettingsButton.gameObject.SetActive(false);
         }
         else if (TrophyButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
-            TrophyButton.gameObject.SetActive(false);
-            PlayButton.gameObject.SetActive(false);
         }
 
         _planet.transform.Rotate(Vector3.up, _rotationSpeed, Space.World);
@@ -138,6 +134,7 @@ public class StepMainMenu : IMenuStep
         activated = true;
         gameObject.SetActive(true);
 
+        // Enable buttons.
         HelpButton.gameObject.SetActive(true);
         PlayButton.gameObject.SetActive(true);
         SocialButton.gameObject.SetActive(true);
@@ -156,23 +153,52 @@ public class StepMainMenu : IMenuStep
             TitleLogo.transform.localScale = Vector3.zero;
             TitleLogo.ScaleTo(Vector3.one).Time(_fadeTime).EaseType(iTween.EaseType.easeOutElastic).Execute();
         }
-    }
 
+        // Animate trophy button if any new or completed challenges.
+        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
+        {
+            if (challenge.Completed || !challenge.Viewed)
+            {
+                TrophyButton.gameObject.animation.Play("ButtonActive");
+                break;
+            }
+        }
+    }
 
     public override void Deactivate(bool animate = true)
     {
         activated = false;
-
-        HelpButton.gameObject.SetActive(false);
-        PlayButton.gameObject.SetActive(false);
-        SocialButton.gameObject.SetActive(false);
-        SettingsButton.gameObject.SetActive(false);
-        TrophyButton.gameObject.SetActive(false);
+        gameObject.SetActive(false);
 
         // Pop out title.
         if (animate)
             TitleLogo.ScaleTo(Vector3.zero).Time(_fadeTime).EaseType(iTween.EaseType.easeInCubic).Execute();
         else
             TitleLogo.SetActive(false);
+    }
+
+    void OnGUI()
+    {
+        if (LugusDebug.debug)
+        {
+            if (GUI.Button(new Rect(10, 50, 250, 200), "Add 10 Stars"))
+                PlayerData.use.Stars += 10;
+
+            if (GUI.Button(new Rect(10, 250, 250, 200), "Clear save data."))
+            {
+                LugusConfig.use.User.ClearAllData();
+                LugusConfig.use.SaveProfiles();
+                Application.LoadLevel(Application.loadedLevel);
+            }
+        }
+    }
+
+    public void DisableButtons()
+    {
+        HelpButton.gameObject.SetActive(false);
+        PlayButton.gameObject.SetActive(false);
+        SocialButton.gameObject.SetActive(false);
+        SettingsButton.gameObject.SetActive(false);
+        TrophyButton.gameObject.SetActive(false);
     }
 }

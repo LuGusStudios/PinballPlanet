@@ -3,12 +3,66 @@
 <Challenges>
 
   <Challenge>
+    <ID>ClickChallengesButton</ID>
+    <Stars>10</Stars>
+    <TextKey>Click the challenges button.</TextKey>
+    <Condition>
+      <Type>ButtonPressed</Type>
+      <Parameters>
+        <ButtonName>Button_Trophy</ButtonName>
+        <MeetOnce>true</MeetOnce>
+      </Parameters>
+    </Condition>
+  </Challenge>
+  
+  <Challenge>
+    <ID>500PointsLeftFlipper</ID>
+    <TextKey>Get 500 points using only the left flipper.</TextKey>
+    <!--<Condition>
+      <Type>ObjectHit</Type>
+      <Parameters>
+        <ObjectName>Right_Paddle</ObjectName>
+        <ShouldHit>false</ShouldHit>
+        <LevelLoadReset>true</LevelLoadReset>
+      </Parameters>
+    </Condition>-->
+    <Condition>
+      <Type>Score</Type>
+      <Parameters>
+        <Value>499</Value>
+        <Comparer>Greater</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
+    <ID>NoHitCannon</ID>
+    <TextKey>Finish the pirate level without using the cannon.</TextKey>
+    <Level>Pirate</Level>
+    <Condition>
+      <Type>ObjectHit</Type>
+      <Parameters>
+        <ObjectName>ShipCannon</ObjectName>
+        <ShouldHit>false</ShouldHit>
+        <LevelLoadReset>true</LevelLoadReset>
+      </Parameters>
+    </Condition>
+    <Condition>
+      <Type>BallCount</Type>
+      <Parameters>
+        <Value>0</Value>
+        <Comparer>Equal</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
     <ID>Score3000</ID>
     <TextKey>Score more than 3000 points.</TextKey>
     <Condition>
       <Type>Score</Type>
       <Parameters>
-        <Value>3000</Value>
+        <Value>2999</Value>
         <Comparer>Greater</Comparer>
       </Parameters>
     </Condition>
@@ -22,7 +76,7 @@
     <Condition>
       <Type>Score</Type>
       <Parameters>
-        <Value>5000</Value>
+        <Value>4999</Value>
         <Comparer>Greater</Comparer>
       </Parameters>
     </Condition>
@@ -70,6 +124,19 @@
       <Parameters>
         <Value>6000</Value>
         <Comparer>Greater</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+  
+  <Challenge>
+    <ID>HitCrystal</ID>
+    <TextKey>Collect 10 crystal shards.</TextKey>
+    <Level>Mine</Level>
+    <Condition>
+      <Type>ObjectHit</Type>
+      <Parameters>
+        <ObjectName>CrystalShard_Parent</ObjectName>
+        <CountToMeet>10</CountToMeet>
       </Parameters>
     </Condition>
   </Challenge>

@@ -5,6 +5,8 @@ using System.Collections;
 public class StepChallengesMenu : IMenuStep
 {
     protected Button ChallengesButton = null;
+    protected Button SocialButton = null;
+    protected Button SettingsButton = null;
     protected Vector3 OriginalPosition = Vector3.zero;
     protected TextMesh StarsText = null;
 
@@ -19,6 +21,24 @@ public class StepChallengesMenu : IMenuStep
 
     public override void SetupLocal()
     {
+        if (SocialButton == null)
+        {
+            SocialButton = transform.FindChild("Button_Social").GetComponent<Button>();
+        }
+        if (SocialButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing social button.");
+        }
+
+        if (SettingsButton == null)
+        {
+            SettingsButton = transform.FindChild("Button_Settings").GetComponent<Button>();
+        }
+        if (SettingsButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing settings button.");
+        }
+
         if (ChallengesButton == null)
         {
             ChallengesButton = transform.FindChild("Button_Trophy").GetComponent<Button>();
@@ -62,6 +82,16 @@ public class StepChallengesMenu : IMenuStep
 
         // Initialize challenge manager by calling it.
         ChallengeManager.use.enabled = true;
+
+        // Add first challenges.
+        int nrChallenges = ChallengeManager.use.CurrentChallenges.Count;
+        if (nrChallenges < MaxChallenges)
+        {
+            for (int i = 0; i < MaxChallenges - nrChallenges; i++)
+            {
+                ChallengeManager.use.AddNewChallenge();
+            }
+        }
     }
 
     public void SetupGlobal()
@@ -85,6 +115,14 @@ public class StepChallengesMenu : IMenuStep
             else
                 MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
         }
+        else if (SocialButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+        }
+        else if (SettingsButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
+        }
 
         if (CompletedChallengeButtons != null)
         {
@@ -102,6 +140,9 @@ public class StepChallengesMenu : IMenuStep
                     // Add stars.
                     PlayerData.use.Stars += buttonChallenge.Second.StarsReward;
 
+                    // Save data.
+                    PlayerData.use.Save();
+
                     UpdateChallenges();
                 }
             }
@@ -110,21 +151,7 @@ public class StepChallengesMenu : IMenuStep
 
     public override void Activate(bool animate = true)
     {
-        activated = true;
-        gameObject.SetActive(true);
-
-        // Hide correct menu.
-        if (Application.loadedLevelName == "Pinball_MainMenu")
-        {
-            MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu].Activate(false);
-        }
-        else
-        {
-            MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu].Activate(false);
-        }
-
-        // Show challenges.
-        UpdateChallenges();
+        LugusCoroutines.use.StartRoutine(ActivateRoutine());
     }
 
     private void UpdateChallenges()
@@ -189,5 +216,28 @@ public class StepChallengesMenu : IMenuStep
         activated = false;
 
         gameObject.SetActive(false);
+    }
+
+    protected IEnumerator ActivateRoutine()
+    {
+        activated = true;
+        gameObject.SetActive(true);
+
+        // Hide correct menu.
+        if (Application.loadedLevelName == PlayerData.MainLvlName)
+        {
+            MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu].Activate(false);
+            (MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu] as StepMainMenu).DisableButtons();
+        }
+        else
+        {
+            MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu].Activate(false);
+            (MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu] as StepPauseMenu).DisableButtons();
+        }
+
+        yield return null;
+
+        // Show challenges.
+        UpdateChallenges();
     }
 }

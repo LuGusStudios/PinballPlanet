@@ -76,7 +76,7 @@ public class CannonTarget : MonoBehaviour
         _timeTravelling = 0;
 
         // Give bonus score for hitting the target.
-        GameObject scorePopup = ScoreManager.use.ShowScore(BonusPoints, transform.position.zAdd(30), 1.5f, null, Color.white);
+        GameObject scorePopup = ScoreManager.use.ShowScore(BonusPoints, transform.position.zAdd(30), 1.5f, null, Color.white, gameObject);
         scorePopup.GetComponent<TextMesh>().characterSize = 4.5f;
 
         // Spawn particle.

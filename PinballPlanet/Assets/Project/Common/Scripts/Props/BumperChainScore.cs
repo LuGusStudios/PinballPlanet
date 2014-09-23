@@ -64,6 +64,6 @@ public class BumperChainScore : MonoBehaviour
         ChainScore.use.TimeSinceHit = 0;
 
         // Give score
-        ScoreManager.use.ShowScore(ScoreHit + ChainScore.use.ChainBonusScore * (ChainScore.use.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, Sound, Color.white);
+        ScoreManager.use.ShowScore(ScoreHit + ChainScore.use.ChainBonusScore * (ChainScore.use.ChainMultiplier - 1), collision.contacts[0].point.zAdd(Random.Range(10, 20)), 2.0f, Sound, Color.white, gameObject);
     }
 }

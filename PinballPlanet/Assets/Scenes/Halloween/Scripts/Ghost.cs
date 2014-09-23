@@ -5,7 +5,7 @@ public class Ghost : MonoBehaviour
 {
     private float _timeAlive = 0;
 
-    private float _flickerStart = 24.0f;
+    private float _flickerStart = 16.0f;
     private float _flickerDelay = 0.5f;
     private float _flickerDelayModifier = -0.015f;
     private float _flickerLength = 0.1f;
@@ -49,6 +49,9 @@ public class Ghost : MonoBehaviour
         // If flicker too fast, destroy ghost.
         if (_flickerDelay <= _flickerMinEnd)
         {
+            // Reset pentagram.
+            GameObject.Find("Pentagram").GetComponent<Pentagram>().Unbreak();
+
             Destroy(GetComponent<Follower>().ObjectToFollow.gameObject);
             Destroy(gameObject);
         }

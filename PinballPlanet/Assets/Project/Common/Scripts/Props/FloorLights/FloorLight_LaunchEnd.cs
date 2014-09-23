@@ -16,7 +16,7 @@ public class FloorLight_LaunchEnd : Triggerable
         // Turn on the end light.
         GetComponent<FloorLight_Link>().Break();
 
-        ScoreManager.use.ShowScore(LaunchLightsScore, transform.position.zAdd(Random.Range(10, 20)), 2.0f, null, Color.white);
+        ScoreManager.use.ShowScore(LaunchLightsScore, transform.position.zAdd(Random.Range(10, 20)), 2.0f, null, Color.white, gameObject);
 
         TurnOffLaunchLights();
     }
@@ -35,7 +35,7 @@ public class FloorLight_LaunchEnd : Triggerable
         if (!GetComponent<FloorLight_Link>().PreviousLight.IsBroken)
             return;
 
-        ScoreManager.use.ShowScore(LaunchLightsScore, transform.position.zAdd(Random.Range(10, 20)), 2.0f, null, Color.white);
+        ScoreManager.use.ShowScore(LaunchLightsScore, transform.position.zAdd(Random.Range(10, 20)), 2.0f, null, Color.white, gameObject);
 
         TurnOffLaunchLights();
     }

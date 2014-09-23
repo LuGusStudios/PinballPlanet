@@ -16,10 +16,13 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	public int BallCount = 5;
 
     private float _timeSinceScore = 0;
-    private float _scoreComboTime = 0.8f;
+    private float _scoreComboTime = 0.65f;
+    private float _scoreDelay = 0.25f;
     private float _scoreComboHeight = 7;
     private int _scoreCombo = 0;
 
+    private GameObject _lastObject = null;
+    
 	// Use this for initialization
 	void Start () 
 	{
@@ -27,7 +30,7 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 		ShowBallCount();     
 	}
 	
-	// Player.js uses SendMessage to call this
+	// Player uses SendMessage to call this
 	public void BallDestroyed()
 	{
 		BallCount--;
@@ -75,7 +78,7 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	}
 
     // Instantiates a score popup and awards the player points.
-    public GameObject ShowScore(int score, Vector3 position, float time, AudioClip sound, Color color)
+    public GameObject ShowScore(int score, Vector3 position, float time, AudioClip sound, Color color, GameObject sender)
     {
         // If no score this can also be used to just play a sound.
         if (score == 0)
@@ -86,10 +89,19 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
             return null;
         }
 
+        // Don't give score when same object is hit very quickly.
+        if (_lastObject == sender)
+        {
+            if (_timeSinceScore < _scoreDelay)
+            {
+                _lastObject = sender;
+                return null;
+            }
+        }
+
         // Randomize position.
         position.xAdd(Random.Range(-5, 5));
         position.yAdd(Random.Range(-5, 5));
-        //position.zAdd(Random.Range(-5, 5));
 
         // Put score slightly higher if scoring in quick sucession.
         if (_timeSinceScore <= _scoreComboTime)
@@ -104,26 +116,35 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
         // Reset time since score.
         _timeSinceScore = 0;
 
+        // Overwrite last object.
+        _lastObject = sender;
+
+        // Spawn score object.
         Transform scoreText = (Transform)Instantiate(ScoreTextPrefab, position, ScoreTextPrefab.transform.rotation);
         scoreText.GetComponent<TextMesh>().text = "" + score;
         scoreText.GetComponent<TextMesh>().renderer.material.color = color;
 
+        // Add height.
         Vector3 posAdd = new Vector3(0, 0, 25);
         if (!MoveScoreUp)
             posAdd *= -1;
 
+        // Play move animation.
         iTween.MoveTo(scoreText.gameObject, position + posAdd, time);
         Destroy(scoreText.gameObject, time);
 
+        // Play hit sound.
         if (sound != null)
             LugusAudio.use.SFX().Play(sound).Loop = false;
 
+        // Add score.
         int newScore = TotalScore + score;
         if (newScore >= 0)
             TotalScore += score;
         else
             TotalScore = 0;
 
+        // Update text mesh.
         ShowTotalScore();
 
         return scoreText.gameObject;

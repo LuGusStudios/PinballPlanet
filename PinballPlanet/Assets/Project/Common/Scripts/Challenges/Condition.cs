@@ -102,7 +102,6 @@ public class Condition
         // Reset condition.
         if (LevelLoadReset)
         {
-            Debug.Log("Resetting condition.");
             _metCounter = 0;
         }
     }
@@ -110,7 +109,7 @@ public class Condition
     // Initialize from a string parameters dictionary. 
     public virtual void InitializeFromParameters(Dictionary<string, string> parameters)
     {
-        Debug.Log("Initializing condition from parameters. ");
+        //Debug.Log("Initializing condition from parameters. ");
 
         // Meet once.
         string key = "MeetOnce";

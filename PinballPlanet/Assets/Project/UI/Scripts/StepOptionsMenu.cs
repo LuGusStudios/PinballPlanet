@@ -4,6 +4,8 @@ using System.Collections;
 public class StepOptionsMenu : IMenuStep
 {
     protected Button optionsButton = null;
+    protected Button TrophyButton = null;
+    protected Button SocialButton = null;
     protected Button musicCheckBox = null;
     private bool _musicChecked = true;
     protected Button effectsCheckBox = null;
@@ -15,6 +17,15 @@ public class StepOptionsMenu : IMenuStep
 
     public override void SetupLocal()
     {
+        if (SocialButton == null)
+        {
+            SocialButton = transform.FindChild("Button_Social").GetComponent<Button>();
+        }
+        if (SocialButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing social button.");
+        }
+
         if (optionsButton == null)
         {
             optionsButton = transform.FindChild("Button_Settings").GetComponent<Button>();
@@ -22,6 +33,15 @@ public class StepOptionsMenu : IMenuStep
         if (optionsButton == null)
         {
             Debug.Log("StepMainMenu: Missing social button.");
+        }
+
+        if (TrophyButton == null)
+        {
+            TrophyButton = transform.FindChild("Button_Trophy").GetComponent<Button>();
+        }
+        if (TrophyButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing trophy button.");
         }
 
         if (musicCheckBox == null)
@@ -67,6 +87,14 @@ public class StepOptionsMenu : IMenuStep
             else
                 MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
         }
+        else if (SocialButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+        }
+        else if (TrophyButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
+        }
         else if (musicCheckBox.pressed)
         {
             if (_musicChecked)
@@ -77,7 +105,7 @@ public class StepOptionsMenu : IMenuStep
             else
             {
                 musicCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
-                LugusAudio.use.Music().VolumePercentage = 100.0f;
+                LugusAudio.use.Music().VolumePercentage = 1.0f;
             }
 
             _musicChecked = !_musicChecked;
@@ -92,7 +120,7 @@ public class StepOptionsMenu : IMenuStep
             else
             {
                 effectsCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
-                LugusAudio.use.SFX().VolumePercentage = 100.0f;
+                LugusAudio.use.SFX().VolumePercentage = 1.0f;
             }
 
             _effectsChecked = !_effectsChecked;
@@ -104,10 +132,16 @@ public class StepOptionsMenu : IMenuStep
         activated = true;
         gameObject.SetActive(true);
 
-        if (Application.loadedLevelName == "Pinball_MainMenu")
+        if (Application.loadedLevelName == PlayerData.MainLvlName)
+        {
             MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu].Activate(false);
+            (MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu] as StepMainMenu).DisableButtons();
+        }
         else
+        {
             MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu].Activate(false);
+            (MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu] as StepPauseMenu).DisableButtons();
+        }
     }
 
     public override void Deactivate(bool animate = true)

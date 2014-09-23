@@ -25,7 +25,7 @@ public class Pentagram : BreakableMultiObjective
 
         // Give bonus score for completing all objectives.
         Vector3 scorePos = transform.position + new Vector3(-20,0);
-        GameObject scorePopup = ScoreManager.use.ShowScore(BonusPoints, scorePos.zAdd(20), 1.5f, null, Color.white);
+        GameObject scorePopup = ScoreManager.use.ShowScore(BonusPoints, scorePos.zAdd(20), 1.5f, null, Color.white, gameObject);
         scorePopup.transform.localScale = new Vector3(1.5f,1.5f,1.5f);
 
         // Spawn ghost.

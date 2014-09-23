@@ -89,7 +89,6 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-
     // Total stars earned.
     private int _stars = 0;
     public int Stars
@@ -104,9 +103,6 @@ public class PlayerData : MonoBehaviour
                 if (starText != null)
                     starText.text = value.ToString();
             }
-
-            // Save data.
-            Save();
         }
     }
 
@@ -146,6 +142,8 @@ public class PlayerData : MonoBehaviour
     // Save data.
     public void Save()
     {
+        Debug.Log("------ Saving player data. ------");
+
         // Initialize lists.
         if (LevelsHighscores == null)
         {
@@ -192,6 +190,8 @@ public class PlayerData : MonoBehaviour
     // Load Data.
     public void Load()
     {
+        Debug.Log("------ Loading player data. ------");
+
         // Load scores.
         foreach (KeyValuePair<string, List<int>> lvlHighScores in LevelsHighscores)
         {
@@ -207,9 +207,6 @@ public class PlayerData : MonoBehaviour
             }
             Sort(lvlHighScores.Key);
         }
-
-        // Load stars.
-        Stars = LugusConfig.use.User.GetInt("Stars", 0);
 
         // Load levels unlocked.
         string[] lvlNames = new string[LevelsUnlocked.Count];
@@ -231,6 +228,9 @@ public class PlayerData : MonoBehaviour
                 }
             }
         }
+
+        // Load stars.
+        Stars = LugusConfig.use.User.GetInt("Stars", 0);
     }
 
     // Adds a highscore if high enough.

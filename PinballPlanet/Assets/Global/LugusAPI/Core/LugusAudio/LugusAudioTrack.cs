@@ -135,11 +135,12 @@ public class LugusAudioTrack : MonoBehaviour, ILugusAudioTrack
 		Source.time = 0.0f;
 
 		// reset the settings 
-		// otherwhise, if the previous PLay had for example Loop set
+		// otherwhise, if the previous Play had for example Loop set
 		// but the baseSettings didn't have loop set... loop would remain set on the next Play
 		// TODO: make this more decent...
 		this.Loop = false;
 		this.Volume = 1.0f;
+		this.OriginalVolume = 1.0f;
 
 		if( settings != null )
 		{

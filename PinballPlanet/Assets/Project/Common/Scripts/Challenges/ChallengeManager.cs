@@ -156,6 +156,18 @@ public class ChallengeManager : MonoBehaviour
                             Debug.Log("New 'BallsInPlay' condition created.");
                             newCondition = new BallsInPlayCondition();
                             break;
+                        case "BallCount":
+                            Debug.Log("New 'BallCount' condition created.");
+                            newCondition = new BallCountCondition();
+                            break;
+                        case "ObjectHit":
+                            Debug.Log("New 'ObjectHit' condition created.");
+                            newCondition = new ObjectHitCondition();
+                            break;
+                        case "ButtonPressed":
+                            Debug.Log("New 'ButtonPressed' condition created.");
+                            newCondition = new ButtonPressedCondition();
+                            break;
                         default:
                             Debug.LogError("Condition type not found! Make sure it's a valid type.");
                             return null;
@@ -189,14 +201,23 @@ public class ChallengeManager : MonoBehaviour
     // Called every frame.
     void Update()
     {
+        CheckChallenges();
+    }
+
+    // Checks if any challenges are completed.
+    public void CheckChallenges()
+    {
         // Looping backwards over uncompleted challenges to safely remove completed ones.
-        for (int i = _uncompletedChallenges.Count - 1; i > 0; i--)
+        for (int i = _uncompletedChallenges.Count - 1; i >= 0; i--)
         {
             if (_uncompletedChallenges[i].IsCompleted())
             {
                 // Store completed challenge.
                 CompletedLvlChallenges.Add(_uncompletedChallenges[i]);
                 _uncompletedChallenges.Remove(_uncompletedChallenges[i]);
+
+                // Save.
+                PlayerData.use.Save();
 
                 //TODO: Show particle effect/message.
             }
@@ -241,19 +262,23 @@ public class ChallengeManager : MonoBehaviour
                     // No required level, just add challenge.
                     if (challenge.LevelKey == LevelKey.None)
                     {
-                        Debug.Log("--- New challenge added. ---");
+                        Debug.Log("--- New challenge added: " + challenge.ID + " ---");
+
                         CurrentChallenges.Add(challenge);
                         _uncompletedChallenges.Add(challenge);
+
                         return;
                     }
 
                     // Check if required level is unlocked.
                     //Debug.Log("--- Checking if challenge required level " + challenge.LevelKey.ToString() + " is unlocked. ---");
-                    if (PlayerData.use.LevelsUnlocked["Pinball_" + challenge.LevelKey.ToString()])
+                    else if (PlayerData.use.LevelsUnlocked["Pinball_" + challenge.LevelKey.ToString()])
                     {
-                        Debug.Log("--- New challenge added. ---");
+                        Debug.Log("--- New challenge added: " + challenge.ID + " ---");
+
                         CurrentChallenges.Add(challenge);
                         _uncompletedChallenges.Add(challenge);
+
                         return;
                     }
                 }
@@ -271,6 +296,28 @@ public class ChallengeManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    // Gives all conditions of a certain type.
+    public List<Condition> GetConditionsOfType<T>()
+        where T : Condition
+    {
+        List<Condition> typeConditions = new List<Condition>();
+
+        // Loop over all conditions.
+        foreach (Challenge chal in AllChallenges)
+        {
+            foreach (Condition cond in chal.Conditions)
+            {
+                // Check if correct type.
+                if(cond.GetType() == typeof(T))
+                {
+                    typeConditions.Add(cond);
+                }
+            }
+        }
+
+        return typeConditions;
     }
 
     void OnDestroy()

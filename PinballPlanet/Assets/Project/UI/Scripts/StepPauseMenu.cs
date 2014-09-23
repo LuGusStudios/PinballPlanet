@@ -1,6 +1,7 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-public class StepPauseMenu : IMenuStep 
+public class StepPauseMenu : IMenuStep
 {
     protected Button ResumeButton = null;
     protected Button MainMenuButton = null;
@@ -11,9 +12,13 @@ public class StepPauseMenu : IMenuStep
     protected Button TrophyButton = null;
     protected Transform ExitConfirmation = null;
     protected Vector3 originalPosition = Vector3.zero;
-	
-	public override void SetupLocal()
-	{
+
+    // Pause variables.
+    private List<Vector3> _ballVelocities = new List<Vector3>();
+    private List<FlipperNew> _flippers = new List<FlipperNew>();
+
+    public override void SetupLocal()
+    {
         if (ResumeButton == null)
         {
             ResumeButton = transform.FindChild("Button_Resume").GetComponent<Button>();
@@ -86,22 +91,27 @@ public class StepPauseMenu : IMenuStep
             Debug.Log("StepPauseMenu: Missing exit confirmation.");
         }
 
-		originalPosition = transform.position;
-	}
-	
-	public void SetupGlobal()
-	{
-	}
-	
-	protected void Start () 
-	{
-		SetupGlobal();
-	}
-	
-	protected void Update () 
-	{
-		if (!activated)
-			return;
+        originalPosition = transform.position;
+
+        foreach (object flipper in GameObject.FindObjectsOfType<FlipperNew>())
+        {
+            _flippers.Add(flipper as FlipperNew);
+        }
+    }
+
+    public void SetupGlobal()
+    {
+    }
+
+    protected void Start()
+    {
+        SetupGlobal();
+    }
+
+    protected void Update()
+    {
+        if (!activated)
+            return;
 
         if (ResumeButton.pressed)
         {
@@ -141,27 +151,57 @@ public class StepPauseMenu : IMenuStep
             ResumeButton.gameObject.SetActive(false);
             MainMenuButton.gameObject.SetActive(false);
         }
+    }
 
-	}
 
+    public override void Activate(bool animate = true)
+    {
+        activated = true;
 
-	public override void Activate(bool animate = true)
-	{
-		activated = true;
-
-		gameObject.SetActive(true);
+        gameObject.SetActive(true);
 
         SocialButton.gameObject.SetActive(true);
         SettingsButton.gameObject.SetActive(true);
         TrophyButton.gameObject.SetActive(true);
         ResumeButton.gameObject.SetActive(true);
         MainMenuButton.gameObject.SetActive(true);
-	}
 
-	public override void Deactivate(bool animate = true)
-	{
-		activated = false;
+        // Pause game.
+        if (Player.Exists())
+        {
+            Player.use.PauseGame();
+        }
+
+        // Animate trophy button if any new or completed challenges.
+        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
+        {
+            if (challenge.Completed || !challenge.Viewed)
+            {
+                TrophyButton.gameObject.animation.Play("ButtonActive");
+                break;
+            }
+        }
+    }
+
+    public override void Deactivate(bool animate = true)
+    {
+        activated = false;
 
         gameObject.SetActive(false);
+
+        // Unpause game.
+        if (Player.Exists())
+        {
+            Player.use.UnpauseGame();
+        }
+    }
+
+    public void DisableButtons()
+    {
+        SocialButton.gameObject.SetActive(false);
+        SettingsButton.gameObject.SetActive(false);
+        TrophyButton.gameObject.SetActive(false);
+        ResumeButton.gameObject.SetActive(false);
+        MainMenuButton.gameObject.SetActive(false);
     }
 }
