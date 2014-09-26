@@ -285,6 +285,12 @@ public class Condition
                 Debug.Log("Comparer Equal added.");
                 return true;
             }
+            else if (readValue == "Unequal")
+            {
+                param = Functor.Unequal<T>();
+                Debug.Log("Comparer Unequal added.");
+                return true;
+            }
             else
             {
                 Debug.LogError(key + " parameter value not valid!");

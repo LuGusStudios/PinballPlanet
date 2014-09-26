@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// A condition that is met by comparing the score.
+/// A condition that is met by checking how many balls are in game.
 /// </summary>
 class BallsInPlayCondition : Condition
 {

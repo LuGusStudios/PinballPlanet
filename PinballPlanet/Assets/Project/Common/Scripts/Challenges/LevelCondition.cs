@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// A condition that is met by comparing the score.
+/// A condition that is met by what level is played.
 /// </summary>
 class LevelCondition : Condition
 {

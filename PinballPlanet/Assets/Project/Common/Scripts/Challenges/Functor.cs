@@ -22,4 +22,10 @@ public static class Functor
     {
         return delegate(T lhs, T rhs) { return lhs.CompareTo(rhs) == 0; };
     }
+
+    public static Func<T, T, bool> Unequal<T>()
+       where T : IComparable<T>
+    {
+        return delegate(T lhs, T rhs) { return lhs.CompareTo(rhs) != 0; };
+    }
 }

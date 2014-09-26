@@ -9,13 +9,22 @@ public class StepChallengesMenu : IMenuStep
     protected Button SettingsButton = null;
     protected Vector3 OriginalPosition = Vector3.zero;
     protected TextMesh StarsText = null;
+    protected Transform StarIcon = null;
 
-    public static int MaxChallenges = 4;
     protected Transform ChallengesTopTransform = null;
     protected Transform ChallengesBotTransform = null;
     public GameObject ChallengePrefab;
 
-    public List<Pair<Button, Challenge>> CompletedChallengeButtons = null;
+    public GameObject StarPrefab;
+    private float _starAnimTime = 0.4f;
+    private float _starAnimDelay = 0.15f;
+    private float _challengeAnimTime = 0.6f;
+
+    protected ILugusCoroutineHandle _updateChallengesHandle = null;
+
+    private int _oldStars = 0;
+
+    public List<Pair<GameObject, Challenge>> ChallengeObjects = null;
 
     public Sprite MissionIconCheck = null;
 
@@ -78,19 +87,26 @@ public class StepChallengesMenu : IMenuStep
             Debug.Log("StepMainMenu: Missing challenge bottom transform button.");
         }
 
+        if (StarIcon == null)
+        {
+            StarIcon = transform.FindChild("MissionStar");
+        }
+        if (StarIcon == null)
+        {
+            Debug.Log("StepMainMenu: Missing challenge Star Icon.");
+        }
+
         OriginalPosition = transform.position;
 
         // Initialize challenge manager by calling it.
         ChallengeManager.use.enabled = true;
 
         // Add first challenges.
-        int nrChallenges = ChallengeManager.use.CurrentChallenges.Count;
-        if (nrChallenges < MaxChallenges)
+        ChallengeManager.use.FillChallenges();
+        ChallengeObjects = new List<Pair<GameObject, Challenge>>();
+        for (int i = 0; i < PlayerData.MaxChallenges; i++)
         {
-            for (int i = 0; i < MaxChallenges - nrChallenges; i++)
-            {
-                ChallengeManager.use.AddNewChallenge();
-            }
+            ChallengeObjects.Add(new Pair<GameObject, Challenge>(null, null));
         }
     }
 
@@ -110,7 +126,7 @@ public class StepChallengesMenu : IMenuStep
 
         if (ChallengesButton.pressed)
         {
-            if(Application.loadedLevelName == "Pinball_MainMenu")
+            if (Application.loadedLevelName == "Pinball_MainMenu")
                 MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu, false);
             else
                 MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
@@ -123,99 +139,11 @@ public class StepChallengesMenu : IMenuStep
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
         }
-
-        if (CompletedChallengeButtons != null)
-        {
-            foreach (var buttonChallenge in CompletedChallengeButtons)
-            {
-                // Check if challenge button is pressed.
-                if (buttonChallenge.First.pressed)
-                {
-                    Debug.Log("Replacing completed challenge.");
-
-                    // Remove challenge and add new one.
-                    buttonChallenge.Second.Done = true;
-                    ChallengeManager.use.ReplaceChallenge(buttonChallenge.Second);
-
-                    // Add stars.
-                    PlayerData.use.Stars += buttonChallenge.Second.StarsReward;
-
-                    // Save data.
-                    PlayerData.use.Save();
-
-                    UpdateChallenges();
-                }
-            }
-        }
     }
 
     public override void Activate(bool animate = true)
     {
         LugusCoroutines.use.StartRoutine(ActivateRoutine());
-    }
-
-    private void UpdateChallenges()
-    {
-        // Destroy all challenge objects.
-        foreach (Transform child in transform)
-        {
-            if (child.name == "Challenge(Clone)")
-                Destroy(child.gameObject);
-        }
-
-        // Add challenges when some are empty.
-        int nrChallenges = ChallengeManager.use.CurrentChallenges.Count;
-        if (nrChallenges < MaxChallenges)
-        {
-            for (int i = 0; i < MaxChallenges - nrChallenges; i++)
-            {
-                ChallengeManager.use.AddNewChallenge();
-            }
-        }
-
-        // Add new challenge object.
-        int count = 0;
-        CompletedChallengeButtons = new List<Pair<Button, Challenge>>();
-        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
-        {
-            Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (MaxChallenges - 1) * count;
-            GameObject challengeGameObj = Instantiate(ChallengePrefab, pos, Quaternion.identity) as GameObject;
-            challengeGameObj.transform.parent = gameObject.transform;
-            challengeGameObj.transform.FindChild("Challenge/Text_Challenge").GetComponent<TextMesh>().text = challenge.Description;
-
-            // Show new text.
-            if (challenge.Viewed)
-                challengeGameObj.transform.FindChild("Challenge/Text_New").gameObject.SetActive(false);
-            else
-                challenge.Viewed = true;
-
-            if (challenge.Completed)
-            {
-                // Set icon sprite.
-                challengeGameObj.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
-
-                // Allow to remove completed challenges in main menu.
-                if (Application.loadedLevelName == PlayerData.MainLvlName)
-                {
-                    // Enable button.
-                    Button challengeButton = challengeGameObj.transform.FindChild("Challenge").GetComponent<Button>();
-                    challengeButton.enabled = true;
-                    CompletedChallengeButtons.Add(new Pair<Button, Challenge>(challengeButton, challenge));
-
-                    // Enable animation.
-                    challengeGameObj.transform.FindChild("Challenge").GetComponent<Animator>().enabled = true;
-                }
-            }
-
-            ++count;
-        }
-    }
-
-    public override void Deactivate(bool animate = true)
-    {
-        activated = false;
-
-        gameObject.SetActive(false);
     }
 
     protected IEnumerator ActivateRoutine()
@@ -235,9 +163,226 @@ public class StepChallengesMenu : IMenuStep
             (MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu] as StepPauseMenu).DisableButtons();
         }
 
+        // Update stars.
+        _oldStars = PlayerData.use.Stars;
+        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
+        {
+            if (challenge.Completed)
+            {
+                // Add challenge stars.
+                PlayerData.use.Stars += challenge.StarsReward;
+            }
+        }
+
+        // Save.
+        PlayerData.use.Save();
+
+        // Wait frame.
         yield return null;
 
         // Show challenges.
-        UpdateChallenges();
+        _updateChallengesHandle = LugusCoroutines.use.StartRoutine(UpdateChallenges());
+    }
+
+    public override void Deactivate(bool animate = true)
+    {
+        activated = false;
+        gameObject.SetActive(false);
+
+        // Replace completed challenges.
+        foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
+        {
+            if (challengeObj.Second != null)
+            {
+                if (challengeObj.Second.Completed)
+                {
+                    ChallengeManager.use.ReplaceChallenge(challengeObj.Second);
+                    challengeObj.Second = null;
+                    Destroy(challengeObj.First);
+                }
+            }
+        }
+
+        // Destroy all remaining stars.
+        foreach (GameObject star in GameObject.FindGameObjectsWithTag("ChallengeStar"))
+        {
+            Destroy(star);
+        } 
+
+        // Stop any update coroutines still going on.
+        if (_updateChallengesHandle != null && _updateChallengesHandle.Running)
+            _updateChallengesHandle.StopRoutine();
+    }
+
+    // Updates challenges and does challenge animations.
+    private IEnumerator UpdateChallenges()
+    {
+        // Fill challenges when some are empty.
+        ChallengeManager.use.FillChallenges();
+        int nrChallenges = ChallengeManager.use.CurrentChallenges.Count;
+        if (nrChallenges < PlayerData.MaxChallenges)
+        {
+            for (int i = 0; i < PlayerData.MaxChallenges - nrChallenges; i++)
+            {
+                ChallengeObjects.Add(new Pair<GameObject, Challenge>(null, null));
+            }
+        }
+
+        // Set text to value before completed challenges stars were added so that animation can be done.
+        foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
+        {
+            if (starText != null)
+                starText.text = _oldStars.ToString();
+        }
+
+        // Update challenge objects.
+        yield return LugusCoroutines.use.StartRoutine(UpdateChallengeObjects());
+
+        // Give stars for completed challenges.
+        int count = 0;
+        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
+        {
+            if (challenge.Completed)
+            {
+                // Set icon sprite.
+                ChallengeObjects[count].First.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
+
+                // Show stars animation.
+                for (int i = 0; i < challenge.StarsReward; i++)
+                {
+                    // Spawn star.
+                    GameObject star = Instantiate(StarPrefab) as GameObject;
+                    star.transform.position = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
+
+                    // Play star animation.
+                    star.MoveTo(StarIcon).Time(_starAnimTime).EaseType(iTween.EaseType.easeOutQuad).Execute();
+
+                    // Wait for animation to end.
+                    yield return new WaitForSeconds(_starAnimTime);
+
+                    // Update star text mesh.
+                    foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
+                    {
+                        if (starText != null)
+                            starText.text = (_oldStars + 1 + i).ToString();
+                    }
+
+                    // Destroy star.
+                    Destroy(star);
+                }
+            }
+
+            ++count;
+        }
+
+        // Update completed challenges.
+        count = 0;
+        foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
+        {
+            if (challengeObj.Second.Completed)
+            {
+                // Replace old with new challenge.
+                ChallengeManager.use.ReplaceChallenge(challengeObj.Second);
+
+                // Make old challenge fly off.
+                Vector3 destPos = challengeObj.First.transform.position.xAdd(15.0f);
+                challengeObj.First.MoveTo(destPos).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeInBack).Execute();
+
+                // Set challenge to null so that it will be updated to new one next time.
+                challengeObj.Second = null;
+
+                // Wait for animation to end.
+                yield return new WaitForSeconds(_challengeAnimTime);
+
+                // Destroy game object.
+                Destroy(challengeObj.First);
+                challengeObj.First = null;
+            }
+
+            ++count;
+        }
+
+        // Update challenge objects.
+        LugusCoroutines.use.StartRoutine(UpdateChallengeObjects());
+    }
+
+    // Updates the UI representation of the challenges.
+    private IEnumerator UpdateChallengeObjects()
+    {
+        // Show challenges.
+        int count = 0;
+        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
+        {
+            // Show new challenge.
+            if (ChallengeObjects[count].Second == null)
+            {
+                // Set pos in window.
+                Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (PlayerData.MaxChallenges - 1) * count;
+
+                // Instantiate challenge game object.
+                GameObject challengeGameObj = Instantiate(ChallengePrefab, pos, Quaternion.identity) as GameObject;
+
+                // Set parent.
+                challengeGameObj.transform.parent = gameObject.transform;
+
+                // Update description.
+                challengeGameObj.transform.FindChild("Challenge/Text_Challenge").GetComponent<TextMesh>().text = challenge.Description;
+
+                // Store.
+                ChallengeObjects[count] = new Pair<GameObject, Challenge>(challengeGameObj, challenge);
+            }
+
+            // Hide new text.
+            if (ChallengeObjects[count].Second.Viewed)
+            {
+                ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject.SetActive(false);
+            }
+            else
+            {
+                // Hide untill animation.
+                ChallengeObjects[count].First.SetActive(false);
+
+                // Hide new after a while.  
+                ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject.SetActive(true);
+                LugusCoroutines.use.StartRoutine(HideGameObject(ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject, 2.0f));
+            }
+
+            ++count;
+        }
+
+        // Animate unviewed challenges.
+        foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
+        {
+            if (!challengeObj.Second.Viewed)
+            {
+                // Unhide for animation.
+                challengeObj.First.SetActive(true);
+
+                // Set to viewed.
+                challengeObj.Second.Viewed = true;
+
+                // Scale of challenge object before animation;
+                Vector3 oldScale = challengeObj.First.transform.localScale;
+
+                // Make new challenge pop in.
+                Vector3 destPos = challengeObj.First.transform.position;
+                challengeObj.First.transform.localScale = Vector3.zero;
+                challengeObj.First.ScaleTo(oldScale).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeOutBack).Execute();
+
+                // Wait for animation to end.
+                Debug.Log("Playing challenge animation.");
+                yield return new WaitForSeconds(_challengeAnimTime);
+            }
+        }
+    }
+
+    // Hides a game object with a delay.
+    private IEnumerator HideGameObject(GameObject target, float delay)
+    {
+        // Wait for delay.
+        yield return new WaitForSeconds(delay);
+
+        if (target != null)
+            target.SetActive(false);
     }
 }

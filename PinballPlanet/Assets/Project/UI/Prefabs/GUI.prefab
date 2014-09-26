@@ -835,7 +835,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100098
 GameObject:
   m_ObjectHideFlags: 1
@@ -1344,7 +1344,7 @@ GameObject:
   - 65: {fileID: 6500036}
   - 114: {fileID: 11400106}
   m_Layer: 22
-  m_Name: Button_GooglePlus
+  m_Name: Button_LugusFB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7302,6 +7302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChallengePrefab: {fileID: 100002, guid: edb13004220c4924295598a629a07fdb, type: 2}
+  StarPrefab: {fileID: 100000, guid: 1df9ffffd8ec176458346a479ef829a1, type: 2}
   MissionIconCheck: {fileID: 21300000, guid: 345eb48c30e90b841970952e11814511, type: 3}
 --- !u!114 &11400100
 MonoBehaviour:
@@ -8668,7 +8669,7 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bf28557a36f86f9408660b5a68d16248, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 050f92d9bec84214bb58d1d0a6fe398e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!212 &21200072
 SpriteRenderer:
