@@ -1,14 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--
+  
+  Conditions
+  **********
+  
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+  <Condition>
+    <Type>All</Type>
+    <Parameters>
+      <MeetOnce>false</MeetOnce>
+      <CountToMeet>1</CountToMeet>
+      <CountChangedOnly>false</CountChangedOnly>
+      <LevelLoadReset>false</LevelLoadReset>
+    </Parameters>
+  </Condition>
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
+  <Condition>
+    <Type>Score</Type>
+    <Parameters>
+      <Value>0</Value>
+      <Comparer>Greater</Comparer>
+    </Parameters>
+  </Condition>
+  
+  <Condition>
+    <Type>ObjectHit</Type>
+    <Parameters>
+      <ObjectName>Scene or Prefab object name</ObjectName>
+      <ShouldHit>true</ShouldHit>
+    </Parameters>
+  </Condition>
+  
+  <Condition>
+    <Type>Level</Type>
+    <Parameters>
+      <Name>Pinball_MainMenu</Name>
+      <Comparer>Equal</Comparer>
+    </Parameters>
+  </Condition>
+  
+  <Condition>
+    <Type>InputKey</Type>
+    <Parameters>
+      <Key>string</Key>
+      <Comparer>Equal</Comparer>
+      <UseOnce>false</UseOnce>
+    </Parameters>
+  </Condition>
+  
+  <Condition>
+    <Type>Flipper</Type>
+    <Parameters>
+      <Flipper>string</Flipper>      ->   RightFlipper/LeftFlipper
+      <Comparer>Equal</Comparer>
+      <UseOnce>false</UseOnce>
+    </Parameters>
+  </Condition>
+  
+  <Condition>
+    <Type>ButtonPressed</Type>
+    <Parameters>
+      <Name>string</Name>
+    </Parameters>
+  </Condition>
+  
+  <Condition>
+    <Type>BallsInPlay</Type>
+    <Parameters>
+      <Value>0</Value>
+      <Comparer>Equal</Comparer>
+    </Parameters>
+  </Condition>
+  
+  <Condition>
+    <Type>BallCount</Type>
+    <Parameters>
+      <Value>0</Value>
+      <Comparer>Equal</Comparer>
+    </Parameters>
+  </Condition>
+  
+  Level Keys
+  **********
+  Mine, Pirate, Halloween, MainMenu
+  
+  Level Names
+  ***********
+  Pinball_Mine, Pinball_Pirate, Pinball_Halloween, Pinball_MainMenu
+  
+  Comparers
+  *********
+  Greater, Less, Equal, Unequal
+
+  -->
+
 <Challenges>
+
+  <Challenge>
+    <ID>ClickChallengesButton</ID>
+    <Stars>10</Stars>
+    <TextKey>Click the challenges button.</TextKey>
+    <Priority>1</Priority>
+    <Condition>
+      <Type>ButtonPressed</Type>
+      <Parameters>
+        <Name>Button_Trophy</Name>
+        <MeetOnce>true</MeetOnce>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
+    <ID>ClickChallengesButton2</ID>
+    <Stars>10</Stars>
+    <TextKey>Click the challenges button.</TextKey>
+    <Priority>1</Priority>
+    <Condition>
+      <Type>ButtonPressed</Type>
+      <Parameters>
+        <Name>Button_Trophy</Name>
+        <MeetOnce>true</MeetOnce>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
+    <ID>PirateBetween1000Score5000Score</ID>
+    <TextKey>Get a score between 1000 and 5000 in the pirate level.</TextKey>
+    <!--<Level>Pirate</Level>-->
+    <Priority>4</Priority>
+    <Condition>
+      <Type>Score</Type>
+      <Parameters>
+        <Value>999</Value>
+        <Comparer>Greater</Comparer>
+      </Parameters>
+    </Condition>
+    <Condition>
+      <Type>Score</Type>
+      <Parameters>
+        <Value>5001</Value>
+        <Comparer>Less</Comparer>
+      </Parameters>
+    </Condition>
+    <Condition>
+      <Type>BallCount</Type>
+      <Parameters>
+        <Value>0</Value>
+        <Comparer>Equal</Comparer>
+      </Parameters>
+    </Condition>
+    <Condition>
+      <Type>Level</Type>
+      <Parameters>
+        <Name>Pirate</Name>
+        <Comparer>Equal</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
+    <ID>500PointsLeftFlipper</ID>
+    <TextKey>Get 500 points using only the left flipper.</TextKey>
+    <Priority>3</Priority>
+    <Condition>
+      <Type>Flipper</Type>
+      <Parameters>
+        <Flipper>RightFlipper</Flipper>
+        <Comparer>Unequal</Comparer>
+        <UseOnce>true</UseOnce>
+        <LevelLoadReset>true</LevelLoadReset>
+      </Parameters>
+    </Condition>
+    <Condition>
+      <Type>Score</Type>
+      <Parameters>
+        <Value>499</Value>
+        <Comparer>Greater</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
+
+  <Challenge>
+    <ID>NoHitCannon</ID>
+    <TextKey>Finish the pirate level without using the cannon.</TextKey>
+    <!--<Level>Pirate</Level>-->
+    <Priority>2</Priority>
+    <Condition>
+      <Type>ObjectHit</Type>
+      <Parameters>
+        <ObjectName>ShipCannon</ObjectName>
+        <ShouldHit>false</ShouldHit>
+        <LevelLoadReset>true</LevelLoadReset>
+      </Parameters>
+    </Condition>
+    <Condition>
+      <Type>BallCount</Type>
+      <Parameters>
+        <Value>0</Value>
+        <Comparer>Equal</Comparer>
+      </Parameters>
+    </Condition>
+  </Challenge>
 
   <Challenge>
     <ID>Score3000</ID>
     <TextKey>Score more than 3000 points.</TextKey>
+    <Priority>2</Priority>
     <Condition>
       <Type>Score</Type>
       <Parameters>
-        <Value>3000</Value>
+        <Value>2999</Value>
         <Comparer>Greater</Comparer>
       </Parameters>
     </Condition>
@@ -17,12 +221,13 @@
   <Challenge>
     <ID>Score5000LvlPirate</ID>
     <Stars>3</Stars>
-    <Level>Pirate</Level>
+    <!--<Level>Pirate</Level>-->
     <TextKey>Score more than 5000 points in the pirate level.</TextKey>
+    <Priority>2</Priority>
     <Condition>
       <Type>Score</Type>
       <Parameters>
-        <Value>5000</Value>
+        <Value>4999</Value>
         <Comparer>Greater</Comparer>
       </Parameters>
     </Condition>
@@ -36,14 +241,15 @@
   </Challenge>
 
   <Challenge>
-    <ID>BallsLost3</ID>
-    <TextKey>Lose 3 balls in a single level.</TextKey>
+    <ID>BallsLost5</ID>
+    <TextKey>Lose 5 balls in a single level.</TextKey>
+    <Priority>3</Priority>
     <Condition>
       <Type>BallsInPlay</Type>
       <Parameters>
         <Value>0</Value>
         <Comparer>Equal</Comparer>
-        <CountToMeet>3</CountToMeet>
+        <CountToMeet>5</CountToMeet>
         <CountChangedOnly>true</CountChangedOnly>
         <LevelLoadReset>true</LevelLoadReset>
       </Parameters>
@@ -53,6 +259,7 @@
   <Challenge>
     <ID>Multiball1</ID>
     <TextKey>Get a multiball.</TextKey>
+    <Priority>3</Priority>
     <Condition>
       <Type>BallsInPlay</Type>
       <Parameters>
@@ -65,6 +272,7 @@
   <Challenge>
     <ID>Score6000</ID>
     <TextKey>Score more than 6000 points.</TextKey>
+    <Priority>3</Priority>
     <Condition>
       <Type>Score</Type>
       <Parameters>
@@ -74,25 +282,19 @@
     </Condition>
   </Challenge>
 
-  <!--
-  
-  Example Conditions
-  ******************
-  
-  <Condition>
-    <Type>All</Type>
-    <Parameters>
-      <MeetOnce>false</MeetOnce>
-      <CountToMeet>1</CountToMeet>
-      <CountChangedOnly>false</CountChangedOnly>
-      <LevelLoadReset>false</LevelLoadReset>
-    </Parameters>
-  </Condition>
-  
-  Level Keys
-  **********
-  Mine, Pirate, Halloween, MainMenu
-  -->
+  <Challenge>
+    <ID>HitCrystal</ID>
+    <TextKey>Collect 10 crystal shards.</TextKey>
+    <!--<Level>Mine</Level>-->
+    <Priority>3</Priority>
+    <Condition>
+      <Type>ObjectHit</Type>
+      <Parameters>
+        <ObjectName>CrystalShard_Parent</ObjectName>
+        <CountToMeet>10</CountToMeet>
+      </Parameters>
+    </Condition>
+  </Challenge>
 
 </Challenges>
 

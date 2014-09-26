@@ -7,6 +7,9 @@ public class Challenge
     // Unique ID
     public string ID = "";
 
+    // Priority in which challenge is given.
+    public int Priority = int.MaxValue;
+
     // Description
     public string Description = "";
 
@@ -15,7 +18,6 @@ public class Challenge
 
     // Completed
     public bool Completed = false;
-    public bool Done = false;
 
     // Has been viewed by player.
     public bool Viewed = false;
@@ -42,14 +44,28 @@ public class Challenge
     // Returns if challenge is completed.
     public bool IsCompleted()
     {
-        foreach (Condition condition in Conditions)
+        bool met = true;
+
+        // Check if in correct level.
+        if (LevelKey != LevelKey.None)
         {
-            // Return false if one condition isn't met.
-            if (!condition.IsMet())
-                return false;
+            if (Application.loadedLevelName != "Pinball_" + LevelKey.ToString())
+                met = false;
         }
 
-        Completed = true;
-        return true;
+        // False when a single condition is not met.
+        foreach (Condition condition in Conditions)
+        {
+            met &= condition.IsMet();
+        }
+
+        // Set to completed.
+        if (met)
+        {
+            Debug.Log("Challenge completed: " + ID);
+            Completed = true;
+        }
+
+        return met;
     }
 }

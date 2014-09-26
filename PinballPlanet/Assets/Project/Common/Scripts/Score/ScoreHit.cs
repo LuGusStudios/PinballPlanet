@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections.Generic;
+
+public delegate void HitEventHandler();
 
 public class ScoreHit : MonoBehaviour
 {
@@ -6,11 +9,18 @@ public class ScoreHit : MonoBehaviour
     public AudioClip sound = null;
     public Color color = Color.white;
 
+    // Hit event.
+    public event HitEventHandler Hit;
 
     // Use this for initialization
     void Start()
     {
-
+        // Let all 'ObjectHitCondition' know this object was created.
+        List<Condition> hitConditions = ChallengeManager.use.GetConditionsOfType<ObjectHitCondition>();
+        foreach (Condition hitCond in hitConditions)
+        {
+            (hitCond as ObjectHitCondition).ScoreHitObjectCreated(this);
+        }
     }
 
     // Update is called once per frame
@@ -25,20 +35,12 @@ public class ScoreHit : MonoBehaviour
         // Only give score if the collider is a ball.
         if (collision.collider.gameObject.tag != "Ball")
             return;
-        //Debug.Log("" + Time.frameCount + " -> " + this.name + " Collided with " + collision.collider.name );
 
         DoScore(collision.contacts[0].point);
 
-
-        //foreach (ContactPoint contact in collision.contacts)
-        //{
-        //    Debug.DrawRay(contact.point, contact.normal, Color.white);
-        //}
-        //if (collision.relativeVelocity.magnitude > 2)
-        //    audio.Play();
-
-
-        //.bounds.Contains()
+        // Call hit event.
+        if (Hit != null)
+            Hit();
     }
 
     void OnTriggerEnter(Collider other)
@@ -48,17 +50,21 @@ public class ScoreHit : MonoBehaviour
             return;
 
         DoScore(other.transform.position);
+
+        // Call hit event.
+        if (Hit != null)
+            Hit();
     }
 
 
     public void DoScore(Vector3 point)
     {
-        ScoreManager.use.ShowScore(score, point.zAdd(Random.Range(10, 20)), 2.0f, sound, color);
+        ScoreManager.use.ShowScore(score, point.zAdd(Random.Range(10, 20)), 2.0f, sound, color, gameObject);
     }
 
     public void DoScore()
     {
-        ScoreManager.use.ShowScore(score, transform.position.zAdd(Random.Range(10, 20)), 2.0f, sound, color);
+        ScoreManager.use.ShowScore(score, transform.position.zAdd(Random.Range(10, 20)), 2.0f, sound, color, gameObject);
     }
 
 }

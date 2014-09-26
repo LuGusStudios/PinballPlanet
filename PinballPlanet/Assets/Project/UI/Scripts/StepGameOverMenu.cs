@@ -117,7 +117,7 @@ public class StepGameOverMenu : IMenuStep
         int i = 0;
         foreach (Challenge challenge in ChallengeManager.use.CompletedLvlChallenges)
         {
-            Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (StepChallengesMenu.MaxChallenges - 1) * i;
+            Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (PlayerData.MaxChallenges - 1) * i;
             GameObject challengeGameObj = Instantiate(CompletedChallengePrefab, pos, Quaternion.identity) as GameObject;
             challengeGameObj.transform.parent = gameObject.transform;
             challengeGameObj.transform.FindChild("Text_Challenge").GetComponent<TextMeshWrapper>().SetText(challenge.Description);

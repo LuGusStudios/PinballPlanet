@@ -9,7 +9,7 @@ public class FlipperNew : MonoBehaviour
     private JointMotor _reverseMotor;
     private float _force;
 
-    private bool _pressed = false;
+    public bool Pressed = false;
     private bool _up = false;
 
     // Use this for initialization
@@ -27,7 +27,7 @@ public class FlipperNew : MonoBehaviour
     // FixedUpdate is called once per physics calculation.
     void FixedUpdate()
     {
-        if (Input.GetKey(InputKey) || _pressed)
+        if (Input.GetKey(InputKey) || Pressed)
         {
             GetComponent<HingeJoint>().motor = _reverseMotor;
 
@@ -46,13 +46,12 @@ public class FlipperNew : MonoBehaviour
             _up = false;
         }
  
-        _pressed = false;
-
+        Pressed = false;
     }
 
     public void SetPressed()
     {
-        _pressed = true;
+        Pressed = true;
 
         if (!_up)
         {

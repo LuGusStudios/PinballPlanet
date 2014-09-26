@@ -204,6 +204,9 @@ public class StepLevelSelectMenu : IMenuStep
                 string thumbnailPath = "Shared/UI/Level" + _lvlName;
                 Sprite thumbnail = Resources.Load<Sprite>(thumbnailPath);
                 Thumbnail.sprite = thumbnail;
+
+                // Save data.
+                PlayerData.use.Save();
             }
         }
         else
@@ -387,14 +390,5 @@ public class StepLevelSelectMenu : IMenuStep
     void LoadLevel()
     {
         Application.LoadLevel("Pinball_" + _lvlName);
-    }
-
-    void OnGUI()
-    {
-        if (LugusDebug.debug)
-        {
-            if (GUI.Button(new Rect(10, 50, 120, 24), "Add 10 Stars"))
-                PlayerData.use.Stars += 10;
-        }
     }
 }

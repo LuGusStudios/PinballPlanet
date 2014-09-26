@@ -37,7 +37,7 @@ public class LugusResources : LugusSingletonExisting<LugusResourcesDefault>
 	[System.Diagnostics.Conditional("DEBUG_RESOURCES")] 
 	public static void LogResourceLoad(string text)
 	{
-		Debug.Log ("LOAD : " + text);
+		//Debug.Log ("LOAD : " + text);
 	}
 }
 

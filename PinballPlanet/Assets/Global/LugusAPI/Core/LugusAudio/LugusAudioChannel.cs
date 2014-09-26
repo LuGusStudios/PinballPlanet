@@ -38,33 +38,40 @@ public class LugusAudioChannel
 		get{ return _channelType; }
 		set{ _channelType = value; }
 	}
-	
+
+	//OLD
 	// TODO: FIXME: this doesn't work properly
 	// if we've already adjusted the percentage and applied to running tracks
 	// if we then do it again, tracks are adjusted again by percentage...
 	// possible fix: tracks should keep original volume at start and re-use that in subsequent calculations
+//	protected void UpdateVolume(float newValue)
+//	{
+//		Debug.Log(newValue);
+//		Debug.Log(_volume);
+//
+//		float changeFactor = newValue / _volume;
+//		_volume = newValue;
+//
+//		foreach( ILugusAudioTrack track in _tracks )
+//		{
+//			track.Source.volume *= changeFactor; 
+//		}
+//	}
+
+	// This method circumvents the problem above.
 	protected void UpdateVolume(float newValue)
 	{
-		Debug.Log(newValue);
-		Debug.Log(_volume);
-
-		float changeFactor = newValue / _volume;
-		_volume = newValue;
-
-		foreach( ILugusAudioTrack track in _tracks )
+		if (newValue > 1.0f || newValue < 0.0f)
 		{
-			track.Source.volume *= changeFactor; 
+			Debug.LogWarning("LuGusAudioChannel: Volume percentage " + newValue + " won't have any effect. Clamping value between 0 and 1.");
+			newValue = Mathf.Clamp01(newValue);
 		}
-	}
 
-	// This method circumvents the problem above. HOWEVER - it's pretty complex to make sure this works in all cases.
-	// Therefore, this currently exists as a directly accessible public method. Ideally, this method should later be linked to the Volume property and made protected, replacing UpdateVolume.
-	// For now, the UpdateVolume method remains as-is, without reference to track.OriginalVolume. 
-	public void UpdateVolumeFromOriginal(float newValue)
-	{
+		// When volume was previously 0, we will happily divide by zero here...
+		// C# is totally happy with this: positive value / 0 = 1.
 		float changeFactor = newValue / _volume;
-		_volume = newValue;
-		
+		_volume =  newValue;
+
 		foreach( ILugusAudioTrack track in _tracks )
 		{
 			track.Source.volume = track.OriginalVolume * changeFactor; 
@@ -158,7 +165,7 @@ public class LugusAudioChannel
 	}
 	
 	// returns the first found track that is currently playing
-	// usefull in situations where we have 1 main track (ex. backgroundmusic) and want to fade to a new track
+	// useful in situations where we have 1 main track (ex. backgroundmusic) and want to fade to a new track
 	public ILugusAudioTrack GetActiveTrack()
 	{	
 		foreach( ILugusAudioTrack t in _tracks )

@@ -47,19 +47,19 @@ public class DebugByTaps : MonoBehaviour
 		}
 		else if(topLeft && topRight && bottomRight)
 		{
-			bottomLeft = HasTouch( new Rect(0, 0, 100, 100) );
+			bottomLeft = HasTouch( new Rect(0, 0, 200, 200) );
 		}
 		else if(topLeft && topRight )
 		{
-			bottomRight = HasTouch( new Rect(Screen.width - 100, 0, 100, 100) );
+			bottomRight = HasTouch( new Rect(Screen.width - 200, 0, 200, 200) );
 		}
 		else if( topLeft )
 		{
-			topRight = HasTouch( new Rect(Screen.width - 100, Screen.height - 100, 100, 100) );
+			topRight = HasTouch( new Rect(Screen.width - 200, Screen.height - 200, 200, 200) );
 		}
 		else
 		{
-			topLeft = HasTouch( new Rect(0, Screen.height - 100, 100, 100) );
+			topLeft = HasTouch( new Rect(0, Screen.height - 200, 200, 200) );
 			resetFutureTime = Time.time + 5;
 		}
 		

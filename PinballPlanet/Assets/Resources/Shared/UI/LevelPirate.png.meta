@@ -1,9 +1,8 @@
 fileFormatVersion: 2
-guid: 2075276a0576e234a9e89c46be5a34a2
+guid: 66bece00acbf928488ad51ec1f8e4b50
 TextureImporter:
   fileIDToRecycleName:
-    21300000: LevelShip
-    21300002: LevelPirate
+    21300000: LevelPirate
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

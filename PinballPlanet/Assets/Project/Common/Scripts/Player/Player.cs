@@ -274,4 +274,14 @@ public class Player : LugusSingletonExisting<Player>
             }
         }
     }
+
+    public void PauseGame()
+    {
+        Time.timeScale = float.Epsilon;
+    }
+
+    public void UnpauseGame()
+    {
+        Time.timeScale = 1.0f;
+    }
 }

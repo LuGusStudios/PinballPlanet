@@ -51,7 +51,10 @@ public class PlayerData : MonoBehaviour
 
     // List of high scores for each level.
     public Dictionary<string, List<int>> LevelsHighscores;
-    public const int MaxHighScores = 5;
+    public static int MaxHighScores = 5;
+
+    // Max challenges at a time.
+    public static int MaxChallenges = 4;
 
     // Level strings.
     public const string MainLvlName = "Pinball_MainMenu";
@@ -89,7 +92,6 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-
     // Total stars earned.
     private int _stars = 0;
     public int Stars
@@ -104,9 +106,6 @@ public class PlayerData : MonoBehaviour
                 if (starText != null)
                     starText.text = value.ToString();
             }
-
-            // Save data.
-            Save();
         }
     }
 
@@ -146,6 +145,8 @@ public class PlayerData : MonoBehaviour
     // Save data.
     public void Save()
     {
+        Debug.Log("------ Saving player data. ------");
+
         // Initialize lists.
         if (LevelsHighscores == null)
         {
@@ -181,7 +182,7 @@ public class PlayerData : MonoBehaviour
         foreach (Challenge challenge in ChallengeManager.use.AllChallenges)
         {
             if (challenge.Completed)
-                LugusConfig.use.User.SetBool("Challenge_" + challenge.ID + "_Done", challenge.Done, true);
+                LugusConfig.use.User.SetBool("Challenge_" + challenge.ID + "_Done", challenge.Completed, true);
         }
 
         // Save to files.
@@ -192,6 +193,8 @@ public class PlayerData : MonoBehaviour
     // Load Data.
     public void Load()
     {
+        Debug.Log("------ Loading player data. ------");
+
         // Load scores.
         foreach (KeyValuePair<string, List<int>> lvlHighScores in LevelsHighscores)
         {
@@ -207,9 +210,6 @@ public class PlayerData : MonoBehaviour
             }
             Sort(lvlHighScores.Key);
         }
-
-        // Load stars.
-        Stars = LugusConfig.use.User.GetInt("Stars", 0);
 
         // Load levels unlocked.
         string[] lvlNames = new string[LevelsUnlocked.Count];
@@ -227,10 +227,13 @@ public class PlayerData : MonoBehaviour
                 challenge.Completed = true;
                 if (LugusConfig.use.User.GetBool("Challenge_" + challenge.ID + "_Done", false))
                 {
-                    challenge.Done = true;
+                    challenge.Completed = true;
                 }
             }
         }
+
+        // Load stars.
+        Stars = LugusConfig.use.User.GetInt("Stars", 0);
     }
 
     // Adds a highscore if high enough.

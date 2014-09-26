@@ -45,7 +45,7 @@ public class LugusAudioSource : MonoBehaviour
 	}
 	
 	// Use this for initialization
-	void Start () 
+	protected void Start () 
 	{
 		AssignKey();
 		
@@ -64,10 +64,5 @@ public class LugusAudioSource : MonoBehaviour
 	protected void FetchClip()
 	{
 		clip = LugusResources.use.GetAudio(key);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }
