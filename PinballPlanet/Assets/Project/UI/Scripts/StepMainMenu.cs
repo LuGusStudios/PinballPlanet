@@ -188,6 +188,8 @@ public class StepMainMenu : IMenuStep
             {
                 LugusConfig.use.User.ClearAllData();
                 LugusConfig.use.SaveProfiles();
+                PlayerData.use.Load();
+                ChallengeManager.use.CurrentChallenges.Clear();
                 Application.LoadLevel(Application.loadedLevel);
             }
         }

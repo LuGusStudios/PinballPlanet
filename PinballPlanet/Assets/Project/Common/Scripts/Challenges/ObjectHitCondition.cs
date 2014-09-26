@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// A condition that is met by comparing the score.
+/// A condition that is met hitting an object.
 /// </summary>
 class ObjectHitCondition : Condition
 {

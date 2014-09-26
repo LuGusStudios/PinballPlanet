@@ -7,6 +7,9 @@ public class Challenge
     // Unique ID
     public string ID = "";
 
+    // Priority in which challenge is given.
+    public int Priority = int.MaxValue;
+
     // Description
     public string Description = "";
 
@@ -15,7 +18,6 @@ public class Challenge
 
     // Completed
     public bool Completed = false;
-    public bool Done = false;
 
     // Has been viewed by player.
     public bool Viewed = false;

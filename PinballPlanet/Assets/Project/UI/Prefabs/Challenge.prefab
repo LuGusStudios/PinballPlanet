@@ -76,9 +76,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400008}
-  - 65: {fileID: 6500002}
-  - 114: {fileID: 11400004}
-  - 95: {fileID: 9500000}
   m_Layer: 22
   m_Name: Challenge
   m_TagString: Untagged
@@ -202,33 +199,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 1.83911145, z: 0}
   m_Center: {x: 4.92999983, y: 0, z: 0}
---- !u!65 &6500002
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100008}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 9.47999954, y: 1.70000005, z: 1}
-  m_Center: {x: 3.66000009, y: 0, z: 0}
---- !u!95 &9500000
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100008}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4a66bfe40f69b7547bd1f5da1baca01d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
 --- !u!102 &10200000
 TextMesh:
   serializedVersion: 3
@@ -303,20 +273,6 @@ MonoBehaviour:
   allowSmallerCharacterSize: 1
   allowSplit: 1
   textMesh: {fileID: 0}
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100008}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fce82d0c6dd23e4087d1546efcfaf13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scaleDownFactor: .899999976
-  pressSoundKey: 
-  clickAnimationTime: .300000012
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

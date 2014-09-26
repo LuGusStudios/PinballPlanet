@@ -33,7 +33,7 @@ public class ChallengeManager : MonoBehaviour
     public List<Challenge> CurrentChallenges = new List<Challenge>();
     private List<Challenge> _uncompletedChallenges = new List<Challenge>();
 
-    // Dictionary of all possible challenges, with a bool indicating completion.
+    // All possible challenges.
     public List<Challenge> AllChallenges = new List<Challenge>();
 
     // Completed challenges in a level.
@@ -101,6 +101,19 @@ public class ChallengeManager : MonoBehaviour
                                 Debug.LogError("Stars parameter value invalid.");
                         }
 
+                        // Read priority.
+                        else if (reader.tagName == "Priority")
+                        {
+                            int result;
+                            if (int.TryParse(reader.content, out result))
+                            {
+                                newChallenge.Priority = result;
+                                Debug.Log("Priority: " + result);
+                            }
+                            else
+                                Debug.LogError("Priority parameter value invalid.");
+                        }
+
                         // Read required level.
                         else if (reader.tagName == "Level")
                         {
@@ -124,10 +137,25 @@ public class ChallengeManager : MonoBehaviour
                     }
                 }
 
-                // Add challenges.
-                AllChallenges.Add(newChallenge);
+                // Make sure required keys are found before adding challenge.
+                if (newChallenge.ID == "")
+                    Debug.Log("Challenge ID not found! Challenge not added.");
+                else if (newChallenge.Description == "")
+                    Debug.Log("Challenge TextKey not found! Challenge not added.");
+                else
+                    AllChallenges.Add(newChallenge);
             }
         }
+
+        // Sort challenges.
+        AllChallenges.Sort(delegate(Challenge first, Challenge second) { return first.Priority.CompareTo(second.Priority); });
+
+        Debug.Log("*** Sorted challenges. ***");
+        foreach (Challenge chall in AllChallenges)
+        {
+            Debug.Log("Challenge " + chall.ID + " Priority: " + chall.Priority);
+        }
+        Debug.Log("******");
     }
 
     // Fill in condition with TinyXmlReader.
@@ -167,6 +195,14 @@ public class ChallengeManager : MonoBehaviour
                         case "ButtonPressed":
                             Debug.Log("New 'ButtonPressed' condition created.");
                             newCondition = new ButtonPressedCondition();
+                            break;
+                        case "InputKey":
+                            Debug.Log("New 'InputKey' condition created.");
+                            newCondition = new InputKeyCondition();
+                            break;
+                        case "Flipper":
+                            Debug.Log("New 'Flipper' condition created.");
+                            newCondition = new FlipperCondition();
                             break;
                         default:
                             Debug.LogError("Condition type not found! Make sure it's a valid type.");
@@ -214,7 +250,8 @@ public class ChallengeManager : MonoBehaviour
             {
                 // Store completed challenge.
                 CompletedLvlChallenges.Add(_uncompletedChallenges[i]);
-                _uncompletedChallenges.Remove(_uncompletedChallenges[i]);
+                //ReplaceChallenge(_uncompletedChallenges[i]);
+                //_uncompletedChallenges.Remove(_uncompletedChallenges[i]);
 
                 // Save.
                 PlayerData.use.Save();
@@ -243,45 +280,180 @@ public class ChallengeManager : MonoBehaviour
     // Removes a current challenge and adds the next one.
     public void ReplaceChallenge(Challenge challengeToRemove)
     {
-        CurrentChallenges.Remove(challengeToRemove);
+        //Debug.Log("* Start current challenges count: " + CurrentChallenges.Count);
 
-        AddNewChallenge();
+        // Remove challenge.
+        int index = CurrentChallenges.FindIndex(delegate(Challenge chall) { return chall == challengeToRemove; });
+
+        // List with possible challenges to be added.
+        List<Challenge> possibleChallenges = new List<Challenge>();
+
+        // Loops until a challenge was added or no more challenges are available to add.
+        for (int i = 0; i < AllChallenges.Count; i = i)
+        {
+            int currentCount = i;
+
+            // Add from any valid challenge with the same priority.
+            for (int j = 0; currentCount + j < AllChallenges.Count; ++j)
+            {
+                if (AllChallenges[currentCount + j].Priority != AllChallenges[currentCount].Priority)
+                {
+                    //Debug.Log("Next challenge: " + AllChallenges[currentCount + j].ID + " priority: " + AllChallenges[currentCount + j].Priority + " != " + AllChallenges[currentCount].Priority);
+                    break;
+                }
+
+                //Debug.Log("Checking to select possible challenge: " + AllChallenges[currentCount + j].ID + " with Priority: " + AllChallenges[currentCount + j].Priority);
+
+                Challenge challenge = AllChallenges[currentCount + j];
+
+                // Check if challenge is already added.
+                if (!CurrentChallenges.Contains(challenge))
+                {
+                    // Look for uncompleted challenge.
+                    if (!challenge.Completed)
+                    {
+                        // Check if required level is unlocked.
+                        if (challenge.LevelKey == LevelKey.None || PlayerData.use.LevelsUnlocked["Pinball_" + challenge.LevelKey.ToString()])
+                        {
+                            possibleChallenges.Add(challenge);
+                            //Debug.Log("Selecting possible challenge: " + challenge.ID);
+                        }
+                    }
+                }
+
+                ++i;
+            }
+
+            // Replace with random possible challenge challenge at index.
+            if (possibleChallenges.Count > 0)
+            {
+                // Generate random index.
+                int randIndex = UnityEngine.Random.Range(0, possibleChallenges.Count);
+
+                CurrentChallenges[index] = (possibleChallenges[randIndex]);
+                _uncompletedChallenges[index] = (possibleChallenges[randIndex]);
+
+                Debug.Log("Replacing challenge: " + possibleChallenges[randIndex].ID + " Rand index: " + randIndex + "/" + (possibleChallenges.Count - 1));
+                //Debug.Log("* End current challenges count: " + CurrentChallenges.Count);
+
+                return;
+            }
+        }
     }
 
     // Adds an uncompleted challenge to the current challenges list.
-    public void AddNewChallenge()
+    public void FillChallenges()
     {
-        // Find next uncompleted challenge.
-        foreach (Challenge challenge in AllChallenges)
+        // List with possible challenges to be added.
+        List<Challenge> possibleChallenges = new List<Challenge>();
+
+        // Loop until enough possible challenges or no more challenges are available.
+        for (int i = 0; possibleChallenges.Count < PlayerData.MaxChallenges - CurrentChallenges.Count && i < AllChallenges.Count; i = i)
         {
-            if (!CurrentChallenges.Contains(challenge))
+            int currentCount = i;
+
+            // Add from any valid challenge with the same priority.
+            for (int j = 0; currentCount + j < AllChallenges.Count; ++j)
             {
-                // Look for uncompleted challenge.
-                if (!challenge.Done)
+                if (AllChallenges[currentCount + j].Priority != AllChallenges[currentCount].Priority)
                 {
-                    // No required level, just add challenge.
-                    if (challenge.LevelKey == LevelKey.None)
+                    //Debug.Log("Next challenge: " + AllChallenges[currentCount + j].ID + " priority: " + AllChallenges[currentCount + j].Priority + " != " + AllChallenges[currentCount].Priority);
+                    break;
+                }
+
+                //Debug.Log("Loop i: " + currentCount + ", j: " + j + ", Nr needed: " + (PlayerData.MaxChallenges - CurrentChallenges.Count) + ", Nr found: " + possibleChallenges.Count + ", Total count: " + AllChallenges.Count);
+                //Debug.Log("Checking challenge: " + AllChallenges[currentCount + j].ID);
+                //Debug.Log("Checking to select possible challenge: " + AllChallenges[currentCount + j].ID + " with Priority: " + AllChallenges[currentCount + j].Priority);
+
+                Challenge challenge = AllChallenges[currentCount + j];
+
+                // Check if challenge is already added.
+                if (!CurrentChallenges.Contains(challenge))
+                {
+                    // Look for uncompleted challenge.
+                    if (!challenge.Completed)
                     {
-                        Debug.Log("--- New challenge added: " + challenge.ID + " ---");
-
-                        CurrentChallenges.Add(challenge);
-                        _uncompletedChallenges.Add(challenge);
-
-                        return;
-                    }
-
-                    // Check if required level is unlocked.
-                    //Debug.Log("--- Checking if challenge required level " + challenge.LevelKey.ToString() + " is unlocked. ---");
-                    else if (PlayerData.use.LevelsUnlocked["Pinball_" + challenge.LevelKey.ToString()])
-                    {
-                        Debug.Log("--- New challenge added: " + challenge.ID + " ---");
-
-                        CurrentChallenges.Add(challenge);
-                        _uncompletedChallenges.Add(challenge);
-
-                        return;
+                        // Check if required level is unlocked.
+                        if (challenge.LevelKey == LevelKey.None || PlayerData.use.LevelsUnlocked["Pinball_" + challenge.LevelKey.ToString()])
+                        {
+                            possibleChallenges.Add(challenge);
+                            //Debug.Log("Selecting possible challenge: " + challenge.ID);
+                        }
                     }
                 }
+
+                ++i;
+            }
+
+            // Keep adding challenges untill filled.
+            while (possibleChallenges.Count > 0 && CurrentChallenges.Count < PlayerData.MaxChallenges)
+            {
+                int randIndex = UnityEngine.Random.Range(0, possibleChallenges.Count);
+
+                Debug.Log("Adding challenge: " + possibleChallenges[randIndex].ID + " Rand index: " + randIndex + "/" + (possibleChallenges.Count - 1));
+
+                CurrentChallenges.Add(possibleChallenges[randIndex]);
+                _uncompletedChallenges.Add(possibleChallenges[randIndex]);
+
+                possibleChallenges.Remove(possibleChallenges[randIndex]);
+            }
+        }
+    }
+
+    // Adds an uncompleted challenge to the current challenges list.
+    public void AddChallenge()
+    {
+        // List with possible challenges to be added.
+        List<Challenge> possibleChallenges = new List<Challenge>();
+
+        // Loops until a challenge was added or no more challenges are available to add.
+        for (int i = 0; i < AllChallenges.Count; i = i)
+        {
+            int currentCount = i;
+
+            // Add from any valid challenge with the same priority.
+            for (int j = 0; currentCount + j < AllChallenges.Count; ++j)
+            {
+                if (AllChallenges[currentCount + j].Priority != AllChallenges[currentCount].Priority)
+                {
+                    //Debug.Log("Next challenge: " + AllChallenges[currentCount + j].ID + " priority: " + AllChallenges[currentCount + j].Priority + " != " + AllChallenges[currentCount].Priority);
+                    break;
+                }
+
+                //Debug.Log("Checking to select possible challenge: " + AllChallenges[currentCount + j].ID + " with Priority: " + AllChallenges[currentCount + j].Priority);
+
+                Challenge challenge = AllChallenges[currentCount + j];
+
+                // Check if challenge is already added.
+                if (!CurrentChallenges.Contains(challenge))
+                {
+                    // Look for uncompleted challenge.
+                    if (!challenge.Completed)
+                    {
+                        // Check if required level is unlocked.
+                        if (challenge.LevelKey == LevelKey.None || PlayerData.use.LevelsUnlocked["Pinball_" + challenge.LevelKey.ToString()])
+                        {
+                            possibleChallenges.Add(challenge);
+                            //Debug.Log("Selecting possible challenge: " + challenge.ID);
+                        }
+                    }
+                }
+
+                ++i;
+            }
+
+            // Add random possible challenge.
+            if (possibleChallenges.Count > 0)
+            {
+                // Generate random index.
+                int randIndex = UnityEngine.Random.Range(0, possibleChallenges.Count);
+
+                CurrentChallenges.Add(possibleChallenges[randIndex]);
+                _uncompletedChallenges.Add(possibleChallenges[randIndex]);
+
+                Debug.Log("Adding challenge: " + possibleChallenges[randIndex].ID + " Rand index: " + randIndex + "/" + (possibleChallenges.Count - 1));
+
+                return;
             }
         }
     }
@@ -310,7 +482,7 @@ public class ChallengeManager : MonoBehaviour
             foreach (Condition cond in chal.Conditions)
             {
                 // Check if correct type.
-                if(cond.GetType() == typeof(T))
+                if (cond.GetType() == typeof(T))
                 {
                     typeConditions.Add(cond);
                 }

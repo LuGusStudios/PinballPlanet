@@ -47,7 +47,7 @@ class ButtonPressedCondition : Condition
     public override void InitializeFromParameters(System.Collections.Generic.Dictionary<string, string> parameters)
     {
         // Name
-        string key = "ButtonName";
+        string key = "Name";
         if (TryParseParameter(key, out _buttonToPressName, "", ref parameters))
             parameters.Remove(key);
 

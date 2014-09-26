@@ -7,11 +7,11 @@ public class MenuManager : LugusSingletonExisting<MenuManagerDefault>
 {
 }
 
-public class MenuManagerDefault: MonoBehaviour
+public class MenuManagerDefault : MonoBehaviour
 {
-	public Dictionary<MenuTypes, IMenuStep> Menus = new Dictionary<MenuTypes, IMenuStep>();
+    public Dictionary<MenuTypes, IMenuStep> Menus = new Dictionary<MenuTypes, IMenuStep>();
 
-	protected bool firstFrame = true;
+    protected bool firstFrame = true;
 
     // Design width of the GUI
     private const float _designWidth = 10.7f;
@@ -27,10 +27,10 @@ public class MenuManagerDefault: MonoBehaviour
         get { return _designHeight; }
     }
 
-	public enum MenuTypes
-	{
-		NONE = -1,
-		GameMenu = 1,
+    public enum MenuTypes
+    {
+        NONE = -1,
+        GameMenu = 1,
         GameOverMenu = 2,
         PauseMenu = 3,
         HelpGameMenu = 4,
@@ -41,13 +41,13 @@ public class MenuManagerDefault: MonoBehaviour
         ChallengesMenu = 9,
         MainHelpMenu = 10,
         LevelSelectHelpMenu = 11,
-	}
+    }
 
     public MenuTypes StartMenu = MenuTypes.MainMenu;
     public MenuTypes ActiveMenu = MenuTypes.NONE;
 
-	public void SetupLocal()
-	{
+    public void SetupLocal()
+    {
         StepMainMenu mainMenu = transform.FindChild("MainMenu").GetComponent<StepMainMenu>();
         if (mainMenu != null)
             Menus.Add(MenuTypes.MainMenu, mainMenu);
@@ -91,10 +91,10 @@ public class MenuManagerDefault: MonoBehaviour
             Debug.LogError("MenuManager: Missing challenges menu!");
 
         StepGameMenu gameMenu = transform.FindChild("GameMenu").GetComponent<StepGameMenu>();
-		if (gameMenu != null)
-			Menus.Add(MenuTypes.GameMenu, gameMenu);
-		else
-			Debug.LogError("MenuManager: Missing game menu!");
+        if (gameMenu != null)
+            Menus.Add(MenuTypes.GameMenu, gameMenu);
+        else
+            Debug.LogError("MenuManager: Missing game menu!");
 
         StepGameOverMenu gameOverMenu = transform.FindChild("GameOverMenu").GetComponent<StepGameOverMenu>();
         if (gameOverMenu != null)
@@ -115,118 +115,118 @@ public class MenuManagerDefault: MonoBehaviour
             Debug.LogError("MenuManager: Missing game help menu!");
 
         foreach (MenuTypes key in Enum.GetValues(typeof(MenuTypes)))
-	    {
-            if(key != MenuTypes.NONE)
+        {
+            if (key != MenuTypes.NONE)
             {
                 Menus[key].SetupLocal();
                 Menus[key].ScaleElements();
             }
-	    }   
-	}
-	
-	public void SetupGlobal()
-	{
-        ActivateMenu(StartMenu);
+        }
+    }
+
+    public void SetupGlobal()
+    {
+        ActivateMenu(StartMenu, true);
 
         //Debug.Log("Saving");
         //LugusConfig.use.User.SetBool(Application.loadedLevelName, true, true);
         //LugusConfig.use.SaveProfiles();
 
         // Make sure to disable game menu in main menu.
-        if(Application.loadedLevelName == "Pinball_MainMenu")
-            Menus[MenuTypes.GameMenu].gameObject.SetActive(false);
-	}
-	
-	protected void Awake()
-	{
-		SetupLocal();
-	}
+        //if(Application.loadedLevelName == "Pinball_MainMenu")
+        //    Menus[MenuTypes.GameMenu].gameObject.SetActive(true);
+    }
 
-	protected void Start () 
-	{
-		SetupGlobal();
-	}
-	
-	protected void Update () 
-	{
-		if (firstFrame)
-			firstFrame = false;
-	}
+    protected void Awake()
+    {
+        SetupLocal();
+    }
+
+    protected void Start()
+    {
+        SetupGlobal();
+    }
+
+    protected void Update()
+    {
+        if (firstFrame)
+            firstFrame = false;
+    }
 
     protected void DeactivateAllMenus(bool animate = true)
-	{
-		foreach(IMenuStep step in Menus.Values)
-		{
-			if (firstFrame)
-			{
-				step.Deactivate(false);
-			}
-			else
-			{
-				if (step.IsActive())
-				{
-					step.Deactivate(animate);
-				}
-				else
-				{
-					step.Deactivate(false);
-				}
-			}
-		}
-	}
+    {
+        foreach (IMenuStep step in Menus.Values)
+        {
+            if (firstFrame)
+            {
+                step.Deactivate(false);
+            }
+            else
+            {
+                if (step.IsActive())
+                {
+                    step.Deactivate(animate);
+                }
+                else
+                {
+                    step.Deactivate(false);
+                }
+            }
+        }
+    }
 
     public void ActivateMenu(MenuTypes type, bool animate = true)
-	{
-		IMenuStep nextStep = null;
+    {
+        IMenuStep nextStep = null;
 
-		if (type == MenuTypes.NONE)
-		{
+        if (type == MenuTypes.NONE)
+        {
             DeactivateAllMenus(animate);
-			return;
-		}
+            return;
+        }
 
-		if (Menus.ContainsKey(type))
-		{
-			nextStep = Menus[type];
-		}
+        if (Menus.ContainsKey(type))
+        {
+            nextStep = Menus[type];
+        }
 
-		if (nextStep != null)
-		{
-			// if there is only one level, we want to bypass the level selection screen and go directly to the level
-			bool proceed = true;
+        if (nextStep != null)
+        {
+            // if there is only one level, we want to bypass the level selection screen and go directly to the level
+            bool proceed = true;
 
-			if( proceed )
-			{
+            if (proceed)
+            {
                 DeactivateAllMenus(animate);
-				nextStep.Activate(animate);
-			    ActiveMenu = type;
-			}
-		}
-		else
-		{
-			Debug.LogError("MenuManagerDefault: Unknown menu:" + type + "!");
-		}
-	}
+                nextStep.Activate(animate);
+                ActiveMenu = type;
+            }
+        }
+        else
+        {
+            Debug.LogError("MenuManagerDefault: Unknown menu:" + type + "!");
+        }
+    }
 
-	public Transform GetChildMenu(string menuName)
-	{
-		if (string.IsNullOrEmpty(menuName))
-		{
-			Debug.LogError("MenuManagerDefault: String is empty!");
-			return null;
-		}
+    public Transform GetChildMenu(string menuName)
+    {
+        if (string.IsNullOrEmpty(menuName))
+        {
+            Debug.LogError("MenuManagerDefault: String is empty!");
+            return null;
+        }
 
-		foreach(Transform t in transform)
-		{
-			if (menuName == t.name)
-			{
-				return t;
-			}
-		}
-		 
-		Debug.LogError("MenuManagerDefault: Could not find child menu: " + menuName);
-		return null;
-	}
+        foreach (Transform t in transform)
+        {
+            if (menuName == t.name)
+            {
+                return t;
+            }
+        }
+
+        Debug.LogError("MenuManagerDefault: Could not find child menu: " + menuName);
+        return null;
+    }
 
     // Relative position in GUI according to design height.
     public Vector3 CalculateRelativeUIPos(Vector3 pos)
@@ -236,12 +236,18 @@ public class MenuManagerDefault: MonoBehaviour
 
     // New position in GUI depending on screen ratio.
     public Vector3 CalculateUIPos(Vector3 pos)
-    {    
+    {
         float newXRatio = (Screen.width / (float)Screen.height);
         float oldXRatio = (DesignWidth / DesignHeight);
 
         pos.x *= newXRatio / oldXRatio;
 
         return pos;
+    }
+
+    void OnLevelWasLoaded(int level) 
+    {
+        Debug.Log("Resetting time scale.");
+        Time.timeScale = 1.0f;
     }
 }

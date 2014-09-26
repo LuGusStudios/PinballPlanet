@@ -51,7 +51,10 @@ public class PlayerData : MonoBehaviour
 
     // List of high scores for each level.
     public Dictionary<string, List<int>> LevelsHighscores;
-    public const int MaxHighScores = 5;
+    public static int MaxHighScores = 5;
+
+    // Max challenges at a time.
+    public static int MaxChallenges = 4;
 
     // Level strings.
     public const string MainLvlName = "Pinball_MainMenu";
@@ -179,7 +182,7 @@ public class PlayerData : MonoBehaviour
         foreach (Challenge challenge in ChallengeManager.use.AllChallenges)
         {
             if (challenge.Completed)
-                LugusConfig.use.User.SetBool("Challenge_" + challenge.ID + "_Done", challenge.Done, true);
+                LugusConfig.use.User.SetBool("Challenge_" + challenge.ID + "_Done", challenge.Completed, true);
         }
 
         // Save to files.
@@ -224,7 +227,7 @@ public class PlayerData : MonoBehaviour
                 challenge.Completed = true;
                 if (LugusConfig.use.User.GetBool("Challenge_" + challenge.ID + "_Done", false))
                 {
-                    challenge.Done = true;
+                    challenge.Completed = true;
                 }
             }
         }
