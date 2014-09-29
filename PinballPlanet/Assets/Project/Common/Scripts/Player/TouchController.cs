@@ -25,6 +25,7 @@ public class TouchController : MonoBehaviour
         _leftFlipperClickBoxTransform = GameObject.Find("ClickBox_LeftFlipper").transform;
         _rightFlipperClickBoxTransform = GameObject.Find("ClickBox_RightFlipper").transform;
         _mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
+	
     }
 
     // Called every fixed frame.
@@ -33,17 +34,28 @@ public class TouchController : MonoBehaviour
         // Check if mouse/touch is being held.
         if (LugusInput.use.down || LugusInput.use.dragging)
         {
-            // Store the clicked/touched object.
-            Transform clickedObject = LugusInput.use.RayCastFromMouse(_mainCameraTransform.GetComponent<Camera>());
+//            // Store the clicked/touched object.
+//            Transform clickedObject = LugusInput.use.RayCastFromMouse(_mainCameraTransform.GetComponent<Camera>());
+//
+//            if (clickedObject != null)
+//            {
+//                // Move flippers if touched/clicked.
+//                if (clickedObject == _leftFlipperClickBoxTransform)
+//                    _leftFlipperTransform.GetComponent<FlipperNew>().SetPressed();
+//                if (clickedObject == _rightFlipperClickBoxTransform)
+//                    _rightFlipperTransform.GetComponent<FlipperNew>().SetPressed();
+//            }
 
-            if (clickedObject != null)
-            {
-                // Move flippers if touched/clicked.
-                if (clickedObject == _leftFlipperClickBoxTransform)
-                    _leftFlipperTransform.GetComponent<FlipperNew>().SetPressed();
-                if (clickedObject == _rightFlipperClickBoxTransform)
-                    _rightFlipperTransform.GetComponent<FlipperNew>().SetPressed();
-            }
+			if (LugusInput.use.RayCastFromAllTouches(LugusCamera.game).Contains(_leftFlipperClickBoxTransform))
+			{
+				print (LugusInput.use.dragging);
+				_leftFlipperTransform.GetComponent<FlipperNew>().SetPressed();
+			}
+
+			if (LugusInput.use.RayCastFromAllTouches(LugusCamera.game).Contains(_rightFlipperClickBoxTransform))
+			{
+				_rightFlipperTransform.GetComponent<FlipperNew>().SetPressed();
+			}
         }
     }
 

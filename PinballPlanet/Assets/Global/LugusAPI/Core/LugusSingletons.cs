@@ -1,156 +1,159 @@
 using UnityEngine;
 using System.Collections;
 
-// TODO:
-// OnEnable and OnDisable implementation so Singleton links are re-made on re-compilation
-// see LugusSingletonExisting:OnEnable for example
-
-// file loosely inspired by http://framebunker.com/blog/unity-singletons/
-
-// use this for a singleton that has to exist in the scene before runtime (that cannot just be made through script)
-public class LugusSingletonExisting<T> : MonoBehaviour where T : MonoBehaviour 
+// A singleton that needs to exist in the scene and cannot be created at runtime.
+public class LugusSingletonExisting<T> : MonoBehaviour where T : MonoBehaviour
 {
 	private static T _instance = null;
-	
-	public static T use 
-	{ 
-		get 
+	public static T use
+	{
+		get
 		{
-			if ( !CheckInstance() )
-			{
-				Debug.LogError ("LuGusSingletonExisting:use : " + typeof (T).Name + " does not exist!");
-			}
+			CacheInstance();
 			
-			
-			return _instance; 
+			return _instance;
 		}
 	}
 	
-	protected static bool CheckInstance()
+	protected static void CacheInstance()
 	{
 		if( _instance != null )
-			return true;
+			return;
 		
 		T[] instances = (T[]) GameObject.FindObjectsOfType( typeof(T) );
+		
 		if( instances.Length == 0 )
 		{
-			Debug.LogError ("LuGusSingletonExisting:CheckInstance : " + typeof (T).Name + " does not exist!");
-			return false;
+			Debug.LogError("No " + typeof(T).Name + " found in this scene.");
+			return;
 		}
-		if( instances.Length > 1 )
+		else if( instances.Length > 1 )
 		{
-			Debug.LogError ("LuGusSingletonExisting:CheckInstance : " + typeof (T).Name + " exists multiple times! " + instances.Length);
+			Debug.LogError("Multiple (" + instances.Length + ") instances of object " + typeof(T).Name + " found in this scene. Returning the first.");
 		}
+		
+		_instance = instances[0]; 
 
-		_instance = instances[0];
+		if (_instance != null)
+		{
+			if (_instance is LugusSingletonExisting<T>)
+			{
+				LugusSingletonExisting<T> singleton  = _instance as LugusSingletonExisting<T>;
+				singleton.InitializeSingleton();
+			}
+		}
+	}
 
-        if(_instance is ISingletonInitializer)
-        {
-            (_instance as ISingletonInitializer).InitializeSingleton();
-        }
-
-		return true;
+	// This method will be called upon the first retrieval of the singleton. Override to use.
+	public virtual void InitializeSingleton()
+	{
 	}
 	
-	public void Change(T newInstance)
+	public static void Change(T newInstance)
 	{
 		_instance = newInstance;
 	}
-
-	void OnDisable()
+	
+	protected void OnDisable()
 	{
 		_instance = null;
 	}
 
+	protected void OnDestroy()
+	{
+		this.enabled = false;
+		_instance = null;
+	}
+	
 	public static bool Exists()
 	{
 		if( _instance != null )
 			return true;
-
-
+		
+		
 		T[] instances = (T[]) GameObject.FindObjectsOfType( typeof(T) );
 		return instances.Length != 0;
 	}
-	
-	/*
-	void OnEnable()
-	{
-		// could be used to survive re-compilation... not tested though
-		_instance = null;	
-	}
-	*/
 }
 
-// use this for a singleton that can just be created through script if it's not set before runtime
-public class LugusSingletonRuntime<T> : MonoBehaviour where T : MonoBehaviour 
+// A singleton that can simply be created at runtime and doesn't need to exist earlier.
+public class LugusSingletonRuntime<T> : MonoBehaviour where T : MonoBehaviour
 {
+	private static string containerName = "_SINGLETONCONTAINER";
+	private static T[] instances = null;
 	private static T _instance = null;
-	
-	public static T use 
-	{ 
-		get 
+	public static T use
+	{
+		get
 		{
-			if ( !CheckInstance() )
-			{
-				Debug.LogError ("LuGusSingletonRuntime:use : " + typeof (T).Name + " does not exist!");
-			}
+			CacheInstance();
 			
-			
-			return _instance; 
+			return _instance;
 		}
 	}
 	
-	protected static bool CheckInstance()
+	protected static void CacheInstance()
 	{
 		if( _instance != null )
-			return true;
+			return;
 		
-		T[] instances = (T[]) GameObject.FindObjectsOfType( typeof(T) );
+		instances = (T[]) GameObject.FindObjectsOfType( typeof(T) );
+		
 		if( instances.Length == 0 )
 		{
-			Debug.LogWarning ("LuGusSingletonRuntime:CheckInstance : " + typeof (T).Name + " does not exist! Creating it...");
+			Debug.Log("No " + typeof(T).Name + " found in this scene. Creating it.");
 			
-			GameObject JESUS = GameObject.Find("JESUS");
-			if( JESUS == null )
+			GameObject scriptContainer = GameObject.Find(containerName);
+			if( scriptContainer == null )
 			{
-				JESUS = new GameObject("JESUS"); 
+				scriptContainer = new GameObject(containerName); 
 			}
 			
-			_instance = JESUS.AddComponent<T>();
-
-            if (_instance is ISingletonInitializer)
-            {
-                (_instance as ISingletonInitializer).InitializeSingleton();
-            }
-            
-            return true;
+			_instance = scriptContainer.AddComponent<T>();
+			
+			return;
 		}
-		if( instances.Length > 1 )
+		else if( instances.Length > 1 )
 		{
-			Debug.LogError ("LuGusSingletonRuntime:CheckInstance : " + typeof (T).Name + " exists multiple times! " + instances.Length);
+			Debug.LogError("Multiple (" + instances.Length + ") instances of object " + typeof(T).Name + " found in this scene. Returning the first.");
 		}
 		
 		_instance = instances[0];
-
-        return true;
+		
+		if (_instance != null)
+		{
+			if (_instance is LugusSingletonRuntime<T>)
+			{
+				LugusSingletonRuntime<T> singleton  = _instance as LugusSingletonRuntime<T>;
+				singleton.InitializeSingleton();
+			}
+		}
 	}
-	
-	
-	public void Change(T newInstance)
+
+	// This method will be called upon the first retrieval of the singleton. Override to use.
+	public virtual void InitializeSingleton()
+	{
+	}
+
+	public static void Change(T newInstance)
 	{
 		_instance = newInstance;
 	}
 	
-	void OnDisable()
+	protected void OnDisable()
 	{
+		_instance = null;
+	}
+
+	protected void OnDestroy()
+	{
+		this.enabled = false;
 		_instance = null;
 	}
 }
 
-
-// use this for a singleton that you don't want to store in a static var. Instead, it searches the singleton in the scene every time use is called.
-// ATTENTION: can be very unperformant. Only use in specific cases!
-public class LugusSingletonVolatile<T> : MonoBehaviour where T : MonoBehaviour 
+// Will find the singleton in the scene everytime. Only use in very specific cases. Potentially quite unperformant.
+public class SingletonVolatile<T> : MonoBehaviour where T : MonoBehaviour 
 {
 	public static T use 
 	{ 
@@ -159,9 +162,4 @@ public class LugusSingletonVolatile<T> : MonoBehaviour where T : MonoBehaviour
 			return (T) GameObject.FindObjectOfType( typeof(T) ); 
 		}
 	}
-}
-
-public interface ISingletonInitializer
-{
-    void InitializeSingleton();
 }
