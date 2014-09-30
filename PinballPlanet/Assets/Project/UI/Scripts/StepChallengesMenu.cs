@@ -20,13 +20,14 @@ public class StepChallengesMenu : IMenuStep
     private float _starAnimDelay = 0.15f;
     private float _challengeAnimTime = 0.6f;
 
-    protected ILugusCoroutineHandle _updateChallengesHandle = null;
-
     private int _oldStars = 0;
+
+    protected ILugusCoroutineHandle _updateChallengesHandle = null;
 
     public List<Pair<GameObject, Challenge>> ChallengeObjects = null;
 
     public Sprite MissionIconCheck = null;
+
 
     public override void SetupLocal()
     {
@@ -163,25 +164,31 @@ public class StepChallengesMenu : IMenuStep
             (MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu] as StepPauseMenu).DisableButtons();
         }
 
-        // Update stars.
-        _oldStars = PlayerData.use.Stars;
-        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
+        // Only update challenges in main menu.
+        if (Application.loadedLevelName == PlayerData.MainLvlName)
         {
-            if (challenge.Completed)
+            // Update stars.
+            _oldStars = PlayerData.use.Stars;
+            foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
             {
-                // Add challenge stars.
-                PlayerData.use.Stars += challenge.StarsReward;
+                if (challenge.Completed)
+                {
+                    // Add challenge stars.
+                    PlayerData.use.Stars += challenge.StarsReward;
+                }
             }
+
+            // Save.
+            PlayerData.use.Save();
+
+            // Wait frame.
+            yield return null;
+
+            // Show challenges.
+            _updateChallengesHandle = LugusCoroutines.use.StartRoutine(UpdateChallenges());
         }
-
-        // Save.
-        PlayerData.use.Save();
-
-        // Wait frame.
-        yield return null;
-
-        // Show challenges.
-        _updateChallengesHandle = LugusCoroutines.use.StartRoutine(UpdateChallenges());
+        else
+            LugusCoroutines.use.StartRoutine(UpdateChallengeObjects());
     }
 
     public override void Deactivate(bool animate = true)
@@ -207,7 +214,7 @@ public class StepChallengesMenu : IMenuStep
         foreach (GameObject star in GameObject.FindGameObjectsWithTag("ChallengeStar"))
         {
             Destroy(star);
-        } 
+        }
 
         // Stop any update coroutines still going on.
         if (_updateChallengesHandle != null && _updateChallengesHandle.Running)
@@ -236,10 +243,11 @@ public class StepChallengesMenu : IMenuStep
         }
 
         // Update challenge objects.
-        yield return LugusCoroutines.use.StartRoutine(UpdateChallengeObjects());
+        yield return LugusCoroutines.use.StartRoutine(UpdateChallengeObjects()).Coroutine;
 
         // Give stars for completed challenges.
         int count = 0;
+        int newStars = _oldStars;
         foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
         {
             if (challenge.Completed)
@@ -261,10 +269,11 @@ public class StepChallengesMenu : IMenuStep
                     yield return new WaitForSeconds(_starAnimTime);
 
                     // Update star text mesh.
+                    ++newStars;
                     foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
                     {
                         if (starText != null)
-                            starText.text = (_oldStars + 1 + i).ToString();
+                            starText.text = (newStars).ToString();
                     }
 
                     // Destroy star.
@@ -279,26 +288,28 @@ public class StepChallengesMenu : IMenuStep
         count = 0;
         foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
         {
-            if (challengeObj.Second.Completed)
+            if (challengeObj.Second != null)
             {
-                // Replace old with new challenge.
-                ChallengeManager.use.ReplaceChallenge(challengeObj.Second);
+                if (challengeObj.Second.Completed)
+                {
+                    // Replace old with new challenge.
+                    ChallengeManager.use.ReplaceChallenge(challengeObj.Second);
 
-                // Make old challenge fly off.
-                Vector3 destPos = challengeObj.First.transform.position.xAdd(15.0f);
-                challengeObj.First.MoveTo(destPos).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeInBack).Execute();
+                    // Make old challenge fly off.
+                    Vector3 destPos = challengeObj.First.transform.position.xAdd(15.0f);
+                    challengeObj.First.MoveTo(destPos).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeInBack).Execute();
 
-                // Set challenge to null so that it will be updated to new one next time.
-                challengeObj.Second = null;
+                    // Set challenge to null so that it will be updated to new one next time.
+                    challengeObj.Second = null;
 
-                // Wait for animation to end.
-                yield return new WaitForSeconds(_challengeAnimTime);
+                    // Wait for animation to end.
+                    yield return new WaitForSeconds(_challengeAnimTime);
 
-                // Destroy game object.
-                Destroy(challengeObj.First);
-                challengeObj.First = null;
+                    // Destroy game object.
+                    Destroy(challengeObj.First);
+                    challengeObj.First = null;
+                }
             }
-
             ++count;
         }
 
@@ -313,7 +324,6 @@ public class StepChallengesMenu : IMenuStep
         int count = 0;
         foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
         {
-            // Show new challenge.
             if (ChallengeObjects[count].Second == null)
             {
                 // Set pos in window.
@@ -353,25 +363,33 @@ public class StepChallengesMenu : IMenuStep
         // Animate unviewed challenges.
         foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
         {
-            if (!challengeObj.Second.Viewed)
+            if (challengeObj.Second != null)
             {
-                // Unhide for animation.
-                challengeObj.First.SetActive(true);
+                if (!challengeObj.Second.Viewed)
+                {
+                    // Unhide for animation.
+                    challengeObj.First.SetActive(true);
 
-                // Set to viewed.
-                challengeObj.Second.Viewed = true;
+                    // Set to viewed.
+                    challengeObj.Second.Viewed = true;
 
-                // Scale of challenge object before animation;
-                Vector3 oldScale = challengeObj.First.transform.localScale;
+                    // Scale of challenge object before animation;
+                    Vector3 oldScale = challengeObj.First.transform.localScale;
 
-                // Make new challenge pop in.
-                Vector3 destPos = challengeObj.First.transform.position;
-                challengeObj.First.transform.localScale = Vector3.zero;
-                challengeObj.First.ScaleTo(oldScale).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeOutBack).Execute();
+                    // Make new challenge pop in.
+                    Vector3 destPos = challengeObj.First.transform.position;
+                    challengeObj.First.transform.localScale = Vector3.zero;
+                    challengeObj.First.ScaleTo(oldScale).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeOutBack).Execute();
 
-                // Wait for animation to end.
-                Debug.Log("Playing challenge animation.");
-                yield return new WaitForSeconds(_challengeAnimTime);
+                    // Wait for animation to end.
+                    Debug.Log("Playing challenge animation.");
+                    yield return new WaitForSeconds(_challengeAnimTime);
+                }
+            }
+            else
+            {
+                // Remove challenge objects there is no challenge.
+                Destroy(challengeObj.First);
             }
         }
     }

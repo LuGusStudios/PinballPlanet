@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 600
-  sound: {fileID: 0}
+  sound: {fileID: 8300000, guid: 7fe97e38cffc86846a4664f5767c13e6, type: 3}
   color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!136 &13600000
 CapsuleCollider:

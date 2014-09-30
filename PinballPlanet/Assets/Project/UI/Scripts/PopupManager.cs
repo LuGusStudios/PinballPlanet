@@ -61,7 +61,7 @@ public class PopupManager : LugusSingletonExisting<PopupManager>
 		// assign variables that have to do with this class only
 		if( boxPrefab == null )
 		{
-			boxPrefab = GameObject.FindObjectOfType<Popup>();
+			boxPrefab = gameObject.FindComponentInChildren<Popup>(true);
 		}
 
 		if( boxPrefab == null )

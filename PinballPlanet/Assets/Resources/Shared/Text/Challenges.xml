@@ -113,23 +113,9 @@
   </Challenge>
 
   <Challenge>
-    <ID>ClickChallengesButton2</ID>
-    <Stars>10</Stars>
-    <TextKey>Click the challenges button.</TextKey>
-    <Priority>1</Priority>
-    <Condition>
-      <Type>ButtonPressed</Type>
-      <Parameters>
-        <Name>Button_Trophy</Name>
-        <MeetOnce>true</MeetOnce>
-      </Parameters>
-    </Condition>
-  </Challenge>
-
-  <Challenge>
     <ID>PirateBetween1000Score5000Score</ID>
     <TextKey>Get a score between 1000 and 5000 in the pirate level.</TextKey>
-    <!--<Level>Pirate</Level>-->
+    <Level>Pirate</Level>
     <Priority>4</Priority>
     <Condition>
       <Type>Score</Type>
@@ -186,7 +172,7 @@
   <Challenge>
     <ID>NoHitCannon</ID>
     <TextKey>Finish the pirate level without using the cannon.</TextKey>
-    <!--<Level>Pirate</Level>-->
+    <Level>Pirate</Level>
     <Priority>2</Priority>
     <Condition>
       <Type>ObjectHit</Type>
@@ -221,7 +207,7 @@
   <Challenge>
     <ID>Score5000LvlPirate</ID>
     <Stars>3</Stars>
-    <!--<Level>Pirate</Level>-->
+    <Level>Pirate</Level>
     <TextKey>Score more than 5000 points in the pirate level.</TextKey>
     <Priority>2</Priority>
     <Condition>
@@ -285,7 +271,7 @@
   <Challenge>
     <ID>HitCrystal</ID>
     <TextKey>Collect 10 crystal shards.</TextKey>
-    <!--<Level>Mine</Level>-->
+    <Level>Mine</Level>
     <Priority>3</Priority>
     <Condition>
       <Type>ObjectHit</Type>

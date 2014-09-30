@@ -17,6 +17,13 @@ public class StepMainMenu : IMenuStep
 
     public AudioClip ThemeMusic;
 
+    private string _messageSeenKey = "Message_Welcome_Seen";
+    private string _playLockedKey = "PlayButton_Locked";
+
+    public Sprite ChallengeIcon = null;
+    public Sprite HelpIcon = null;
+
+
     public override void SetupLocal()
     {
         if (HelpButton == null)
@@ -91,6 +98,8 @@ public class StepMainMenu : IMenuStep
 
     public void SetupGlobal()
     {
+        // Unlock play button.
+        transform.FindChild("LevelSelectLock").gameObject.SetActive(LugusConfig.use.User.GetBool(_playLockedKey, true));
     }
 
     protected void Start()
@@ -111,7 +120,17 @@ public class StepMainMenu : IMenuStep
         }
         else if (PlayButton.pressed)
         {
-            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.LevelSelectMenu);
+            // Show locked message.
+            if (LugusConfig.use.User.GetBool(_playLockedKey, true))
+            {
+                Popup newPopup = PopupManager.use.CreateBox("You'll need some stars before you can play, click the challenges button.", ChallengeIcon);
+                newPopup.blockInput = true;
+                newPopup.boxType = Popup.PopupType.Continue;
+                newPopup.onContinueButtonClicked += PlayLockedContinue;
+                newPopup.Show();
+            }
+            else
+                MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.LevelSelectMenu);
         }
         else if (SocialButton.pressed)
         {
@@ -123,6 +142,13 @@ public class StepMainMenu : IMenuStep
         }
         else if (TrophyButton.pressed)
         {
+            // Unlock play button.
+            if (LugusConfig.use.User.GetBool(_playLockedKey, true))
+            {
+                LugusConfig.use.User.SetBool(_playLockedKey, false, true);
+                transform.FindChild("LevelSelectLock").gameObject.SetActive(false);
+            }
+
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
         }
 
@@ -163,6 +189,16 @@ public class StepMainMenu : IMenuStep
                 break;
             }
         }
+
+        // Show welcome message.
+        if (!LugusConfig.use.User.GetBool(_messageSeenKey, false))
+        {
+            Popup newPopup = PopupManager.use.CreateBox("Welcome to Pinball Planet!\nIf you need help, click the '?' button in the top right corner.\nHave fun!", HelpIcon);
+            newPopup.blockInput = true;
+            newPopup.boxType = Popup.PopupType.Continue;
+            newPopup.onContinueButtonClicked += WelcomeContinue;
+            newPopup.Show();
+        }
     }
 
     public override void Deactivate(bool animate = true)
@@ -202,5 +238,20 @@ public class StepMainMenu : IMenuStep
         SocialButton.gameObject.SetActive(false);
         SettingsButton.gameObject.SetActive(false);
         TrophyButton.gameObject.SetActive(false);
+    }
+
+    private void WelcomeContinue(Popup sender)
+    {
+        // Unsubscribe from popup event and hide it.
+        LugusConfig.use.User.SetBool(_messageSeenKey, true, true);
+        sender.onContinueButtonClicked -= WelcomeContinue;
+        sender.Hide();
+    }
+
+    private void PlayLockedContinue(Popup sender)
+    {
+        // Unsubscribe from popup event and hide it.
+        sender.onContinueButtonClicked -= PlayLockedContinue;
+        sender.Hide();
     }
 }

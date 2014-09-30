@@ -150,7 +150,7 @@ public class Player : LugusSingletonExisting<Player>
             {
                 if (!_launchSoundPlaying)
                 {
-                    Debug.Log("Playing LaunchSound");
+                    //Debug.Log("Playing LaunchSound");
                     LugusAudio.use.SFX().Play(LaunchSound, true).Loop = true;
                     _launchSoundPlaying = true;
                 }
@@ -245,13 +245,13 @@ public class Player : LugusSingletonExisting<Player>
     // Play light on sound.
     public void PlayLightOnSound()
     {
-        LugusAudio.use.SFX().Play(LightOnSound).Loop = false;
+        //LugusAudio.use.SFX().Play(LightOnSound).Loop = false;
     }
 
     // Play light off sound.
     public void PlayLightOffSound()
     {
-        LugusAudio.use.SFX().Play(LightOffSound).Loop = false;
+        //LugusAudio.use.SFX().Play(LightOffSound).Loop = false;
     }
 
     public void PlayLeftFlipperSound()

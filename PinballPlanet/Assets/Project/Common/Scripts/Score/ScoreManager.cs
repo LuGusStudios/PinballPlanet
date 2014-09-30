@@ -135,7 +135,9 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 
         // Play hit sound.
         if (sound != null)
-            LugusAudio.use.SFX().Play(sound).Loop = false;
+        {
+            LugusAudio.use.SFX().Play(sound);
+        }
 
         // Add score.
         int newScore = TotalScore + score;

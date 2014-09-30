@@ -9,10 +9,16 @@ public class OpeningSkull : BreakableMultiObjective
     private Vector3 _closedEulAngles;
     private Vector3 _openEulAngles;
 
+    private AudioClip _spitSound;
+
     protected override void Start()
     {
+        // Store animation rotations.
         _closedEulAngles = gameObject.transform.eulerAngles;
         _openEulAngles = GameObject.Find("Skull_Open").transform.eulerAngles;
+
+        // Load sounds.
+        _spitSound = LugusResources.use.Shared.GetAudio("SkullBallSpit01");
 
         base.Start();
     }
@@ -44,11 +50,11 @@ public class OpeningSkull : BreakableMultiObjective
 
             _opened = true;
         }
-
     }
 
     public void CloseSkull()
     {
+        // Close skull.
         if (_opened)
         {
             iTween.Stop(this.gameObject);
@@ -63,6 +69,7 @@ public class OpeningSkull : BreakableMultiObjective
 
     void OnSkullClosed()
     {
+        // Rotate to target.
         iTween.RotateTo(gameObject,
             iTween.Hash("rotation", GameObject.Find("Skull_End").transform.eulerAngles,
                         "time", 2.0f,
@@ -71,19 +78,27 @@ public class OpeningSkull : BreakableMultiObjective
 
     void OnSkullAimed()
     {
+        // Unfreeze ball.
         Ball.rigidbody.velocity = Vector3.zero;
         Ball.rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
 
+        // Disable collider.
         GameObject.Find("CollisionBox_Skull").collider.enabled = false;
 
+        // Set ball to new position.
         Transform shooter = GameObject.Find("Skull_BallShoot").transform;
         Ball.transform.position = new Vector3(shooter.position.x, shooter.position.y, Ball.transform.position.z);
 
+        // Shoot ball with smal random deviation.
         Vector3 randVec = Vector3.zero.zAdd(Random.Range(-10, 10));
         Ball.rigidbody.AddForce((shooter.up.normalized + randVec) * 3000);
 
+        // Play shoot sound.
+        LugusAudio.use.SFX().Play(_spitSound);
+
+        // Rotate back to original position.
         iTween.RotateTo(gameObject,
-        iTween.Hash("rotation", GameObject.Find("Skull_Start").transform.eulerAngles,
+            iTween.Hash("rotation", GameObject.Find("Skull_Start").transform.eulerAngles,
                     "time", 2.0f,
                     "oncomplete", "OnSkullReset"));
     }

@@ -77,7 +77,7 @@ public class ChestMultiObjective : BreakableMultiObjective
         float randZ = Random.Range(-15, 15);
 
         GameObject scorePopup = ScoreManager.use.ShowScore(BonusPoints / _scoreRepeat, transform.position.zAdd(60) + new Vector3(randX, randY, randZ), 1.0f, null, Color.yellow, gameObject);
-        scorePopup.GetComponent<TextMesh>().characterSize = 2f;
+//        scorePopup.GetComponent<TextMesh>().characterSize = 2f;
     }
 
     // Reset.

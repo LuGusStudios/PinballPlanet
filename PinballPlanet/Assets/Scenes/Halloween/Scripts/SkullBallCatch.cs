@@ -4,10 +4,13 @@ using System.Collections;
 public class SkullBallCatch : MonoBehaviour
 {
     private OpeningSkull _skull;
+    private AudioClip _eatSound;
 
     void Start()
     {
         _skull = GameObject.Find("Skull_Opening").GetComponent<OpeningSkull>();
+
+        _eatSound = LugusResources.use.Shared.GetAudio("SkullBallMunch01");
     }
 
     void OnTriggerEnter(Collider other)
@@ -20,5 +23,8 @@ public class SkullBallCatch : MonoBehaviour
 
         other.transform.position = new Vector3(transform.position.x, transform.position.y, other.transform.position.z);
         other.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+
+        // Play eat sound.
+        LugusAudio.use.SFX().Play(_eatSound);
     }
 }

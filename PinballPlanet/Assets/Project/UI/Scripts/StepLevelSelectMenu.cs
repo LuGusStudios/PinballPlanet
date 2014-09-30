@@ -28,6 +28,9 @@ public class StepLevelSelectMenu : IMenuStep
 
     public string _lvlName;
 
+    private string _messageLvlUnlockKey = "Message_LvlUnlock_Seen";
+    public Sprite StarIcon = null;
+
     public override void SetupLocal()
     {
         if (HelpButton == null)
@@ -211,6 +214,7 @@ public class StepLevelSelectMenu : IMenuStep
         }
         else
         {
+            // Check if level is selected.
             foreach (Button levelButton in LevelSelectButtons)
             {
                 if (levelButton.pressed)
@@ -219,6 +223,7 @@ public class StepLevelSelectMenu : IMenuStep
                     _selectedLevelButton = levelButton;
                     _lvlName = new List<string>(_selectedLevelButton.name.Split('_'))[1];
 
+                    // Show level info.
                     ShowLevel();
 
                     // Rotate to level.
@@ -234,22 +239,27 @@ public class StepLevelSelectMenu : IMenuStep
                     LevelName.gameObject.SetActive(true);
                     LevelName.GetComponent<TextMesh>().text = levelName;
 
-                    // Exit loop.
                     break;
                 }
             }
         }
 
-        // Allow dragging when no button was pressed.
+        // Allow rotating world when dragging except when mouse is dragging over a button.
         if (LugusInput.use.RayCastFromMouse() == null)
         {
             if (LugusInput.use.dragging)
             {
+                // Hide level info.
                 if (_selectedLevelButton != null)
                 {
                     _selectedLevelButton = null;
                     HideLevel();
                 }
+
+                // Stop any iTweens animations on planet.
+                iTween.Stop(_planet);
+
+                // Calculate rotation amount.
                 Vector3 dragVec = LugusInput.use.lastPoint - LugusInput.use.inputPoints[LugusInput.use.inputPoints.Count - 2];
                 float dragAmountX = dragVec.x / Screen.width;
                 float dragAmountY = dragVec.y / Screen.height;
@@ -293,6 +303,16 @@ public class StepLevelSelectMenu : IMenuStep
         // Move camera to level select position.
         Vector3 target = GameObject.Find("Camera_LevelSelect").transform.position;
         Camera.main.gameObject.MoveTo(target).Time(0.5f).EaseType(iTween.EaseType.easeInOutQuad).Execute();
+
+        // Show welcome message.
+        if (!LugusConfig.use.User.GetBool(_messageLvlUnlockKey, false))
+        {
+            Popup newPopup = PopupManager.use.CreateBox("Spend stars to unlock a level of your choice. When you earn more stars, you can unlock another one!", StarIcon);
+            newPopup.blockInput = true;
+            newPopup.boxType = Popup.PopupType.Continue;
+            newPopup.onContinueButtonClicked += LvlUnlockContinue;
+            newPopup.Show();
+        }
     }
 
     public override void Deactivate(bool animate = true)
@@ -390,5 +410,13 @@ public class StepLevelSelectMenu : IMenuStep
     void LoadLevel()
     {
         Application.LoadLevel("Pinball_" + _lvlName);
+    }
+
+    private void LvlUnlockContinue(Popup sender)
+    {
+        // Unsubscribe from popup event and hide it.
+        LugusConfig.use.User.SetBool(_messageLvlUnlockKey, true, true);
+        sender.onContinueButtonClicked -= LvlUnlockContinue;
+        sender.Hide();
     }
 }

@@ -13,6 +13,11 @@ public class Ghost : MonoBehaviour
 
     private bool _shouldRender = false;
 
+    void Start()
+    {
+        LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio("GhostSpawn03"));
+    }
+
     // Called every frame.
     void Update()
     {

@@ -169,6 +169,8 @@ public class Popup : MonoBehaviour
 
 	public void SetupLocal()
 	{
+        gameObject.SetActive(true);
+
 		// assign variables that have to do with this class only
 		if( background == null )
 		{

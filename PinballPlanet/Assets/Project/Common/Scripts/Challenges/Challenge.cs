@@ -53,10 +53,18 @@ public class Challenge
                 met = false;
         }
 
+        // Return if false.
+        if (!met)
+            return false;
+
         // False when a single condition is not met.
         foreach (Condition condition in Conditions)
         {
             met &= condition.IsMet();
+
+            // Return if false.
+            if (!met)
+                return false;
         }
 
         // Set to completed.

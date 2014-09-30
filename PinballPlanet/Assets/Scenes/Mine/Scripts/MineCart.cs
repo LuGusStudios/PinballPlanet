@@ -21,16 +21,18 @@ public class MineCart : MonoBehaviour
     public GameObject CrystalShardPrefab = null;
 
     // How many crystal shard to drop.
-    public int CrystalsToDropBarrier = 3;
+    public int CrystalsToDropBarrier = 5;
     public int CrystalsToDropHit = 3;
     public int CrystalsToDropCrash = 15;
-    public float CrystalsDropHitRadius = 50;
+    public float CrystalsDropHitRadius = 60.0f;
+    public float CrystalsDropDelay = 0.15f;
+    private float _timeSinceCrystalsDrop = .0f;
 
     // Sounds
     public AudioClip TravelSound = null;
     public AudioClip CrashSound = null;
 
-    // Use this for initialization
+    // Use this for initialization.
     void Start()
     {
         _upsideDownTransform = transform.Find("MineCart02_UpsideDown").transform;
@@ -42,26 +44,41 @@ public class MineCart : MonoBehaviour
         StartPathMove();
     }
 
+    // Called every frame.
+    void Update()
+    {
+        _timeSinceCrystalsDrop += Time.deltaTime;
+    }
+
     // Called when this collider/rigidbody has begun touching another rigidbody/collider.
     void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag != "Ball")
             return;
 
-        // Spawn crystal shard projectiles.
-        for (int i = 0; i < CrystalsToDropBarrier; i++)
+        // Drop crystals if enough time has passed.
+        if (_timeSinceCrystalsDrop > CrystalsDropDelay)
         {
-            // Pick a random spot around the cart to spawn the crystals.
-            Vector3 randPos = new Vector3(transform.position.x + Random.Range(-0.5f, 0.5f) * CrystalsDropHitRadius, transform.position.y + Random.Range(-0.5f, 0.5f) * CrystalsDropHitRadius);
-            // Spawn crystal shard at cart and set projectile target to new position.
-            GameObject crystal = Instantiate(CrystalShardPrefab, transform.position, Quaternion.identity) as GameObject;
-            crystal.GetComponent<CrystalShard>().SetTarget(randPos);
-            // Give random rotation.
-            crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
-        }
+            // Spawn crystal shard projectiles.
+            for (int i = 0; i < CrystalsToDropHit; i++)
+            {
+                // Pick a random spot around the cart to spawn the crystals.
+                Vector3 randPos = new Vector3(transform.position.x + Random.Range(-0.5f, 0.5f) * CrystalsDropHitRadius, transform.position.y + Random.Range(-0.5f, 0.5f) * CrystalsDropHitRadius);
 
-        // Play shake animation.
-        transform.Find("MineCart_Pivot/MineCart02").animation.Play("MineCartShake");
+                // Spawn crystal shard at cart and set projectile target to new position.
+                GameObject crystal = Instantiate(CrystalShardPrefab, transform.position, Quaternion.identity) as GameObject;
+                crystal.GetComponent<CrystalShard>().SetTarget(randPos);
+
+                // Give random rotation.
+                crystal.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
+            }
+
+            // Reset drop timer.
+            _timeSinceCrystalsDrop = .0f;
+
+            // Play shake animation.
+            transform.Find("MineCart_Pivot/MineCart02").animation.Play("MineCartShake");
+        }
     }
 
     // Destroys the mine cart and notifies the Rails script.
