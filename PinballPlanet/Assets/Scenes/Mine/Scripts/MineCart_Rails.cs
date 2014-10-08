@@ -34,6 +34,7 @@ public class MineCart_Rails : MonoBehaviour
 
     private void SpawnMineCart()
     {
-        Instantiate(MineCartPrefab);
+		GameObject cart = (GameObject) Instantiate(MineCartPrefab);
+		cart.name = "MineCart";
     }
 }

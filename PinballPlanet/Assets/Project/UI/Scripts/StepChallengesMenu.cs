@@ -16,8 +16,8 @@ public class StepChallengesMenu : IMenuStep
     public GameObject ChallengePrefab;
 
     public GameObject StarPrefab;
-    private float _starAnimTime = 0.4f;
-    private float _starAnimDelay = 0.15f;
+    private float _starAnimTime = 1.5f;
+    private float _starAnimDelay = 0.2f;
     private float _challengeAnimTime = 0.6f;
 
     private int _oldStars = 0;
@@ -258,26 +258,33 @@ public class StepChallengesMenu : IMenuStep
                 // Show stars animation.
                 for (int i = 0; i < challenge.StarsReward; i++)
                 {
-                    // Spawn star.
-                    GameObject star = Instantiate(StarPrefab) as GameObject;
-                    star.transform.position = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
+					// create new star at the challenge and move to the starIcon position
+					Vector3 startPos = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
+					Vector3 endPos = StarIcon.position;
+					LugusCoroutines.use.StartRoutine(AnimateStar(startPos, endPos, ++newStars));
+					// Wait for animation to end.
+					yield return new WaitForSeconds(_starAnimDelay);
 
-                    // Play star animation.
-                    star.MoveTo(StarIcon).Time(_starAnimTime).EaseType(iTween.EaseType.easeOutQuad).Execute();
-
-                    // Wait for animation to end.
-                    yield return new WaitForSeconds(_starAnimTime);
-
-                    // Update star text mesh.
-                    ++newStars;
-                    foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
-                    {
-                        if (starText != null)
-                            starText.text = (newStars).ToString();
-                    }
-
-                    // Destroy star.
-                    Destroy(star);
+//                    // Spawn star.
+//                    GameObject star = Instantiate(StarPrefab) as GameObject;
+//                    star.transform.position = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
+//
+//                    // Play star animation.
+//                    star.MoveTo(StarIcon).Time(_starAnimTime).EaseType(iTween.EaseType.easeOutQuad).Execute();
+//
+//                    // Wait for animation to end.
+//                    yield return new WaitForSeconds(_starAnimDelay);
+//
+//                    // Update star text mesh.
+//                    ++newStars;
+//                    foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
+//                    {
+//                        if (starText != null)
+//                            starText.text = (newStars).ToString();
+//                    }
+//
+//                    // Destroy star.
+//                    Destroy(star);
                 }
             }
 
@@ -316,6 +323,32 @@ public class StepChallengesMenu : IMenuStep
         // Update challenge objects.
         LugusCoroutines.use.StartRoutine(UpdateChallengeObjects());
     }
+
+	private IEnumerator AnimateStar(Vector3 startPos, Vector3 targetPos, int newStarCount)
+	{
+		// Create new star
+		GameObject star = Instantiate(StarPrefab) as GameObject;
+		star.transform.position = startPos;
+
+		Vector3 midPoint = (startPos + targetPos) / 2 + new Vector3 (-0.5f, 1.0f, -5);
+		Vector3[] path = new Vector3[]{startPos, midPoint, targetPos};
+
+		// Play star animation.
+		star.MoveTo(path).Time(_starAnimTime).EaseType(iTween.EaseType.easeInQuad).Execute();
+
+		// Wait for animation to end.
+		yield return new WaitForSeconds(_starAnimTime);
+		
+		// Update star text mesh.
+		foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
+		{
+			if (starText != null)
+				starText.text = (newStarCount).ToString();
+		}
+		
+		// Destroy star.
+		Destroy(star);
+	}
 
     // Updates the UI representation of the challenges.
     private IEnumerator UpdateChallengeObjects()

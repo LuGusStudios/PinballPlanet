@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class StepMainMenu : IMenuStep
@@ -225,15 +225,16 @@ public class StepMainMenu : IMenuStep
                 LugusConfig.use.User.ClearAllData();
                 LugusConfig.use.SaveProfiles();
                 PlayerData.use.Load();
-                ChallengeManager.use.CurrentChallenges.Clear();
-                Application.LoadLevel(Application.loadedLevel);
+                //ChallengeManager.use.CurrentChallenges.Clear();
+				ChallengeManager.use.reset();
+				SceneLoader.use.LoadNewScene(Application.loadedLevel);
             }
         }
     }
 
     public void DisableButtons()
     {
-        HelpButton.gameObject.SetActive(false);
+        HelpButton.gameObject.SetActive(false);	
         PlayButton.gameObject.SetActive(false);
         SocialButton.gameObject.SetActive(false);
         SettingsButton.gameObject.SetActive(false);

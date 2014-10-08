@@ -130,11 +130,11 @@ public class StepGameOverMenu : IMenuStep
 
         if (RestartButton.pressed)
         {
-            Application.LoadLevel(Application.loadedLevel);
+			SceneLoader.use.LoadNewScene(Application.loadedLevel);
         }
         else if (MainMenuButton.pressed)
         {
-            Application.LoadLevel("Pinball_MainMenu");
+			SceneLoader.use.LoadNewScene("Pinball_MainMenu");
         }
 	}
 
@@ -260,6 +260,7 @@ public class StepGameOverMenu : IMenuStep
         {
             for (int i = 0; i < PlayerData.MaxChallenges - nrChallenges; i++)
             {
+				Debug.Log("adding challenge object " + i);
                 ChallengeObjects.Add(new Pair<GameObject, Challenge>(null, null));
             }
         }
@@ -322,7 +323,7 @@ public class StepGameOverMenu : IMenuStep
                 if (ChallengeObjects[i].Second.Completed)
                 {
                     // Replace old with new challenge.
-                    bool toRemove = ChallengeManager.use.ReplaceChallenge(ChallengeObjects[i].Second);
+                    bool toRemove = !ChallengeManager.use.ReplaceChallenge(ChallengeObjects[i].Second);
 
                     // Make old challenge fly off.
                     Vector3 destPos = ChallengeObjects[i].First.transform.position.xAdd(15.0f);
@@ -359,6 +360,7 @@ public class StepGameOverMenu : IMenuStep
         int count = 0;
         foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
         {
+			Debug.Log("count = " + count + " :: ChallengeObjects.count = " + ChallengeObjects.Count);
             if (ChallengeObjects[count].Second == null)
             {
                 // Set pos in window.

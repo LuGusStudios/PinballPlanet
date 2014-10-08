@@ -18,10 +18,10 @@ public class LevelSelect : MonoBehaviour
     void OnGUI()
     {
         if (GUI.Button(new Rect(10, 10, 150, 25), "Load halloween pinball"))
-            Application.LoadLevel("Pinball_Halloween");
+			SceneLoader.use.LoadNewScene("Pinball_Halloween");
         if (GUI.Button(new Rect(10, 50, 150, 25), "Load pirate pinball"))
-            Application.LoadLevel("Pinball_Ship");
+			SceneLoader.use.LoadNewScene("Pinball_Ship");
         if (GUI.Button(new Rect(10, 100, 150, 25), "Load mine pinball"))
-            Application.LoadLevel("Pinball_Mine");
+			SceneLoader.use.LoadNewScene("Pinball_Mine");
     }
 }

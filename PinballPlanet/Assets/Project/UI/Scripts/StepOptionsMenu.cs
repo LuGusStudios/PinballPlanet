@@ -6,6 +6,7 @@ public class StepOptionsMenu : IMenuStep
     protected Button optionsButton = null;
     protected Button TrophyButton = null;
     protected Button SocialButton = null;
+	protected Button resetButton = null;
     protected Button musicCheckBox = null;
     private bool _musicChecked = true;
     protected Button effectsCheckBox = null;
@@ -44,6 +45,11 @@ public class StepOptionsMenu : IMenuStep
             Debug.Log("StepMainMenu: Missing trophy button.");
         }
 
+		if (resetButton == null)
+		{
+			resetButton = transform.FindChild("Button_Reset").GetComponent<Button>();
+		}
+
         if (musicCheckBox == null)
         {
             musicCheckBox = transform.FindChild("CheckBox_Music").GetComponent<Button>();
@@ -67,7 +73,33 @@ public class StepOptionsMenu : IMenuStep
 
     public void SetupGlobal()
     {
+		GetSavedSettings();
     }
+
+	public void GetSavedSettings() 
+	{
+		_musicChecked = !(LugusConfig.use.System.GetBool("musicMuted", false));
+		_effectsChecked = !(LugusConfig.use.System.GetBool("SFXMuted", false));
+
+		if (_musicChecked) 
+		{
+			musicCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
+		}
+		else 
+		{
+			musicCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
+		}
+
+		if (_effectsChecked) 
+		{
+			effectsCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
+		}
+		else 
+		{
+			effectsCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
+		}
+
+	}
 
     protected void Start()
     {
@@ -95,18 +127,26 @@ public class StepOptionsMenu : IMenuStep
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
         }
+		else if (resetButton.pressed) 
+		{
+			Debug.Log("Pressed reset button");
+		}
         else if (musicCheckBox.pressed)
         {
             if (_musicChecked)
             {
                 musicCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
                 LugusAudio.use.Music().VolumePercentage = 0;
+				LugusConfig.use.System.SetBool("musicMuted", true, true);
             }
             else
             {
                 musicCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
                 LugusAudio.use.Music().VolumePercentage = 1.0f;
+				LugusConfig.use.System.SetBool("musicMuted", false, true);
             }
+
+			LugusConfig.use.System.Store();
 
             _musicChecked = !_musicChecked;
         }
@@ -116,12 +156,16 @@ public class StepOptionsMenu : IMenuStep
             {
                 effectsCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
                 LugusAudio.use.SFX().VolumePercentage = 0;
+				LugusConfig.use.System.SetBool("SFXMuted", true, true);
             }
             else
             {
                 effectsCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
                 LugusAudio.use.SFX().VolumePercentage = 1.0f;
+				LugusConfig.use.System.SetBool("SFXMuted", false, true);
             }
+
+			LugusConfig.use.System.Store();
 
             _effectsChecked = !_effectsChecked;
         }

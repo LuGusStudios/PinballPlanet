@@ -110,16 +110,13 @@ public class LugusSingletonRuntime<T> : MonoBehaviour where T : MonoBehaviour
 			}
 			
 			_instance = scriptContainer.AddComponent<T>();
-			
-			return;
 		}
 		else if( instances.Length > 1 )
 		{
 			Debug.LogError("Multiple (" + instances.Length + ") instances of object " + typeof(T).Name + " found in this scene. Returning the first.");
+			_instance = instances[0];
 		}
-		
-		_instance = instances[0];
-		
+
 		if (_instance != null)
 		{
 			if (_instance is LugusSingletonRuntime<T>)

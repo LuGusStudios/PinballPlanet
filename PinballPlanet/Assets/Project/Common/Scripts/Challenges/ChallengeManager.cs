@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+using System.IO;
+#endif
+
 public class ChallengeManager : MonoBehaviour
 {
     // Singleton
@@ -39,29 +43,86 @@ public class ChallengeManager : MonoBehaviour
     // Completed challenges in a level.
     public List<Challenge> CompletedLvlChallenges = new List<Challenge>();
 
+	private bool loadFromFileSystem = false;
+
+	public void reset()
+	{
+		CurrentChallenges = new List<Challenge>();
+		_uncompletedChallenges = new List<Challenge>();
+		AllChallenges = new List<Challenge>();
+		CompletedLvlChallenges = new List<Challenge>();
+		SetupLocal();
+	}
+
     // Initialization.
     public void SetupLocal()
     {
         Debug.Log("Initializing challenge manager.");
 
-        // Load challenges file into reader.
-        TextAsset challengesText = LugusResources.use.Shared.GetTextAsset("Challenges");
+		string txt = "";
 
-        // Check if challenges file is found.
-        if (challengesText == LugusResources.use.errorTextAsset)
-        {
-            Debug.LogError("Challenges file not Found!");
-            return;
-        }
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+		if (! loadFromFileSystem) 
+		{
+#endif
+			// Load challenges file into reader.
+			TextAsset challengesText = LugusResources.use.Shared.GetTextAsset ("Challenges");
+
+			// Check if challenges file is found.
+			if (challengesText == LugusResources.use.errorTextAsset) {
+					Debug.LogError ("Challenges file not Found!");
+					return;
+			}
+
+			txt = challengesText.text;
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+		}
+		else 
+		{
+
+			string configPath = Application.dataPath + "/challenges.xml";
+			if (File.Exists(configPath))
+			{
+				txt = File.ReadAllText(configPath);
+			}
+			else 
+			{
+				Debug.LogError ("Challenges file not Found in filesystem!");
+				return;
+			}
+
+		}
+#endif
 
         // Parse challenges file.
-        ParseChallenges(ref challengesText);
+        ParseChallenges(txt);
     }
 
+	void OnGUI()
+	{
+		if (!LugusDebug.debug)
+			return;
+
+		if ( loadFromFileSystem ) 
+		{
+			if (GUILayout.Button("challenge from file"))
+			{
+				loadFromFileSystem = false;
+			}
+		}
+		else 
+		{
+			if (GUILayout.Button("challenge from default"))
+			{
+				loadFromFileSystem = true;
+			}
+		}
+	}
+
     // Loads in all challenges.
-    private void ParseChallenges(ref TextAsset challengesText)
+    private void ParseChallenges(string challengesText)
     {
-        TinyXmlReader reader = new TinyXmlReader(challengesText.text);
+        TinyXmlReader reader = new TinyXmlReader(challengesText);
 
         // Start read.
         while (reader.Read("Challenges"))
@@ -284,8 +345,16 @@ public class ChallengeManager : MonoBehaviour
     }
 
     // Removes a current challenge and adds the next one, returns whether a new challenge was found.
+	// explanation about the inner workings:
+	// The outer loop starts with the first challenge. This list is sorted, so this is also the list with the first priority.
+	// the inner loop runs though all challenges with the same priority.
+	// if the inner loop encounters a challenge that is not completed and can be used in the current level, add that to the list of possible challenges.
+	// if a different priority is reached. break. If no possible challenges are found, proceed to next difificulty, else pick one.
+	// from the list of possible challenges one challenge is chosen, this replaces the old challenge in the current challenges list. 
+	// if no possible challenges were found, remove this challenge from the current challenges list. (resulting in one fewer challenge)
+
     public bool ReplaceChallenge(Challenge challengeToRemove)
-    {
+    {	
         //Debug.Log("* Start current challenges count: " + CurrentChallenges.Count);
 
         // Remove challenge.

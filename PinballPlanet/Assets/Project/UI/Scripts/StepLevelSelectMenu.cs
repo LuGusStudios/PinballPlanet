@@ -409,7 +409,7 @@ public class StepLevelSelectMenu : IMenuStep
 
     void LoadLevel()
     {
-        Application.LoadLevel("Pinball_" + _lvlName);
+		SceneLoader.use.LoadNewScene("Pinball_" + _lvlName);
     }
 
     private void LvlUnlockContinue(Popup sender)

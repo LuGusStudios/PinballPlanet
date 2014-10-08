@@ -127,6 +127,7 @@ public class MenuManagerDefault : MonoBehaviour
     public void SetupGlobal()
     {
         ActivateMenu(StartMenu, true);
+		SetSavedSettings();
 
         //Debug.Log("Saving");
         //LugusConfig.use.User.SetBool(Application.loadedLevelName, true, true);
@@ -136,6 +137,27 @@ public class MenuManagerDefault : MonoBehaviour
         //if(Application.loadedLevelName == "Pinball_MainMenu")
         //    Menus[MenuTypes.GameMenu].gameObject.SetActive(true);
     }
+
+	public void SetSavedSettings() 
+	{
+		if (LugusConfig.use.System.GetBool("musicMuted", false))
+		{
+			LugusAudio.use.Music().VolumePercentage = 0.0f;
+		} 
+		else 
+		{
+			LugusAudio.use.Music().VolumePercentage = 1.0f;
+		}
+
+		if (LugusConfig.use.System.GetBool("SFXMuted", false))
+		{
+			LugusAudio.use.SFX().VolumePercentage = 0.0f;
+		}
+		else 
+		{
+			LugusAudio.use.SFX().VolumePercentage = 1.0f;
+		}
+	}
 
     protected void Awake()
     {

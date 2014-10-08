@@ -132,7 +132,7 @@ public class StepPauseMenu : IMenuStep
         }
         else if (YesButton.pressed)
         {
-            Application.LoadLevel("Pinball_MainMenu");
+			SceneLoader.use.LoadNewScene("Pinball_MainMenu");
         }
         else if (SocialButton.pressed)
         {
