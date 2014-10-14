@@ -8,7 +8,7 @@ public class StepGameMenu : IMenuStep
     protected TextMeshWrapper ballsLeft = null;
     protected Vector3 originalPosition = Vector3.zero;
     protected Transform launchHelp = null;
-    protected Button StarButton = null;
+    protected StarButton starButton = null;
 
     public GameObject StarPrefab = null;
     public int StarsEarned = 0;
@@ -135,8 +135,10 @@ public class StepGameMenu : IMenuStep
         Debug.Log("Spawning Star");
 
         GameObject star = Instantiate(StarPrefab) as GameObject;
-        StarButton = star.transform.GetChild(0).GetComponent<Button>();
+        starButton = star.transform.GetChild(0).GetComponent<StarButton>();
         star.transform.parent = transform;
         star.transform.localPosition = Vector3.zero.zAdd(-2.0f);
+
+		starButton.StartAnimation();
     }
 }

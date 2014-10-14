@@ -272,6 +272,10 @@ public class Player : LugusSingletonExisting<Player>
             {
                 BallsInPlay[0].transform.position = GameObject.Find("UnstuckPos").transform.position.z(BallsInPlay[0].transform.position.z);
             }
+			if (GUI.Button(new Rect(0, 200, 75, 25), "add 1000"))
+			{
+				ScoreManager.use.ShowScore(1000, Vector3.zero, 100, null, Color.white, gameObject);
+			}
         }
     }
 

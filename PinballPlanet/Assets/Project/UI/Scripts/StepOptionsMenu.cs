@@ -7,6 +7,9 @@ public class StepOptionsMenu : IMenuStep
     protected Button TrophyButton = null;
     protected Button SocialButton = null;
 	protected Button resetButton = null;
+	protected Transform resetConfirmation = null;
+	protected Button resetYes = null; 
+	protected Button resetNo = null;
     protected Button musicCheckBox = null;
     private bool _musicChecked = true;
     protected Button effectsCheckBox = null;
@@ -68,6 +71,33 @@ public class StepOptionsMenu : IMenuStep
             Debug.Log("StepMainMenu: Missing sound effects checkbox.");
         }
 
+		if (resetConfirmation == null)
+		{
+			resetConfirmation = transform.FindChild("ResetConfirmation");
+		}
+		if (resetConfirmation == null)
+		{
+			Debug.Log("StepMainMenu: Missing resetConfirmation.");
+		}
+		
+		if (resetYes == null)
+		{
+			resetYes = transform.FindChild("ResetConfirmation/Button_Yes").GetComponent<Button>();
+		}
+		if (resetYes == null)
+		{
+			Debug.Log("StepMainMenu: Missing Button Yes");
+		}
+		
+		if (resetNo == null)
+		{
+			resetNo = transform.FindChild("ResetConfirmation/Button_No").GetComponent<Button>();
+		}
+		if (resetNo == null)
+		{
+			Debug.Log("StepMainMenu: Missing Button No");
+		}
+
         originalPosition = transform.position;
     }
 
@@ -127,9 +157,47 @@ public class StepOptionsMenu : IMenuStep
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
         }
+		/*
+		else if (MainMenuButton.pressed)
+        {
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
+            ExitConfirmation.gameObject.SetActive(true);
+            ResumeButton.gameObject.SetActive(false);
+            MainMenuButton.gameObject.SetActive(false);
+        }
+        else if (NoButton.pressed)
+        {
+            ExitConfirmation.gameObject.SetActive(false);
+            ResumeButton.gameObject.SetActive(true);
+            MainMenuButton.gameObject.SetActive(true);
+        }
+        else if (YesButton.pressed)
+        {
+			SceneLoader.use.LoadNewScene("Pinball_MainMenu");
+        }
+		 */
 		else if (resetButton.pressed) 
 		{
 			Debug.Log("Pressed reset button");
+			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
+
+			foreach (Transform child in transform) {
+				child.gameObject.SetActive(false);
+			}
+			resetConfirmation.gameObject.SetActive(true);
+		}
+		else if (resetYes.pressed)
+		{
+			Debug.Log("Resetting");
+			ResetGame();
+		}
+		else if (resetNo.pressed)
+		{
+			foreach (Transform child in transform) {
+				child.gameObject.SetActive(true);
+			}
+			resetConfirmation.gameObject.SetActive(false);
+			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu, false);
 		}
         else if (musicCheckBox.pressed)
         {
@@ -170,6 +238,15 @@ public class StepOptionsMenu : IMenuStep
             _effectsChecked = !_effectsChecked;
         }
     }
+
+	void ResetGame()
+	{
+		LugusConfig.use.User.ClearAllData();
+		LugusConfig.use.SaveProfiles();
+		PlayerData.use.Load();
+		ChallengeManager.use.reset();
+		SceneLoader.use.LoadNewScene(Application.loadedLevel);
+	}
 
     public override void Activate(bool animate = true)
     {

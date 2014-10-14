@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class StepMainMenu : IMenuStep
 {
@@ -22,6 +23,7 @@ public class StepMainMenu : IMenuStep
 
     public Sprite ChallengeIcon = null;
     public Sprite HelpIcon = null;
+	public Sprite starIcon = null;
 
 
     public override void SetupLocal()
@@ -198,7 +200,9 @@ public class StepMainMenu : IMenuStep
             newPopup.boxType = Popup.PopupType.Continue;
             newPopup.onContinueButtonClicked += WelcomeContinue;
             newPopup.Show();
-        }
+        } 
+
+		checkDailyStars();
     }
 
     public override void Deactivate(bool animate = true)
@@ -222,15 +226,48 @@ public class StepMainMenu : IMenuStep
 
             if (GUI.Button(new Rect(10, 250, 250, 200), "Clear save data."))
             {
-                LugusConfig.use.User.ClearAllData();
-                LugusConfig.use.SaveProfiles();
-                PlayerData.use.Load();
-                //ChallengeManager.use.CurrentChallenges.Clear();
-				ChallengeManager.use.reset();
-				SceneLoader.use.LoadNewScene(Application.loadedLevel);
+				ResetGame();
             }
         }
     }
+
+	void ResetGame()
+	{
+		LugusConfig.use.User.ClearAllData();
+		LugusConfig.use.SaveProfiles();
+		PlayerData.use.Load();
+		ChallengeManager.use.reset();
+		SceneLoader.use.LoadNewScene(Application.loadedLevel);
+	}
+
+	protected void checkDailyStars()
+	{
+		DateTime today = DateTime.Now.Date;
+		
+		if (LugusConfig.use.User.Exists("LastLoginDate"))
+		{
+			DateTime lastLoginDate = DateTime.Parse( LugusConfig.use.User.GetString("LastLoginDate", today.ToString()) );
+			
+			int dateComparison = today.CompareTo(lastLoginDate);
+			if (dateComparison > 0) // comparison is 1 if today is later
+			{
+				// Give daily star
+				PlayerData.use.Stars = PlayerData.use.Stars + 1;
+				Popup newPopup = PopupManager.use.CreateBox("Congratulations, you have earned a daily star!", starIcon);
+				newPopup.blockInput = true;
+				newPopup.boxType = Popup.PopupType.Continue;
+				newPopup.onContinueButtonClicked += dailyStarContinue;
+				newPopup.Show();
+			}
+		}
+		else 
+		{
+			Debug.Log("No saved last login date yet");
+		}
+		
+		LugusConfig.use.User.SetString("LastLoginDate", today.ToString(), true);
+		LugusConfig.use.User.Store();
+	}
 
     public void DisableButtons()
     {
@@ -255,4 +292,10 @@ public class StepMainMenu : IMenuStep
         sender.onContinueButtonClicked -= PlayLockedContinue;
         sender.Hide();
     }
+
+	private void dailyStarContinue(Popup sender)
+	{
+		sender.onContinueButtonClicked -= dailyStarContinue;
+		sender.Hide();
+	}
 }

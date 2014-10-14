@@ -17,9 +17,9 @@ public class StepGameOverMenu : IMenuStep
     protected Transform ChallengesBotTransform = null;
 
     public GameObject StarPrefab;
-    private float _starAnimTime = 0.4f;
-    private float _starAnimDelay = 0.15f;
-    private float _challengeAnimTime = 0.6f;
+	private float _starAnimTime = 1.5f;
+	private float _starAnimDelay = 0.2f;
+	private float _challengeAnimTime = 0.6f;
 
     private int _oldStars = 0;
 
@@ -188,9 +188,11 @@ public class StepGameOverMenu : IMenuStep
         // Stop any animations on menu.
         iTween.Stop(gameObject);
 
+		// Note: this caused issues with the placement of individual challenges
+		// Disabled since animation was barely visible.
         // Play menu animation.
-        transform.position = OriginalPosition + new Vector3(30, 0, 0);
-        gameObject.MoveTo(OriginalPosition).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
+        //transform.position = OriginalPosition + new Vector3(30, 0, 0);
+        //gameObject.MoveTo(OriginalPosition).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
 
         // Fill in score text.
         Score.SetText(ScoreManager.use.TotalScore.ToString());
@@ -255,7 +257,7 @@ public class StepGameOverMenu : IMenuStep
     private IEnumerator UpdateChallenges()
     {
         // Fill challenges when some are empty.
-        int nrChallenges = ChallengeObjects.Count;
+        /*int nrChallenges = ChallengeObjects.Count;
         if (nrChallenges < PlayerData.MaxChallenges)
         {
             for (int i = 0; i < PlayerData.MaxChallenges - nrChallenges; i++)
@@ -263,7 +265,21 @@ public class StepGameOverMenu : IMenuStep
 				Debug.Log("adding challenge object " + i);
                 ChallengeObjects.Add(new Pair<GameObject, Challenge>(null, null));
             }
-        }
+        }*/
+
+		// Resetting the list each time ensures that this list and the one in the challenge manager are in sync!
+		// The list is refilled in Update Challenge Objects.
+		foreach (Pair<GameObject, Challenge> pair in ChallengeObjects)
+		{
+			GameObject.Destroy(pair.First);
+		};
+
+		ChallengeObjects = new List<Pair<GameObject, Challenge>>();
+
+		for (int i = 0; i < PlayerData.MaxChallenges; i++)
+		{
+			ChallengeObjects.Add(new Pair<GameObject, Challenge>(null, null));
+		}
 
         // Set text to value before completed challenges stars were added so that animation can be done.
         foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
@@ -284,33 +300,20 @@ public class StepGameOverMenu : IMenuStep
             {
                 if (ChallengeObjects[count].First == null)
                     Debug.Log("*** Problem with " + challenge.ID + " object, count: " + count + " ***");
-                // Set icon sprite.
-                ChallengeObjects[count].First.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
-
-                // Show stars animation.
-                for (int i = 0; i < challenge.StarsReward; i++)
-                {
-                    // Spawn star.
-                    GameObject star = Instantiate(StarPrefab) as GameObject;
-                    star.transform.position = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
-
-                    // Play star animation.
-                    star.MoveTo(StarIcon).Time(_starAnimTime).EaseType(iTween.EaseType.easeOutQuad).Execute();
-
-                    // Wait for animation to end.
-                    yield return new WaitForSeconds(_starAnimTime);
-
-                    // Update star text mesh.
-                    ++newStars;
-                    foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
-                    {
-                        if (starText != null)
-                            starText.text = (newStars).ToString();
-                    }
-
-                    // Destroy star.
-                    Destroy(star);
-                }
+				// Set icon sprite.
+				ChallengeObjects[count].First.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
+				
+				// Show stars animation.
+				for (int i = 0; i < challenge.StarsReward; i++)
+				{
+					// create new star at the challenge and move to the starIcon position
+					Vector3 startPos = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
+					Vector3 endPos = StarIcon.position;
+					LugusCoroutines.use.StartRoutine(AnimateStar(startPos, endPos, ++newStars));
+					// Wait for animation to end.
+					yield return new WaitForSeconds(_starAnimDelay);
+				}
+                
             }
             ++count;
         }
@@ -353,76 +356,160 @@ public class StepGameOverMenu : IMenuStep
         LugusCoroutines.use.StartRoutine(UpdateChallengeObjects());
     }
 
+	private IEnumerator AnimateStar(Vector3 startPos, Vector3 targetPos, int newStarCount)
+	{
+		// Create new star
+		GameObject star = Instantiate(StarPrefab) as GameObject;
+		star.transform.position = startPos;
+		
+		Vector3 midPoint = (startPos + targetPos) / 2 + new Vector3 (-0.5f, 1.0f, -5);
+		Vector3[] path = new Vector3[]{startPos, midPoint, targetPos};
+		
+		// Play star animation.
+		star.MoveTo(path).Time(_starAnimTime).EaseType(iTween.EaseType.easeInQuad).Execute();
+		
+		// Wait for animation to end.
+		yield return new WaitForSeconds(_starAnimTime);
+		
+		// Update star text mesh.
+		foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
+		{
+			if (starText != null)
+				starText.text = (newStarCount).ToString();
+		}
+		
+		// Destroy star.
+		Destroy(star);
+	}
+
     // Updates the UI representation of the challenges.
     private IEnumerator UpdateChallengeObjects()
     {
-        // Show challenges.
-        int count = 0;
-        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
-        {
-			Debug.Log("count = " + count + " :: ChallengeObjects.count = " + ChallengeObjects.Count);
-            if (ChallengeObjects[count].Second == null)
-            {
-                // Set pos in window.
-                Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (PlayerData.MaxChallenges - 1) * count;
+		// Show challenges.
+		int count = 0;
+		foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
+		{
+			if (ChallengeObjects[count].Second == null)
+			{
+				// Set pos in window.
+				Vector3 pos = GetChallengePosition(count);
+				
+				// Instantiate challenge game object.
+				GameObject challengeGameObj = Instantiate(ChallengePrefab, pos, Quaternion.identity) as GameObject;
+				
+				// Set parent.
+				challengeGameObj.transform.parent = gameObject.transform;
+				challengeGameObj.transform.localScale = Vector3.one;
+				
+				// Update description.
+				challengeGameObj.transform.FindChild("Challenge/Text_Challenge").GetComponent<TextMesh>().text = challenge.Description;
+				
+				// Store.
+				ChallengeObjects[count] = new Pair<GameObject, Challenge>(challengeGameObj, challenge);
+			}
+			
+			// Hide "new challenge" text.
+			if (ChallengeObjects[count].Second.Viewed)
+			{
+				ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject.SetActive(false);
+			}
+			else
+			{
+				// Hide untill animation.
+				ChallengeObjects[count].First.SetActive(false);
+				
+				// Hide new after a while.  
+				ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject.SetActive(true);
+				LugusCoroutines.use.StartRoutine(HideGameObject(ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject, 2.0f));
+			}
+			
+			++count;
+		}
 
-                // Instantiate challenge game object.
-                GameObject challengeGameObj = Instantiate(ChallengePrefab, pos, Quaternion.identity) as GameObject;
-
-                // Set parent.
-                challengeGameObj.transform.parent = gameObject.transform;
-                challengeGameObj.transform.localScale = Vector3.one;
-
-                // Update description.
-                challengeGameObj.transform.FindChild("Challenge/Text_Challenge").GetComponent<TextMesh>().text = challenge.Description;
-
-                // Store.
-                ChallengeObjects[count] = new Pair<GameObject, Challenge>(challengeGameObj, challenge);
-            }
-
-            // Hide new text.
-            if (ChallengeObjects[count].Second.Viewed)
-            {
-                ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject.SetActive(false);
+		count = 0; 
+		// Animate viewed challenges. + set viewed to correct position
+		foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
+		{
+			if (challengeObj.Second != null)
+			{
+				Debug.Log(count);
+				if (challengeObj.Second.Viewed)
+				{
+					Debug.Log("Moving challenge " + challengeObj.Second.ID + " to index " + count);
+					Vector3 destPos = GetChallengePosition(count);
+					Debug.Log(destPos);
+					challengeObj.First.MoveTo(destPos).Time(_challengeAnimTime).Execute();
+					yield return new WaitForSeconds(_challengeAnimTime);
+				} 
+				else 
+				{
+					count --;
+				}
             }
             else
             {
-                // Hide new after a while.  
-                ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject.SetActive(true);
-                LugusCoroutines.use.StartRoutine(HideGameObject(ChallengeObjects[count].First.transform.FindChild("Challenge/Text_New").gameObject, 2.0f));
+                // Remove challenge objects there is no challenge.
+                Destroy(challengeObj.First);
+				count --;
             }
-
-            // First update all challenges have to animate, otherwise only new ones.
-            if (_firstChallengeObjectsUpdate || (!_firstChallengeObjectsUpdate && ChallengeObjects[count].Second.Viewed == false))
-            {
-                // Scale of challenge object before animation;
-                Vector3 oldScale = Vector3.one;
-
-                // Make new challenge pop in.
-                Vector3 destPos = ChallengeObjects[count].First.transform.position;
-                ChallengeObjects[count].First.transform.localScale = Vector3.zero;
-                ChallengeObjects[count].First.ScaleTo(oldScale).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeOutBack).Execute();
-
-                // Set to viewed.
-                ChallengeObjects[count].Second.Viewed = true;
-
-                // Wait for animation to end.
-                yield return new WaitForSeconds(_challengeAnimTime);
-            }
-
-            ++count;
+			count++;
         }
 
-        // Alternate between second and first time this function is called.
-        _firstChallengeObjectsUpdate = !_firstChallengeObjectsUpdate;
+		// Animate unviewed challenges.
+		foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
+		{
+			if (challengeObj.Second != null)
+			{
+				Debug.Log(count);
+				if (!challengeObj.Second.Viewed)
+				{
+					Debug.Log("Adding challenge " + challengeObj.Second.ID + " to index " + count);
+					// Unhide for animation.
+					challengeObj.First.SetActive(true);
+					
+					// Set to viewed.
+					challengeObj.Second.Viewed = true;
+					
+					// Scale of challenge object before animation;
+					Vector3 oldScale = challengeObj.First.transform.localScale;
+					
+					// Make new challenge pop in.
+					Vector3 destPos = GetChallengePosition(count);
+					challengeObj.First.transform.position = destPos;
+					challengeObj.First.transform.localScale = Vector3.zero;
+					challengeObj.First.ScaleTo(oldScale).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeOutBack).Execute();
+					
+					// Wait for animation to end.
+					Debug.Log("Playing challenge animation.");
+					yield return new WaitForSeconds(_challengeAnimTime);
+				} 
+				else
+				{
+					count --;
+				}
+			}
+			else
+			{
+				// Remove challenge objects there is no challenge.
+				Destroy(challengeObj.First);
+				count --;
+			}
+			count++;
+		}
     }
 
+	protected Vector3 GetChallengePosition(int index)
+	{
+		Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (PlayerData.MaxChallenges - 1) * index;
+		return pos;
+	}
+    
     // Hides a game object with a delay.
     private IEnumerator HideGameObject(GameObject target, float delay)
     {
         // Wait for delay.
         yield return new WaitForSeconds(delay);
-
+        
         if (target != null)
             target.SetActive(false);
     }

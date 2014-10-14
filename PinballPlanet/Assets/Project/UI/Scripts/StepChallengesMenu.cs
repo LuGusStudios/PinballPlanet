@@ -264,27 +264,6 @@ public class StepChallengesMenu : IMenuStep
 					LugusCoroutines.use.StartRoutine(AnimateStar(startPos, endPos, ++newStars));
 					// Wait for animation to end.
 					yield return new WaitForSeconds(_starAnimDelay);
-
-//                    // Spawn star.
-//                    GameObject star = Instantiate(StarPrefab) as GameObject;
-//                    star.transform.position = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
-//
-//                    // Play star animation.
-//                    star.MoveTo(StarIcon).Time(_starAnimTime).EaseType(iTween.EaseType.easeOutQuad).Execute();
-//
-//                    // Wait for animation to end.
-//                    yield return new WaitForSeconds(_starAnimDelay);
-//
-//                    // Update star text mesh.
-//                    ++newStars;
-//                    foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
-//                    {
-//                        if (starText != null)
-//                            starText.text = (newStars).ToString();
-//                    }
-//
-//                    // Destroy star.
-//                    Destroy(star);
                 }
             }
 
