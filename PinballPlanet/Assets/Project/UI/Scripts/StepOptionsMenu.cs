@@ -157,25 +157,6 @@ public class StepOptionsMenu : IMenuStep
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
         }
-		/*
-		else if (MainMenuButton.pressed)
-        {
-            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
-            ExitConfirmation.gameObject.SetActive(true);
-            ResumeButton.gameObject.SetActive(false);
-            MainMenuButton.gameObject.SetActive(false);
-        }
-        else if (NoButton.pressed)
-        {
-            ExitConfirmation.gameObject.SetActive(false);
-            ResumeButton.gameObject.SetActive(true);
-            MainMenuButton.gameObject.SetActive(true);
-        }
-        else if (YesButton.pressed)
-        {
-			SceneLoader.use.LoadNewScene("Pinball_MainMenu");
-        }
-		 */
 		else if (resetButton.pressed) 
 		{
 			Debug.Log("Pressed reset button");

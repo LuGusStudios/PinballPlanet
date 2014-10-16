@@ -82,6 +82,17 @@ class ObjectHitCondition : Condition
         }
     }
 
+	// Subscribes to the score hit event.
+	public void BumperChainScoreObjectCreated(BumperChainScore bumperChainScore)
+	{
+		// Check if name corresponds (also check for cloned objects).
+		if (bumperChainScore.name == _objectToHitName || bumperChainScore.name == _objectToHitName + "(Clone)")
+		{
+			Debug.Log("Subscribed to hit event of " + _objectToHitName);
+			bumperChainScore.Hit += OnObjectHit;
+		}
+	}
+
     // Called when new level was loaded.
     public override void OnLevelWasLoaded()
     {

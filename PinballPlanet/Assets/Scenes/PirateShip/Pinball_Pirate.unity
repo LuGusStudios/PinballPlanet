@@ -4245,7 +4245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &263846639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4496,7 +4496,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100096, guid: f93767c587d6fa443bd0128e89f787ec, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: f93767c587d6fa443bd0128e89f787ec, type: 2}
       propertyPath: m_RootOrder
@@ -13875,6 +13875,7 @@ MonoBehaviour:
   ThemeMusic: {fileID: 8300000, guid: d622fdf5acba0764ab71293608203a57, type: 3}
   ChallengeIcon: {fileID: 21300000, guid: a1ae25f20f386f244a2b440ed59a7ef7, type: 3}
   HelpIcon: {fileID: 21300000, guid: 52e2363512a5b7e4b9116b2505417e69, type: 3}
+  starIcon: {fileID: 0}
 --- !u!1 &918957041
 GameObject:
   m_ObjectHideFlags: 0

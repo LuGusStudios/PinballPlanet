@@ -214,7 +214,7 @@ public class LugusResourceCollectionLocalized : LugusResourceCollectionDefault
 		BaseURL = url;
 	}
 	
-	protected string _langID = "nl";
+	protected string _langID = "en";
 	public string LangID
 	{
 		get{ return _langID; }

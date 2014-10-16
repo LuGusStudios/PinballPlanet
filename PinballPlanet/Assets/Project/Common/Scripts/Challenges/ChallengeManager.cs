@@ -144,6 +144,9 @@ public class ChallengeManager : MonoBehaviour
                             {
                                 newChallenge.ID = reader.content;
                                 Debug.Log("Challenge ID: " + newChallenge.ID);
+
+								newChallenge.Description = LugusResources.use.Localized.GetText(reader.content);
+								Debug.Log("Description: " + newChallenge.Description);
                             }
                             else
                                 Debug.LogError("Challenge ID: " + reader.content + " is not unique!.");
@@ -186,8 +189,9 @@ public class ChallengeManager : MonoBehaviour
                         // Read description.
                         else if (reader.tagName == "TextKey")
                         {
-                            newChallenge.Description = reader.content;
-                            Debug.Log("Description: " + newChallenge.Description);
+							// moved to xml file, uses ID now 
+                            //newChallenge.Description = reader.content;
+                            //Debug.Log("Description: " + newChallenge.Description);
                         }
 
                         // Read conditions.
@@ -414,6 +418,11 @@ public class ChallengeManager : MonoBehaviour
         CurrentChallenges.Remove(challengeToRemove);
         return false;
     }
+
+	public void removeChallenge(Challenge toRemove)
+	{
+		CurrentChallenges.Remove(toRemove);
+	}
 
     // Adds an uncompleted challenge to the current challenges list.
     public void FillChallenges()

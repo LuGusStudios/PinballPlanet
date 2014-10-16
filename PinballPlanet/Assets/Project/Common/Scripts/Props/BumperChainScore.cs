@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// Script for a bumper that gives more score for each other bumper that is hit in quick sucession.
@@ -10,6 +11,7 @@ public class BumperChainScore : MonoBehaviour
     // Hit ScoreHit.
     public int ScoreHit = 100;
     public AudioClip Sound;
+	public event HitEventHandler Hit;
 
     // Bumper hit animation.
     public string AnimationName;
@@ -19,6 +21,13 @@ public class BumperChainScore : MonoBehaviour
     {
         // Increase the 'actual' chain rest time for every instance of this script.
         ChainScore.use.ActualChainResetTime += ChainScore.use.ChainResetTime;
+
+		// Let all 'ObjectHitCondition' know this object was created.
+		List<Condition> hitConditions = ChallengeManager.use.GetConditionsOfType<ObjectHitCondition>();
+		foreach (Condition hitCond in hitConditions)
+		{
+			(hitCond as ObjectHitCondition).BumperChainScoreObjectCreated(this);
+		}
     }
 
     // Called every frame.
@@ -46,6 +55,10 @@ public class BumperChainScore : MonoBehaviour
         // Check if the collider is the ball.
         if (collision.collider.gameObject.tag != "Ball")
             return;
+
+		// Call hit event.
+		if (Hit != null)
+			Hit();
 
         // Play bump animation.
         GetComponent<Animation>().Play(AnimationName);

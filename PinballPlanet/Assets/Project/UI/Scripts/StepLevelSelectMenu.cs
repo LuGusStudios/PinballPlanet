@@ -195,6 +195,8 @@ public class StepLevelSelectMenu : IMenuStep
                 // Set level to unlocked.
                 PlayerData.use.LevelsUnlocked["Pinball_" + _lvlName] = true;
 
+				// If there are empty challenges, fill them with this level's unique challenges.
+
                 // Show play button.
                 PlayButton.gameObject.SetActive(true);
 
@@ -210,6 +212,8 @@ public class StepLevelSelectMenu : IMenuStep
 
                 // Save data.
                 PlayerData.use.Save();
+
+				ChallengeManager.use.FillChallenges();
             }
         }
         else

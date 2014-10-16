@@ -98,189 +98,392 @@
 
 <Challenges>
 
-  <Challenge>
-    <ID>ClickChallengesButton</ID>
-    <Stars>10</Stars>
-    <TextKey>Click the challenges button.</TextKey>
-    <Priority>1</Priority>
-    <Condition>
-      <Type>ButtonPressed</Type>
-      <Parameters>
-        <Name>Button_Trophy</Name>
-        <MeetOnce>true</MeetOnce>
-      </Parameters>
-    </Condition>
-  </Challenge>
+  <!-- =============== -->
+  <!-- MAIN CHALLENGES -->
+  <!-- =============== -->
+  
+	<Challenge>
+		<ID>ClickChallengesButton</ID>
+		<Stars>10</Stars>
+		<TextKey>Open the challenge menu.</TextKey>
+		<Priority>1</Priority>
+		<Condition>
+			<Type>ButtonPressed</Type>
+			<Parameters>
+				<Name>Button_Trophy</Name>
+				<MeetOnce>true</MeetOnce>
+			</Parameters>
+		</Condition>
+	</Challenge>
 
-  <Challenge>
-    <ID>PirateBetween1000Score5000Score</ID>
-    <TextKey>Get a score between 1000 and 5000 in the pirate level.</TextKey>
-    <Level>Pirate</Level>
-    <Priority>4</Priority>
-    <Condition>
-      <Type>Score</Type>
-      <Parameters>
-        <Value>999</Value>
-        <Comparer>Greater</Comparer>
-      </Parameters>
-    </Condition>
-    <Condition>
-      <Type>Score</Type>
-      <Parameters>
-        <Value>5001</Value>
-        <Comparer>Less</Comparer>
-      </Parameters>
-    </Condition>
-    <Condition>
-      <Type>BallCount</Type>
-      <Parameters>
-        <Value>0</Value>
-        <Comparer>Equal</Comparer>
-      </Parameters>
-    </Condition>
-    <Condition>
-      <Type>Level</Type>
-      <Parameters>
-        <Name>Pirate</Name>
-        <Comparer>Equal</Comparer>
-      </Parameters>
-    </Condition>
-  </Challenge>
+  <!-- ================= -->
+  <!-- PIRATE CHALLENGES -->
+  <!-- ================= -->
+  
+	<Challenge>
+		<ID>PirateMoreThan10000Score</ID>
+		<TextKey>Score more than 10.000 points in the pirate level.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>9999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Pirate</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
 
-  <Challenge>
-    <ID>500PointsLeftFlipper</ID>
-    <TextKey>Get 500 points using only the left flipper.</TextKey>
-    <Priority>3</Priority>
-    <Condition>
-      <Type>Flipper</Type>
-      <Parameters>
-        <Flipper>RightFlipper</Flipper>
-        <Comparer>Unequal</Comparer>
-        <UseOnce>true</UseOnce>
-        <LevelLoadReset>true</LevelLoadReset>
-      </Parameters>
-    </Condition>
-    <Condition>
-      <Type>Score</Type>
-      <Parameters>
-        <Value>499</Value>
-        <Comparer>Greater</Comparer>
-      </Parameters>
-    </Condition>
-  </Challenge>
+	
+	<Challenge>
+		<ID>PirateMoreThan20000Score</ID>
+		<TextKey>Score more than 20.000 points in the pirate level.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>3</Priority>
+		<Stars>3</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>19999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Pirate</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>PirateMoreThan50000Score</ID>
+		<TextKey>Yo-ho-ho! Score more than 50.000 points in the pirate level.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>4</Priority>
+		<Stars>4</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>49999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Pirate</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>PirateBetween3000Score3500Score</ID>
+		<TextKey>Get a score between 3000 and 3500 in the pirate level.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>2999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>3501</Value>
+				<Comparer>Less</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Pirate</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>BallCount</Type>
+			<Parameters>
+				<Value>0</Value>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>PirateBetween9000Score10000Score</ID>
+		<TextKey>Get a score between 9000 and 10.000 in the pirate level.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>3</Priority>
+		<Stars>3</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>8999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>10001</Value>
+				<Comparer>Less</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Pirate</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>BallCount</Type>
+			<Parameters>
+				<Value>0</Value>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge> 
+	
+	<Challenge>
+		<ID>NoHitCannon</ID>
+		<TextKey>Finish the pirate level without using the cannon.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>3</Priority>
+		<Stars>3</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+				<ObjectName>ShipCannon</ObjectName>
+				<ShouldHit>false</ShouldHit>
+				<LevelLoadReset>true</LevelLoadReset>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>BallCount</Type>
+			<Parameters>
+				<Value>0</Value>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
 
-  <Challenge>
-    <ID>NoHitCannon</ID>
-    <TextKey>Finish the pirate level without using the cannon.</TextKey>
-    <Level>Pirate</Level>
-    <Priority>2</Priority>
-    <Condition>
-      <Type>ObjectHit</Type>
-      <Parameters>
-        <ObjectName>ShipCannon</ObjectName>
-        <ShouldHit>false</ShouldHit>
-        <LevelLoadReset>true</LevelLoadReset>
-      </Parameters>
-    </Condition>
-    <Condition>
-      <Type>BallCount</Type>
-      <Parameters>
-        <Value>0</Value>
-        <Comparer>Equal</Comparer>
-      </Parameters>
-    </Condition>
-  </Challenge>
+  <!-- =============== -->
+  <!-- MINE CHALLENGES -->
+  <!-- =============== -->
+  
+  	<Challenge>
+		<ID>MineMoreThan10000Score</ID>
+		<TextKey>Score more than 10.000 points in the mine level.</TextKey>
+		<Level>Mine</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>9999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Mine</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
 
-  <Challenge>
-    <ID>Score3000</ID>
-    <TextKey>Score more than 3000 points.</TextKey>
-    <Priority>2</Priority>
-    <Condition>
-      <Type>Score</Type>
-      <Parameters>
-        <Value>2999</Value>
-        <Comparer>Greater</Comparer>
-      </Parameters>
-    </Condition>
-  </Challenge>
+	
+	<Challenge>
+		<ID>MineMoreThan20000Score</ID>
+		<TextKey>Score more than 20.000 points in the mine level.</TextKey>
+		<Level>Mine</Level>
+		<Priority>3</Priority>
+		<Stars>3</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>19999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Mine</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>MineMoreThan50000Score</ID>
+		<TextKey>Lucky Strike! Score more than 50.000 points in the mine level.</TextKey>
+		<Level>Mine</Level>
+		<Priority>4</Priority>
+		<Stars>4</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>49999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Mine</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>HitCart10Times</ID>
+		<TextKey>Hit the mine cart 10 times.</TextKey>
+		<Level>Mine</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+			<ObjectName>MineCart</ObjectName>
+			<CountToMeet>10</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>Hit50Crystals</ID>
+		<TextKey>Crystal fever! Collect 50 in a single game.</TextKey>
+		<Level>Mine</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+			<ObjectName>CrystalShard_Parent</ObjectName>
+			<CountToMeet>50</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>Hit50Trees</ID>
+		<TextKey>Hit the pine trees 50 times. TIIIMBER!</TextKey>
+		<Level>Mine</Level>
+		<Priority>4</Priority>
+		<Stars>4</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+			<ObjectName>PineTree01</ObjectName>
+			<CountToMeet>50</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>EnterMine3Times</ID>
+		<TextKey>Stake a claim. Enter the mine 3 times in one game.</TextKey>
+		<Level>Mine</Level>
+		<Priority>3</Priority>
+		<Stars>3</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+			<ObjectName>MineEntrance</ObjectName>
+			<CountToMeet>3</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+  <!-- ==================== -->
+  <!-- HALLOWEEN CHALLENGES -->
+  <!-- ==================== -->
+  
+	<Challenge>
+		<ID>HalloweenMoreThan10000Score</ID>
+		<TextKey>Score more than 10.000 points in the halloween level.</TextKey>
+		<Level>Halloween</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>9999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Halloween</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
 
-  <Challenge>
-    <ID>Score5000LvlPirate</ID>
-    <Stars>3</Stars>
-    <Level>Pirate</Level>
-    <TextKey>Score more than 5000 points in the pirate level.</TextKey>
-    <Priority>2</Priority>
-    <Condition>
-      <Type>Score</Type>
-      <Parameters>
-        <Value>4999</Value>
-        <Comparer>Greater</Comparer>
-      </Parameters>
-    </Condition>
-    <Condition>
-      <Type>Level</Type>
-      <Parameters>
-        <Name>Pinball_Pirate</Name>
-        <Comparer>Equal</Comparer>
-      </Parameters>
-    </Condition>
-  </Challenge>
-
-  <Challenge>
-    <ID>BallsLost5</ID>
-    <TextKey>Lose 5 balls in a single level.</TextKey>
-    <Priority>3</Priority>
-    <Condition>
-      <Type>BallsInPlay</Type>
-      <Parameters>
-        <Value>0</Value>
-        <Comparer>Equal</Comparer>
-        <CountToMeet>5</CountToMeet>
-        <CountChangedOnly>true</CountChangedOnly>
-        <LevelLoadReset>true</LevelLoadReset>
-      </Parameters>
-    </Condition>
-  </Challenge>
-
-  <Challenge>
-    <ID>Multiball1</ID>
-    <TextKey>Get a multiball.</TextKey>
-    <Priority>3</Priority>
-    <Condition>
-      <Type>BallsInPlay</Type>
-      <Parameters>
-        <Value>3</Value>
-        <Comparer>Greater</Comparer>
-      </Parameters>
-    </Condition>
-  </Challenge>
-
-  <Challenge>
-    <ID>Score6000</ID>
-    <TextKey>Score more than 6000 points.</TextKey>
-    <Priority>3</Priority>
-    <Condition>
-      <Type>Score</Type>
-      <Parameters>
-        <Value>6000</Value>
-        <Comparer>Greater</Comparer>
-      </Parameters>
-    </Condition>
-  </Challenge>
-
-  <Challenge>
-    <ID>HitCrystal</ID>
-    <TextKey>Collect 10 crystal shards.</TextKey>
-    <Level>Mine</Level>
-    <Priority>3</Priority>
-    <Condition>
-      <Type>ObjectHit</Type>
-      <Parameters>
-        <ObjectName>CrystalShard_Parent</ObjectName>
-        <CountToMeet>10</CountToMeet>
-      </Parameters>
-    </Condition>
-  </Challenge>
-
+	
+	<Challenge>
+		<ID>HalloweenMoreThan20000Score</ID>
+		<TextKey>Score more than 20.000 points in the halloween level.</TextKey>
+		<Level>Halloween</Level>
+		<Priority>3</Priority>
+		<Stars>3</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>19999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Halloween</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>HalloweenMoreThan50000Score</ID>
+		<TextKey>Score more than 50.000 points in the halloween level.</TextKey>
+		<Level>Halloween</Level>
+		<Priority>4</Priority>
+		<Stars>4</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>49999</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Halloween</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+  
+  
 </Challenges>
 
