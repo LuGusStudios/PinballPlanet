@@ -257,6 +257,10 @@ public class ChallengeManager : MonoBehaviour
                             Debug.Log("New 'ObjectHit' condition created.");
                             newCondition = new ObjectHitCondition();
                             break;
+						case "BreakableMultiTrigger":
+							Debug.Log("New 'BreakableMultiTrigger' condition created.");
+							newCondition = new BreakableMultiTriggerCondition();
+                            break;
                         case "ButtonPressed":
                             Debug.Log("New 'ButtonPressed' condition created.");
                             newCondition = new ButtonPressedCondition();

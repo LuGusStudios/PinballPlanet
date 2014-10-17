@@ -179,7 +179,7 @@ public class LugusAudioTrack : MonoBehaviour, ILugusAudioTrack
 		
 		_paused = false;
 
-		OriginalVolume = Source.volume;
+		//OriginalVolume = Source.volume;
 		
 		Source.Play();
 	}

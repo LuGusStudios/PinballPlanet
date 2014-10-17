@@ -34,6 +34,14 @@
   </Condition>
   
   <Condition>
+    <Type>BreakableMultiTrigger</Type>
+    <Parameters>
+      <ObjectName>Scene or Prefab object name</ObjectName>
+      <ShouldTrigger>true</ShouldHit>
+    </Parameters>
+  </Condition>
+  
+  <Condition>
     <Type>Level</Type>
     <Parameters>
       <Name>Pinball_MainMenu</Name>
@@ -260,6 +268,51 @@
 	</Challenge> 
 	
 	<Challenge>
+		<ID>PirateOpenChest5Times</ID>
+		<TextKey>Pillage the booty 5 times in one game.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>4</Priority>
+		<Stars>4</Stars>
+		<Condition>
+			<Type>BreakableMultiTrigger</Type>
+			<Parameters>
+				<ObjectName>TreasureChest</ObjectName>
+				<CountToMeet>5</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>PirateBreakMast3Times</ID>
+		<TextKey>Shiver me timbers 3 times in one game.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>BreakableMultiTrigger</Type>
+			<Parameters>
+				<ObjectName>Mast</ObjectName>
+				<CountToMeet>5</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>PirateGetDrunk5Times</ID>
+		<TextKey>Where did the rum go? Get drunk.</TextKey>
+		<Level>Pirate</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>BallsInPlay</Type>
+			<Parameters>
+				<Value>3</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
 		<ID>NoHitCannon</ID>
 		<TextKey>Finish the pirate level without using the cannon.</TextKey>
 		<Level>Pirate</Level>
@@ -377,8 +430,8 @@
 		<Condition>
 			<Type>ObjectHit</Type>
 			<Parameters>
-			<ObjectName>CrystalShard_Parent</ObjectName>
-			<CountToMeet>50</CountToMeet>
+				<ObjectName>CrystalShard_Parent</ObjectName>
+				<CountToMeet>50</CountToMeet>
 			</Parameters>
 		</Condition>
 	</Challenge>
@@ -399,6 +452,21 @@
 	</Challenge>
 	
 	<Challenge>
+		<ID>MineDestroyMine3Times</ID>
+		<TextKey>Boom! Boom! BOOM!</TextKey>
+		<Level>Mine</Level>
+		<Priority>4</Priority>
+		<Stars>4</Stars>
+		<Condition>
+			<Type>BreakableMultiTrigger</Type>
+			<Parameters>
+				<ObjectName>BridgeMultiObjective</ObjectName>
+				<CountToMeet>3</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
 		<ID>EnterMine3Times</ID>
 		<TextKey>Stake a claim. Enter the mine 3 times in one game.</TextKey>
 		<Level>Mine</Level>
@@ -407,8 +475,8 @@
 		<Condition>
 			<Type>ObjectHit</Type>
 			<Parameters>
-			<ObjectName>MineEntrance</ObjectName>
-			<CountToMeet>3</CountToMeet>
+				<ObjectName>MineEntrance</ObjectName>
+				<CountToMeet>3</CountToMeet>
 			</Parameters>
 		</Condition>
 	</Challenge>
@@ -483,7 +551,87 @@
 			</Parameters>
 		</Condition>
 	</Challenge>
-  
-  
+	
+	<Challenge>
+		<ID>HalloweenMoreThan66600Score</ID>
+		<TextKey>Score more than 66.600 points in the halloween level.</TextKey>
+		<Level>Halloween</Level>
+		<Priority>4</Priority>
+		<Stars>4</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>66599</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Level</Type>
+			<Parameters>
+				<Name>Pinball_Halloween</Name>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>HalloweenGetSpider10Times</ID>
+		<TextKey>Get Arachnophobia 10 times in one game.</TextKey>
+		<Level>Halloween</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+				<ObjectName>SpiderWeb</ObjectName>
+				<CountToMeet>10</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>HalloweenHitGhost5Times</ID>
+		<TextKey>Ghost Hunting! Hit it 5 times in one game.</TextKey>
+		<Level>Halloween</Level>
+		<Priority>2</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+				<ObjectName>Ghost_Parent</ObjectName>
+				<CountToMeet>5</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>HalloweenHitPumpkin100Times</ID>
+		<TextKey>Pumpkin soup ingredients: 100 pumpkin slices.</TextKey>
+		<Level>Halloween</Level>
+		<Priority>4</Priority>
+		<Stars>4</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+				<ObjectName>Pumpkin</ObjectName>
+				<CountToMeet>100</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>HalloweenHitBat100Times</ID>
+		<TextKey>Catch 100 bats in one game.</TextKey>
+		<Level>Halloween</Level>
+		<Priority>3</Priority>
+		<Stars>3</Stars>
+		<Condition>
+			<Type>ObjectHit</Type>
+			<Parameters>
+				<ObjectName>Bat</ObjectName>
+				<CountToMeet>100</CountToMeet>
+			</Parameters>
+		</Condition>
+	</Challenge>
 </Challenges>
 

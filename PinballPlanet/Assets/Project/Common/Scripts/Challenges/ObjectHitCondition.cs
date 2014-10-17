@@ -71,6 +71,11 @@ class ObjectHitCondition : Condition
         _hitOnce = true;
     }
 
+	private void OnObjectHit(GameObject go)
+	{
+		OnObjectHit();
+	}
+
     // Subscribes to the score hit event.
     public void ScoreHitObjectCreated(ScoreHit scoreHit)
     {
@@ -90,6 +95,16 @@ class ObjectHitCondition : Condition
 		{
 			Debug.Log("Subscribed to hit event of " + _objectToHitName);
 			bumperChainScore.Hit += OnObjectHit;
+		}
+	}
+
+	public void BreakableObjectCreated(Breakable breakable)
+	{
+		// Check if name corresponds (also check for cloned objects).
+		if (breakable.name == _objectToHitName || breakable.name == _objectToHitName + "(Clone)")
+		{
+			Debug.Log("Subscribed to hit event of " + _objectToHitName);
+			breakable.Broken += OnObjectHit;
 		}
 	}
 

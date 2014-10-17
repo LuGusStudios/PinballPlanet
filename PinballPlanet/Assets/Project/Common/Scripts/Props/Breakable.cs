@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public delegate void OnBrokenEventHandler(GameObject sender);
 public delegate void OnUnBrokenEventHandler(GameObject sender);
@@ -27,6 +28,12 @@ public class Breakable : MonoBehaviour
         // Store original score.
         if (GetComponent<ScoreHit>() != null)
             _originalScore = GetComponent<ScoreHit>().score;
+
+		List<Condition> hitConditions = ChallengeManager.use.GetConditionsOfType<ObjectHitCondition>();
+		foreach (Condition hitCond in hitConditions)
+		{
+			(hitCond as ObjectHitCondition).BreakableObjectCreated(this);
+		}
     }
 
     // Called when another object collides.

@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void BreakableMultiTriggerEventHandler();
+
 /// <summary>
 /// This gameobject will require the player to break a number of 'Breakable' to activate the objective/function of this gameobject.
 /// </summary>
 public class BreakableMultiObjective : Breakable
 {
+	public event BreakableMultiTriggerEventHandler Trigger;
+
     // List of breakable objectives.
     public List<Breakable> Objectives;
 
@@ -40,6 +44,13 @@ public class BreakableMultiObjective : Breakable
         {
             objective.GetComponent<Breakable>().Broken += ObjectiveBroken;
         }
+
+		// Let all 'ObjectHitCondition' know this object was created.
+		List<Condition> hitConditions = ChallengeManager.use.GetConditionsOfType<BreakableMultiTriggerCondition>();
+		foreach (Condition hitCond in hitConditions)
+		{
+			(hitCond as BreakableMultiTriggerCondition).BreakableMultiObjectCreated(this);
+		}
     }
 
     // Called when a breakable objective is broken.
@@ -50,6 +61,8 @@ public class BreakableMultiObjective : Breakable
         {
             Break();
             Activate();
+			if (Trigger != null)
+				Trigger();
         }
     }
 

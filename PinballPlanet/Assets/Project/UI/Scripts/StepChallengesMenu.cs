@@ -233,17 +233,20 @@ public class StepChallengesMenu : IMenuStep
 			Destroy(star);
 		}
 
-		// Replace completed challenges.
-		foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
+		if (Application.loadedLevelName == PlayerData.MainLvlName)
 		{
-			if (challengeObj.Second != null)
+			// Replace completed challenges.
+			foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
 			{
-				if (challengeObj.Second.Completed)
+				if (challengeObj.Second != null)
 				{
-					ChallengeManager.use.removeChallenge(challengeObj.Second);
-					//ChallengeManager.use.ReplaceChallenge(challengeObj.Second);
-					challengeObj.Second = null;
-					Destroy(challengeObj.First);
+					if (challengeObj.Second.Completed)
+					{
+						ChallengeManager.use.removeChallenge(challengeObj.Second);
+						//ChallengeManager.use.ReplaceChallenge(challengeObj.Second);
+						challengeObj.Second = null;
+						Destroy(challengeObj.First);
+					}
 				}
 			}
 		}

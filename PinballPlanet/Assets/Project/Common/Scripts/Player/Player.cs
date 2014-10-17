@@ -128,7 +128,7 @@ public class Player : LugusSingletonExisting<Player>
     {
         ReleaseBall();
 
-        LugusAudio.use.Music().Play(Music, true).Loop = true;
+        LugusAudio.use.Music().Play(Music, true, new LugusAudioTrackSettings().Loop(true));
     }
 
     protected virtual void Update()

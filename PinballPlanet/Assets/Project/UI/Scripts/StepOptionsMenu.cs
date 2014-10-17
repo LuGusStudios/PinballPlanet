@@ -182,10 +182,13 @@ public class StepOptionsMenu : IMenuStep
 		}
         else if (musicCheckBox.pressed)
         {
+			Debug.Log(LugusAudio.use.Music().IsPlaying);
+			Debug.Log(LugusAudio.use.Music().GetTrack().ToString());
+
             if (_musicChecked)
             {
                 musicCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
-                LugusAudio.use.Music().VolumePercentage = 0;
+                LugusAudio.use.Music().VolumePercentage = 0.0f;
 				LugusConfig.use.System.SetBool("musicMuted", true, true);
             }
             else
