@@ -195,12 +195,14 @@ public class BallPhysics : MonoBehaviour
 
             if (layerMask != 0)
             {
+				//layerMask = 1 << layerMask;
+				//Debug.Log("Layer " + layerMask);
                 //Debug.Log("*** Correction might be required. ***");
                 RaycastHit hitInfo;
                 // Cast a ray from behind the ball toward the tangent. If it hits, then try to put the ball above the flipper
                 if (Physics.Raycast(_previousPosition, Vector3.Normalize(-_rb.velocity), out hitInfo, Mathf.Infinity, layerMask))
                 {
-                    //Debug.Log("Correction required. Ball at " + objTransform.position + " collided with " + hitInfo.transform.name + " at " + hitInfo.point + " v = " + rb.velocity);
+                    Debug.Log(/*"Correction required. Ball at " + objTransform.position + */" collided with " + hitInfo.transform.name + " at " + hitInfo.point /*+ " v = " + rb.velocity*/);
 
                     // Move the ball up to the tangent point
                     // (c.haag 2011-02-28) - If you uncomment this out, sometimes the ball is jerked to a place it shouldn't
@@ -214,8 +216,12 @@ public class BallPhysics : MonoBehaviour
                     Vector3 surfaceNormal = -hitInfo.normal;
                     Vector3 ballRay = Vector3.Normalize(_rb.velocity);
                     Vector3 angleOfReflection = Vector3.Reflect(ballRay, surfaceNormal);
+
                     // Also apply an extra velocity so it doesn't stick or loiter around the boundary of the flipper
-                    Vector3 extraVelocity = (_rb.velocity.y < 0 && _rb.velocity.y > -60) ? new Vector3(0, 500, 0) : new Vector3(0, 100, 0);
+                    //Vector3 extraVelocity = (_rb.velocity.y < 0 && _rb.velocity.y > -60) ? new Vector3(0, 500, 0) : new Vector3(0, 100, 0);
+					// Edit By Tom: This caused a bug making the ball launch when releasing an "up" flipper
+					Vector3 extraVelocity = new Vector3(0, 0, 0); 
+
                     _rb.velocity = angleOfReflection * Vector3.Magnitude(_rb.velocity);
                     // Ensure the current velocity is always positive
                     if (_rb.velocity.y < 0) { _rb.velocity.y(-_rb.velocity.y); }

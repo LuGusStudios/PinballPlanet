@@ -106,7 +106,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: .000583028363, y: 5.66272211e-05, z: .00941986591, w: .999955535}
-  m_LocalPosition: {x: 3.75069833, y: .0975042582, z: 2}
+  m_LocalPosition: {x: 3.72216797, y: -.311523438, z: 1.99952698}
   m_LocalScale: {x: 1.36345387, y: 1.36345375, z: 1.36345387}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -118,7 +118,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: .292622775, w: .956228018}
-  m_LocalPosition: {x: -1.00940681, y: .676373005, z: 3.57627869e-07}
+  m_LocalPosition: {x: -1.28125, y: .404541016, z: 0}
   m_LocalScale: {x: .733430982, y: .733430982, z: .733430982}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -130,7 +130,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .448583364, y: .091512531, z: 3.57627869e-07}
+  m_LocalPosition: {x: .448730469, y: -.254882812, z: 0}
   m_LocalScale: {x: .733430982, y: .733430982, z: .733430982}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -142,7 +142,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.511426687, y: -2.79694796e-05, z: 3.57627869e-07}
+  m_LocalPosition: {x: -.783203125, y: -.271728516, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -170,7 +170,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.58772111, y: .286604941, z: -1.99999964}
+  m_LocalPosition: {x: 5080.104, y: -2604.45605, z: -19.7192383}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400008}
@@ -226,8 +226,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 12, y: 1.83911145, z: 0}
-  m_Center: {x: 5.86000013, y: 0, z: 0}
+  m_Size: {x: 11.5469189, y: 3.01995587, z: 0}
+  m_Center: {x: 5.63357162, y: .0838844255, z: 0}
 --- !u!102 &10200000
 TextMesh:
   serializedVersion: 3
@@ -256,7 +256,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
-  m_Text: "Get a highscore higher\r\nthan 1000"
+  m_Text: Get a highscore higher than 1000.
   m_OffsetZ: 0
   m_CharacterSize: .115000002
   m_LineSpacing: 1
@@ -324,7 +324,7 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8763260099aa0d54387b85767b4f115a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0a34f183db1f81f43be6079fdc1cffba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!212 &21200002
 SpriteRenderer:

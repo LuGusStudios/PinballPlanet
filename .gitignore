@@ -13,7 +13,7 @@ Temp/
 BUILDS/
 PinballPlanet/Assets/ResourcesTemp/
 PinballPlanet/Assets/ResourcesTemp.meta
-PinballPlanet/Assets/
+#PinballPlanet/Assets/
 *.pidb
 *.pidb.meta
 

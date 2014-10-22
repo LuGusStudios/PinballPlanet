@@ -30,7 +30,8 @@ public class FlowBackPreventer : Triggerable
             trigger.collider.isTrigger = false;
 
         // Unhide object.
-		renderer.enabled = true;
+		//renderer.enabled = true;
+		SetRenderersVisibility(true);
         if (collider != null) 
             collider.isTrigger = false;
 
@@ -50,7 +51,8 @@ public class FlowBackPreventer : Triggerable
         }
 
         // Hide object.
-        renderer.enabled = false;
+        //renderer.enabled = false;
+		SetRenderersVisibility(false);
         if (collider != null) 
             collider.isTrigger = true;
 
@@ -59,6 +61,14 @@ public class FlowBackPreventer : Triggerable
         //    child.gameObject.SetActive(false);
         //}
     }
+
+	void SetRenderersVisibility(bool visible)
+	{
+		foreach(Renderer r in transform.GetComponentsInChildren<Renderer>())
+		{
+			r.enabled = visible;
+		}
+	}
 
     void OnTriggerEnter(Collider other)
     {

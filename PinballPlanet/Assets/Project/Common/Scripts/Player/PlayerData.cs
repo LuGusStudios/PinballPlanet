@@ -54,7 +54,7 @@ public class PlayerData : MonoBehaviour
     public static int MaxHighScores = 5;
 
     // Max challenges at a time.
-    public static int MaxChallenges = 4;
+    public static int MaxChallenges = 3;
 
     // Level strings.
     public const string MainLvlName = "Pinball_MainMenu";

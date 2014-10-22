@@ -195,7 +195,8 @@ public class StepMainMenu : IMenuStep
         // Show welcome message.
         if (!LugusConfig.use.User.GetBool(_messageSeenKey, false))
         {
-            Popup newPopup = PopupManager.use.CreateBox("Welcome to Pinball Planet!\nIf you need help, click the '?' button in the top right corner.\nHave fun!", HelpIcon);
+
+			Popup newPopup = PopupManager.use.CreateBox(LugusResources.use.Localized.GetText("MainMenuPopupHelp"), HelpIcon);
             newPopup.blockInput = true;
             newPopup.boxType = Popup.PopupType.Continue;
             newPopup.onContinueButtonClicked += WelcomeContinue;

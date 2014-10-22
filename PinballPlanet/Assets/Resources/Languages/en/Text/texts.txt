@@ -1,0 +1,50 @@
+<root>
+
+	<MainMenuPopupHelp>Welcome to Pinball Planet!\nIf you need help, click the '?' button in the top right corner.\nHave fun!</MainMenuPopupHelp>
+
+	<!-- =============== -->
+	<!-- MAIN CHALLENGES -->
+	<!-- =============== -->
+
+	<ClickChallengesButton>Open the challenge menu.</ClickChallengesButton>
+	
+	<!-- ================= -->
+	<!-- PIRATE CHALLENGES -->
+	<!-- ================= -->
+	
+	<PirateMoreThan10000Score>Score more than 10.000 points in the pirate level.</PirateMoreThan10000Score>
+	<PirateMoreThan20000Score>Score more than 20.000 points in the pirate level.</PirateMoreThan20000Score>
+	<PirateMoreThan50000Score>Yo-ho-ho! Score more than 50.000 points in the pirate level.</PirateMoreThan50000Score>
+	<PirateBetween3000Score3500Score>Get a score between 3000 and 3500 in the pirate level.</PirateBetween3000Score3500Score>
+	<PirateBetween9000Score10000Score>Get a score between 9000 and 10.000 in the pirate level.</PirateBetween9000Score10000Score>
+	<NoHitCannon>Finish the pirate level without using the cannon.</NoHitCannon>
+	<PirateOpenChest5Times>Pillage the booty 5 times in one game.</PirateOpenChest5Times>
+	<PirateBreakMast3Times>Shiver me timbers 3 times in one game.</PirateBreakMast3Times>
+	<PirateGetDrunk5Times>Where did the rum go? Get drunk.</PirateGetDrunk5Times>
+
+    <!-- =============== -->
+	<!-- MINE CHALLENGES -->
+	<!-- =============== -->
+	
+	<MineMoreThan10000Score>Score more than 10.000 points in the mine level.</MineMoreThan10000Score>
+	<MineMoreThan20000Score>Score more than 20.000 points in the mine level.</MineMoreThan20000Score>
+	<MineMoreThan50000Score>Lucky Strike! Score more than 50.000 points in the mine level.</MineMoreThan50000Score>
+	<Hit50Crystals>Crystal fever! Collect 50 in a single game.</Hit50Crystals>
+	<EnterMine3Times>Stake a claim. Enter the mine 3 times in one game.</EnterMine3Times>
+	<HitCart10Times>Hit the mine cart 10 times.</HitCart10Times>
+	<Hit50Trees>Hit the pine trees 50 times. TIIIMBER!</Hit50Trees>
+	<MineDestroyMine3Times>Boom! Boom! BOOM!</MineDestroyMine3Times>
+	
+	<!-- ==================== -->
+	<!-- HALLOWEEN CHALLENGES -->
+	<!-- ==================== -->
+	
+	<HalloweenMoreThan10000Score>Score more than 10.000 points in the halloween level.</HalloweenMoreThan10000Score>
+	<HalloweenMoreThan20000Score>Score more than 20.000 points in the halloween level.</HalloweenMoreThan20000Score>
+	<HalloweenMoreThan50000Score>Score more than 50.000 points in the halloween level.</HalloweenMoreThan50000Score>
+	<HalloweenMoreThan66600Score>Score more than 66.600 points in the halloween level.</HalloweenMoreThan66600Score>
+	<HalloweenGetSpider10Times>Get Arachnophobia 10 times in one game.</HalloweenGetSpider10Times>
+	<HalloweenHitGhost5Times>Ghost Hunting! Hit it 5 times in one game.</HalloweenHitGhost5Times>
+	<HalloweenHitPumpkin100Times>Pumpkin soup ingredients: 100 pumpkin slices.</HalloweenHitPumpkin100Times>
+	<HalloweenHitBat100Times>Catch 100 bats in one game.</HalloweenHitBat100Times>
+</root>

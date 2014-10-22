@@ -18,6 +18,9 @@ public class SkullBallCatch : MonoBehaviour
         if (other.tag != "Ball")
             return;
 
+		if (_skull.Ball != null)
+			return;
+
         _skull.CloseSkull();
         _skull.Ball = other.gameObject.GetComponent<Ball>();
 

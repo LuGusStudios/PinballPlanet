@@ -102,7 +102,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.58789062, y: 1.4831543, z: -2}
+  m_LocalPosition: {x: 5082.16602, y: -2604.80811, z: -24.4733887}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400008}
@@ -127,7 +127,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.01708984, y: -.0224609375, z: 0}
+  m_LocalPosition: {x: 1.01708984, y: .0114746094, z: 0}
   m_LocalScale: {x: .733430982, y: .733430982, z: .733430982}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -197,8 +197,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10, y: 1.83911145, z: 0}
-  m_Center: {x: 4.92999983, y: 0, z: 0}
+  m_Size: {x: 10, y: 2.83811069, z: 0}
+  m_Center: {x: 4.92987442, y: -.103524037, z: 0}
 --- !u!102 &10200000
 TextMesh:
   serializedVersion: 3
@@ -253,6 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: -1
+  height: -1
   autoUpdate: 0
   allowSmallerCharacterSize: 1
   allowSplit: 1
@@ -269,6 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 10
+  height: -1
   autoUpdate: 0
   allowSmallerCharacterSize: 1
   allowSplit: 1

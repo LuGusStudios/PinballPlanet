@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Config>
+	<LastLoginDate>10/15/2014 12:00:00 AM</LastLoginDate>
+	<Message_Welcome_Seen>True</Message_Welcome_Seen>
+	<PlayButton_Locked>False</PlayButton_Locked>
+	<Highscore_Pinball_Mine_0>11950</Highscore_Pinball_Mine_0>
+	<Highscore_Pinball_Mine_1>8800</Highscore_Pinball_Mine_1>
+	<Highscore_Pinball_Mine_2>6700</Highscore_Pinball_Mine_2>
+	<Highscore_Pinball_Mine_3>6400</Highscore_Pinball_Mine_3>
+	<Stars>0</Stars>
+	<Pinball_Halloween_Unlocked>False</Pinball_Halloween_Unlocked>
+	<Pinball_Pirate_Unlocked>False</Pinball_Pirate_Unlocked>
+	<Pinball_Mine_Unlocked>True</Pinball_Mine_Unlocked>
+	<Challenge_ClickChallengesButton_Done>True</Challenge_ClickChallengesButton_Done>
+	<Message_LvlUnlock_Seen>True</Message_LvlUnlock_Seen>
+</Config>
