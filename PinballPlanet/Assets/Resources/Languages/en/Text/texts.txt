@@ -1,12 +1,25 @@
 <root>
 
+	<!-- ========= -->
+	<!-- MAIN MENU -->
+	<!-- ========= -->
+
 	<MainMenuPopupHelp>Welcome to Pinball Planet!\nIf you need help, click the '?' button in the top right corner.\nHave fun!</MainMenuPopupHelp>
+	
+	<!-- =========== -->
+	<!-- DURING GAME -->
+	<!-- =========== -->
+	
+	<FirstBonusScoreStarPopup>You get a star every 20.000 points. \nCatch the star to collect it!</FirstBonusScoreStarPopup>
 
 	<!-- =============== -->
 	<!-- MAIN CHALLENGES -->
 	<!-- =============== -->
 
 	<ClickChallengesButton>Open the challenge menu.</ClickChallengesButton>
+	<WorldMapFindTreasure>Find treasure on the world map.</WorldMapFindTreasure>
+	<LessThan1337Score>Score less than 1337. \n...N00b.</LessThan1337Score>
+	<MoreThan9000Score>"It's over Nine-Thousand!"</MoreThan9000Score>	
 	
 	<!-- ================= -->
 	<!-- PIRATE CHALLENGES -->

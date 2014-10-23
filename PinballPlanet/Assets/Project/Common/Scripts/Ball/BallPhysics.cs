@@ -164,73 +164,76 @@ public class BallPhysics : MonoBehaviour
 
         // Keep the ball at z=0 (I haven't been able to get a custom joint to do this adequately)
         //objTransform.position.z = 0;
-        _rb.velocity.z(0);
+        //_rb.velocity.z(0);
 
-        // If the ball is going downards, then we're OK to begin flipper correction checking
-        if (_rb.velocity.y != 0)
-        {
-            // Begin by seeing if the ball is within the "flipper buffer" which is a rectangular region of space near the flipper.
-            // No point in doing correction calculations if the ball is far away.	
-            int layerMask = 0;
-
-            if (_leftFlipperBuffer.bounds.Contains(_objTransform.position))
-            {
-                //if ((_leftFlipper.IsGoingToPressedPosition || _leftFlipper.IsAtRest) && Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0)
-                if (Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0) 
-                {
-                    // We're near the left flipper and it's in motion. Set the layer mask to that of the correction tangents of the left flipper
-                    layerMask = _leftFlipper.transform.FindChild("FlipperTangent").gameObject.layer;
-                }
-            }
-            else if (_rightFlipperBuffer.bounds.Contains(_objTransform.position))
-            {
-                //if ((_rightFlipper.IsGoingToPressedPosition || _rightFlipper.IsAtRest) && Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0)
-                if (Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0)
-                {
-                    // We're near the right flipper and it's in motion. Set the layer mask to that of the correction tangents of the right flipper
-                    layerMask = _rightFlipper.transform.FindChild("FlipperTangent").gameObject.layer;
-                }
-            }
-            //else if()
-
-            if (layerMask != 0)
-            {
-				//layerMask = 1 << layerMask;
-				//Debug.Log("Layer " + layerMask);
-                //Debug.Log("*** Correction might be required. ***");
-                RaycastHit hitInfo;
-                // Cast a ray from behind the ball toward the tangent. If it hits, then try to put the ball above the flipper
-                if (Physics.Raycast(_previousPosition, Vector3.Normalize(-_rb.velocity), out hitInfo, Mathf.Infinity, layerMask))
-                {
-                    Debug.Log(/*"Correction required. Ball at " + objTransform.position + */" collided with " + hitInfo.transform.name + " at " + hitInfo.point /*+ " v = " + rb.velocity*/);
-
-                    // Move the ball up to the tangent point
-                    // (c.haag 2011-02-28) - If you uncomment this out, sometimes the ball is jerked to a place it shouldn't
-                    // be. This is because the ball may have already started going in the opposite direction by a regular
-                    // Unity collision and the flipper tangent may not be in the direction it was when the ball actually penetrated
-                    // it by this juncture.
-                    //transform.position = hitInfo.point;
-
-                    // Now calculate the ball's new velocity. It should be a value that causes it to defelect off the normal
-                    // of the flipper.
-                    Vector3 surfaceNormal = -hitInfo.normal;
-                    Vector3 ballRay = Vector3.Normalize(_rb.velocity);
-                    Vector3 angleOfReflection = Vector3.Reflect(ballRay, surfaceNormal);
-
-                    // Also apply an extra velocity so it doesn't stick or loiter around the boundary of the flipper
-                    //Vector3 extraVelocity = (_rb.velocity.y < 0 && _rb.velocity.y > -60) ? new Vector3(0, 500, 0) : new Vector3(0, 100, 0);
-					// Edit By Tom: This caused a bug making the ball launch when releasing an "up" flipper
-					Vector3 extraVelocity = new Vector3(0, 0, 0); 
-
-                    _rb.velocity = angleOfReflection * Vector3.Magnitude(_rb.velocity);
-                    // Ensure the current velocity is always positive
-                    if (_rb.velocity.y < 0) { _rb.velocity.y(-_rb.velocity.y); }
-                    // Now apply the extra velocity
-                    _rb.velocity += extraVelocity;
-                    //Debug.Log("New velocity: " + rb.velocity + " (Extra = " + extraVelocity + ")");
-                }
-
-            }
-        }
+//        // If the ball is going downards, then we're OK to begin flipper correction checking
+//        if (_rb.velocity.y != 0) // TODO WHUT
+//        {
+//            // Begin by seeing if the ball is within the "flipper buffer" which is a rectangular region of space near the flipper.
+//            // No point in doing correction calculations if the ball is far away.	
+//            int layerMask = 0;
+//
+//            if (_leftFlipperBuffer.bounds.Contains(_objTransform.position))
+//            {
+//                //if ((_leftFlipper.IsGoingToPressedPosition || _leftFlipper.IsAtRest) && Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0)
+//                if (Mathf.Abs(_leftFlipper.rigidbody.angularVelocity.z) > 2.0f) 
+//                {
+//                    // We're near the left flipper and it's in motion. Set the layer mask to that of the correction tangents of the left flipper
+//                    layerMask = _leftFlipper.transform.FindChild("FlipperTangent").gameObject.layer;
+//                }
+//            }
+//            else if (_rightFlipperBuffer.bounds.Contains(_objTransform.position))
+//            {
+//                //if ((_rightFlipper.IsGoingToPressedPosition || _rightFlipper.IsAtRest) && Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0)
+//                if (Mathf.Abs(_rightFlipper.rigidbody.angularVelocity.z) > 2.0f)
+//                {
+//                    // We're near the right flipper and it's in motion. Set the layer mask to that of the correction tangents of the right flipper
+//                    layerMask = _rightFlipper.transform.FindChild("FlipperTangent").gameObject.layer;
+//                }
+//            }
+//            //else if()
+//
+//            if (layerMask != 0)
+//            {
+//				layerMask = 1 << layerMask;
+//				//Debug.Log("Layer " + layerMask);
+//                //Debug.Log("*** Correction might be required. ***");
+//                RaycastHit hitInfo;
+//                // Cast a ray from behind the ball toward the tangent. If it hits, then try to put the ball above the flipper
+//                if (Physics.Raycast(_previousPosition, Vector3.Normalize(_rb.velocity), out hitInfo, Mathf.Infinity, layerMask))
+//                {
+//                    Debug.Log(/*"Correction required. Ball at " + objTransform.position + */" collided with " + hitInfo.transform.name + " at " + hitInfo.point /*+ " v = " + rb.velocity*/);
+//
+//                    // Move the ball up to the tangent point
+//                    // (c.haag 2011-02-28) - If you uncomment this out, sometimes the ball is jerked to a place it shouldn't
+//                    // be. This is because the ball may have already started going in the opposite direction by a regular
+//                    // Unity collision and the flipper tangent may not be in the direction it was when the ball actually penetrated
+//                    // it by this juncture.
+//                    //transform.position = hitInfo.point;
+//
+//                    // Now calculate the ball's new velocity. It should be a value that causes it to defelect off the normal
+//                    // of the flipper.
+//                    Vector3 surfaceNormal = hitInfo.normal;
+//                    Vector3 ballRay = Vector3.Normalize(_rb.velocity);
+//                    Vector3 angleOfReflection = Vector3.Reflect(ballRay, surfaceNormal);
+//
+//                    // Also apply an extra velocity so it doesn't stick or loiter around the boundary of the flipper
+//                    //Vector3 extraVelocity = (_rb.velocity.y < 0 && _rb.velocity.y > -60) ? new Vector3(0, 500, 0) : new Vector3(0, 100, 0);
+//
+//					// Edit By Tom: This caused a bug making the ball launch when releasing an "up" flipper
+//					Vector3 extraVelocity = new Vector3(0, 0, 0); 
+//
+//                    _rb.velocity = angleOfReflection * Vector3.Magnitude(_rb.velocity);
+//                    // Ensure the current velocity is always positive
+//                    if (_rb.velocity.y < 0) { 
+//						_rb.velocity.y(-_rb.velocity.y); 
+//					}
+//                    // Now apply the extra velocity
+//                    _rb.velocity += extraVelocity;
+//                    //Debug.Log("New velocity: " + rb.velocity + " (Extra = " + extraVelocity + ")");
+//                }
+//
+//            }
+//        }
     }
 }

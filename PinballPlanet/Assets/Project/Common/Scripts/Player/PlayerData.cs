@@ -113,7 +113,7 @@ public class PlayerData : MonoBehaviour
     public List<TextMesh> StarTextMeshes = new List<TextMesh>();
 
     // Score needed to get a star.
-    public int ScorePerStar = 5000;
+    public int ScorePerStar = 20000;
 
     // Unlock costs.
     public int UnlockCost

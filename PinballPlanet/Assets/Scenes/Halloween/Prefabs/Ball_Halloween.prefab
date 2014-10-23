@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DragStartVelocity: 0
   DragMaxVelocity: 0
-  MaxVelocity: 500
+  MaxVelocity: 350
   MaxDrag: 0
   LayerMask:
     serializedVersion: 2

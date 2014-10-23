@@ -225,7 +225,7 @@ public class Player : LugusSingletonExisting<Player>
         ball.rigidbody.velocity = Vector3.zero;
 
         //Debug.Log("Launch force: " + BallLaunchForce);
-        ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
+		ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
 
         // Reset launch force.
         BallLaunchForce = 0;

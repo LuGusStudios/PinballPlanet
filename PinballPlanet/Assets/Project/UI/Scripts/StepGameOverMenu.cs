@@ -31,8 +31,9 @@ public class StepGameOverMenu : IMenuStep
     public GameObject ChallengePrefab;
     public List<Pair<GameObject, Challenge>> ChallengeObjects = null;
 
-    protected ILugusCoroutineHandle _updateChallengesHandle = null;
+	protected ILugusCoroutineHandle _updateChallengesHandle = null;
 	protected ILugusCoroutineHandle _createChallengeObjectsHandle = null;
+	protected ILugusCoroutineHandle _setChallengeCompletedIconHandle = null;
 	protected ILugusCoroutineHandle _giveStarsForCompletedChallengeObjectsHandle = null;
 	protected ILugusCoroutineHandle _removeCompletedChallengeObjectsHandle = null;
 	protected ILugusCoroutineHandle _reorderChallengeObjectsHandle = null;
@@ -239,12 +240,15 @@ public class StepGameOverMenu : IMenuStep
         iTween.Stop(gameObject);
         gameObject.MoveTo(OriginalPosition + new Vector3(-30, 0, 0)).Time(0.5f).EaseType(iTween.EaseType.easeOutBack).Execute();
         
-        // Stop any update coroutines still going on.
+		// Stop any update coroutines still going on.
 		if (_updateChallengesHandle != null && _updateChallengesHandle.Running)
 			_updateChallengesHandle.StopRoutine();
 		
 		if (_createChallengeObjectsHandle != null && _createChallengeObjectsHandle.Running)
 			_createChallengeObjectsHandle.StopRoutine();
+		
+		if (_setChallengeCompletedIconHandle != null && _setChallengeCompletedIconHandle.Running)
+			_setChallengeCompletedIconHandle.StopRoutine();
 		
 		if (_giveStarsForCompletedChallengeObjectsHandle != null && _giveStarsForCompletedChallengeObjectsHandle.Running)
 			_giveStarsForCompletedChallengeObjectsHandle.StopRoutine();
@@ -388,8 +392,20 @@ public class StepGameOverMenu : IMenuStep
 	// Updates challenges and does challenge animations.
 	private IEnumerator UpdateChallenges()
 	{
+		// Set text to value before completed challenges stars were added so that animation can be done.
+		foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
+		{
+			if (starText != null)
+				starText.text = _oldStars.ToString();
+		}
+
 		_createChallengeObjectsHandle = LugusCoroutines.use.StartRoutine(CreateChallengeObjects());
 		yield return _createChallengeObjectsHandle.Coroutine;
+
+		yield return new WaitForSeconds(0.5f);
+				
+		_setChallengeCompletedIconHandle = LugusCoroutines.use.StartRoutine(SetChallengeCompletedIcon());
+		yield return _setChallengeCompletedIconHandle.Coroutine;
 
 		_giveStarsForCompletedChallengeObjectsHandle = LugusCoroutines.use.StartRoutine(GiveStarsForCompletedChallengeObjects());
 		yield return _giveStarsForCompletedChallengeObjectsHandle.Coroutine;
@@ -462,21 +478,29 @@ public class StepGameOverMenu : IMenuStep
 				newFlag.SetActive(true);
 				LugusCoroutines.use.StartRoutine( HideGameObject(newFlag, 2.0f) );
 			}
+
 		}
 
 		yield break;
 	}
 
+	private IEnumerator SetChallengeCompletedIcon()
+	{
+		foreach (Pair<GameObject, Challenge> challenge in ChallengeObjects)
+		{
+			if (challenge.Second.Completed)
+			{
+				// Set icon sprite.
+				challenge.First.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
+				yield return new WaitForSeconds(0.2f);
+			}
+		}
+		
+		yield return new WaitForSeconds(0.5f);
+	}
+
 	private IEnumerator GiveStarsForCompletedChallengeObjects()
 	{
-
-		// Set text to value before completed challenges stars were added so that animation can be done.
-		foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
-		{
-			if (starText != null)
-				starText.text = _oldStars.ToString();
-		}
-
 		// Give stars for completed challenges.
 		int count = 0;
 		int newStars = _oldStars;

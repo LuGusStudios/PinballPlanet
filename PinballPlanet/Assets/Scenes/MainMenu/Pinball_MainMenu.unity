@@ -10847,6 +10847,10 @@ Prefab:
       propertyPath: StartMenu
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 100314, guid: f93767c587d6fa443bd0128e89f787ec, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f93767c587d6fa443bd0128e89f787ec, type: 2}
   m_RootGameObject: {fileID: 826484708}
@@ -12649,6 +12653,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StarPrefab: {fileID: 100000, guid: f9a4ee3217dbad94a91467f858adf58e, type: 2}
+  starHand: {fileID: 0}
   StarsEarned: 0
 --- !u!1 &708903626
 GameObject:
@@ -28343,7 +28348,7 @@ Transform:
   m_PrefabInternal: {fileID: 624176821}
   m_GameObject: {fileID: 1585328150}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1395680531}
@@ -34750,6 +34755,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1976748790}
+  - 65: {fileID: 1976748792}
+  - 114: {fileID: 1976748791}
   m_Layer: 0
   m_Name: TreasureChest01
   m_TagString: Untagged
@@ -34775,6 +34782,32 @@ Transform:
   - {fileID: 68299353}
   m_Father: {fileID: 1056411897}
   m_RootOrder: 0
+--- !u!114 &1976748791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1976748789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fce82d0c6dd23e4087d1546efcfaf13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scaleDownFactor: .899999976
+  pressSoundKey: 
+  clickAnimationTime: .300000012
+--- !u!65 &1976748792
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1976748789}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 100.379997, y: 58.2000008, z: 59.0299988}
+  m_Center: {x: -15.3999996, y: 51.3899994, z: 2.5999999}
 --- !u!1 &1978789561
 GameObject:
   m_ObjectHideFlags: 0

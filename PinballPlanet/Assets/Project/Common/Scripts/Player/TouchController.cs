@@ -8,7 +8,7 @@ public class TouchController : MonoBehaviour
     private Vector3 _dragEnd;
 
     // How far the player needs to drag to launch with max force.
-    public float MaxDragDistance = 250;
+	public float MaxDragDistance = 0;//250;
 
     // Transforms of often accessed game objects.
     private Transform _leftFlipperTransform;
@@ -26,6 +26,7 @@ public class TouchController : MonoBehaviour
         _rightFlipperClickBoxTransform = GameObject.Find("ClickBox_RightFlipper").transform;
         _mainCameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
 	
+		MaxDragDistance = Screen.height*0.4f;
     }
 
     // Called every fixed frame.

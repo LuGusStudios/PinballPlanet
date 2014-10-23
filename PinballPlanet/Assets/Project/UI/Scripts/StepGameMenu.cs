@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class StepGameMenu : IMenuStep
 {
@@ -11,7 +12,10 @@ public class StepGameMenu : IMenuStep
     protected StarButton starButton = null;
 
     public GameObject StarPrefab = null;
+	public Sprite starHand = null;
     public int StarsEarned = 0;
+
+	private string _firstStarPopupShownKey = "FirstStarMessageShown";
 
     public override void SetupLocal()
     {
@@ -130,7 +134,7 @@ public class StepGameMenu : IMenuStep
         launchHelp.gameObject.SetActive(show);
     }
 
-    public void SpawnStar()
+	public void SpawnStar()
     {
         Debug.Log("Spawning Star");
 
@@ -140,5 +144,31 @@ public class StepGameMenu : IMenuStep
         star.transform.localPosition = Vector3.zero.zAdd(-2.0f);
 
 		starButton.StartAnimation();
+
+		// Show popup on the first time a star appears
+		if ( ! LugusConfig.use.User.GetBool(_firstStarPopupShownKey, false) )
+		{
+			starHand = LugusResources.use.Shared.GetSprite("FireTheBallHandIcon");	
+			Popup newPopup = PopupManager.use.CreateBox(LugusResources.use.Localized.GetText("FirstBonusScoreStarPopup"), starHand);
+			newPopup.blockInput = true;
+			newPopup.boxType = Popup.PopupType.Continue;
+			newPopup.onContinueButtonClicked += popupContinue;
+			newPopup.Show();		
+			Player.use.PauseGame();
+		}
+
     }
+
+	private void popupContinue(Popup sender)
+	{
+		// Remember that the popup was shown
+		LugusConfig.use.User.SetBool(_firstStarPopupShownKey, true, true);
+
+		// Unsubscribe from popup event and hide it.
+		sender.onContinueButtonClicked -= popupContinue;
+		sender.Hide();
+
+		// Unpause the game
+		Player.use.UnpauseGame();	
+	}
 }

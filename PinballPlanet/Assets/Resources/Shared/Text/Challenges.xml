@@ -123,6 +123,55 @@
 			</Parameters>
 		</Condition>
 	</Challenge>
+	
+	<Challenge>
+		<ID>WorldMapFindTreasure</ID>
+		<Stars>1</Stars>
+		<TextKey>Find treasure on the world map.</TextKey>
+		<Priority>2</Priority>
+		<Condition>
+			<Type>ButtonPressed</Type>
+			<Parameters>
+				<Name>TreasureChest01</Name>
+				<MeetOnce>true</MeetOnce>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>LessThan1337Score</ID>
+		<TextKey>Score less than 1337. \n...N00b.</TextKey>
+		<Priority>2</Priority>
+		<Stars>1</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>1338</Value>
+				<Comparer>Less</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>BallCount</Type>
+			<Parameters>
+				<Value>0</Value>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>MoreThan9000Score</ID>
+		<TextKey>"It's over Nine-Thousand!"</TextKey>
+		<Priority>2</Priority>
+		<Stars>1</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>9000</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
 
   <!-- ================= -->
   <!-- PIRATE CHALLENGES -->
