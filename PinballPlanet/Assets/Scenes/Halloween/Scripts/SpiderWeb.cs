@@ -7,11 +7,13 @@ public class SpiderWeb : Breakable
     private Spider _spider;
 
     public float SpiderRespawnTime = 5.0f;
+	public ParticleSystem particles = null;
 
     protected override void Start()
     {
         // Spawn spider.
         _spider = (Instantiate(SpiderPrefab) as GameObject).GetComponent<Spider>();
+		_spider.particles = particles;
 
         base.Start();
     }
@@ -34,6 +36,7 @@ public class SpiderWeb : Breakable
     {
         // Spawn spider.
         _spider = (Instantiate(SpiderPrefab) as GameObject).GetComponent<Spider>();
+		_spider.particles = particles;
 
         // Enable collision.
         collider.enabled = true;

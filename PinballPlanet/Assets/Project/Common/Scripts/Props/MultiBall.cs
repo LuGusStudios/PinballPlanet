@@ -16,6 +16,8 @@ public class MultiBall : MonoBehaviour
     // How hard the new balls launch.
     public float LaunchForce = 500;
 
+	public ParticleSystem particles;
+
     // Use this for initialization
     void Start()
     {
@@ -51,6 +53,9 @@ public class MultiBall : MonoBehaviour
         if (collision.collider.gameObject.tag != "Ball")
             return;
 
+		if (particles != null)
+			particles.Play();
+
         SpawnBalls();
     }
 
@@ -79,8 +84,10 @@ public class MultiBall : MonoBehaviour
             GameObject newBall = Instantiate(BallPrefab, exit.position, exit.rotation) as GameObject;
             //Debug.Log("New ball at: " + newBall.transform.position + " from " + exit.position);
             //newBall.transform.position = newBall.transform.position.z(5);
-            newBall.rigidbody.velocity = exit.up.normalized * LaunchForce;
+            newBall.rigidbody.velocity = exit.up.normalized * LaunchForce/100;
             ScoreManager.use.AddBalls(1);
+
+			exit.gameObject.GetComponentInChildren<ParticleSystem>().Play();
         }
 
         // Deactivate multiball untill it's reacivated.

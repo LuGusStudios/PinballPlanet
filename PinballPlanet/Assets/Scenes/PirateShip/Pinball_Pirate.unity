@@ -11720,7 +11720,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 5900000, guid: a0d3888dd30ccde4aa3646bc989e1f49, type: 2}
       propertyPath: m_ConnectedAnchor.y
-      value: 37.137188
+      value: 36.5445824
       objectReference: {fileID: 0}
     - target: {fileID: 5900000, guid: a0d3888dd30ccde4aa3646bc989e1f49, type: 2}
       propertyPath: m_ConnectedAnchor.z
@@ -11732,7 +11732,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 5900002, guid: a0d3888dd30ccde4aa3646bc989e1f49, type: 2}
       propertyPath: m_ConnectedAnchor.y
-      value: 37.137188
+      value: 36.5445824
       objectReference: {fileID: 0}
     - target: {fileID: 5900002, guid: a0d3888dd30ccde4aa3646bc989e1f49, type: 2}
       propertyPath: m_ConnectedAnchor.z
@@ -11764,11 +11764,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 5900000, guid: a0d3888dd30ccde4aa3646bc989e1f49, type: 2}
       propertyPath: m_Motor.force
-      value: 2000
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 5900002, guid: a0d3888dd30ccde4aa3646bc989e1f49, type: 2}
       propertyPath: m_Motor.force
-      value: 2000
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 5900002, guid: a0d3888dd30ccde4aa3646bc989e1f49, type: 2}
       propertyPath: m_Motor.targetVelocity
@@ -12632,7 +12632,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 7000
-    force: 2000
+    force: 1500
     freeSpin: 0
   m_UseLimits: 1
   m_Limits:
@@ -31285,7 +31285,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: -7000
-    force: 2000
+    force: 1500
     freeSpin: 0
   m_UseLimits: 1
   m_Limits:

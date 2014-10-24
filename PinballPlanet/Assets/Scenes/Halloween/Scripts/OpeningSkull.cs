@@ -33,9 +33,9 @@ public class OpeningSkull : BreakableMultiObjective
 
     public override void Unbreak()
     {
+		Ball = null;
         collider.enabled = true;
         GameObject.Find("Skull_BallCatch").collider.enabled = false;
-
         base.Unbreak();
     }
 
@@ -90,7 +90,7 @@ public class OpeningSkull : BreakableMultiObjective
         Ball.transform.position = new Vector3(shooter.position.x, shooter.position.y, Ball.transform.position.z);
 
         // Shoot ball with smal random deviation.
-        Vector3 randVec = Vector3.zero.zAdd(Random.Range(-10, 10));
+        Vector3 randVec = Vector3.zero.xAdd(Random.Range(-0.3f, 0.3f));
         Ball.rigidbody.AddForce((shooter.up.normalized + randVec) * 3000);
 
         // Play shoot sound.
@@ -106,8 +106,6 @@ public class OpeningSkull : BreakableMultiObjective
     void OnSkullReset()
     {
         GameObject.Find("CollisionBox_Skull").collider.enabled = true;
-
-        Ball = null;
 
         Invoke("Unbreak", ResetDelay);
     }

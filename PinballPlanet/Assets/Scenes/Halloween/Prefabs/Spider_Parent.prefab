@@ -1178,7 +1178,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JumpTarget: {fileID: 0}
   JumpTime: .5
-  StickTime: 5
+  StickTime: 2.5
+  particles: {fileID: 0}
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

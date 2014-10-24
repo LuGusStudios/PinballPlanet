@@ -17,6 +17,8 @@ public class Spider : MonoBehaviour
     // Animator.
     private Animator _animator;
 
+	public ParticleSystem particles = null;
+
     void Start()
     {
         _originalPos = transform.position;
@@ -50,6 +52,12 @@ public class Spider : MonoBehaviour
         Invoke("Stick", JumpTime);
     }
 
+	public void ShowParticles()
+	{
+		//if (particles != null)
+			particles.Play();
+	}
+
     // Make spider stick to target.
     void Stick()
     {
@@ -60,6 +68,7 @@ public class Spider : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
 
+		Invoke("ShowParticles", StickTime - 0.1f);
         // Remove spider after delay.
         Destroy(gameObject, StickTime);
 
