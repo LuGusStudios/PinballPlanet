@@ -136,7 +136,8 @@ public class StepMainMenu : IMenuStep
         }
         else if (SocialButton.pressed)
         {
-            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+            //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ProfileMenu, false);
         }
         else if (SettingsButton.pressed)
         {

@@ -66,6 +66,7 @@ public class ChallengeManager : MonoBehaviour
 		{
 #endif
 			// Load challenges file into reader.
+			Debug.Log("LResources" + LugusResources.use);
 			TextAsset challengesText = LugusResources.use.Shared.GetTextAsset ("Challenges");
 
 			// Check if challenges file is found.

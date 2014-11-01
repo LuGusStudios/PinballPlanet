@@ -9540,6 +9540,7 @@ MonoBehaviour:
   StarPrefab: {fileID: 100000, guid: f9a4ee3217dbad94a91467f858adf58e, type: 2}
   starHand: {fileID: 0}
   StarsEarned: 0
+  AutoCaptureStars: 0
 --- !u!1 &536388487
 GameObject:
   m_ObjectHideFlags: 0

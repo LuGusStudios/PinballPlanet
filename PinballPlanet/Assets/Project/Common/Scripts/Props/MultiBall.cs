@@ -87,7 +87,11 @@ public class MultiBall : MonoBehaviour
             newBall.rigidbody.velocity = exit.up.normalized * LaunchForce/100;
             ScoreManager.use.AddBalls(1);
 
-			exit.gameObject.GetComponentInChildren<ParticleSystem>().Play();
+			ParticleSystem ps = exit.gameObject.GetComponentInChildren<ParticleSystem>();
+			if (ps != null)
+			{
+				ps.Play();
+			}
         }
 
         // Deactivate multiball untill it's reacivated.

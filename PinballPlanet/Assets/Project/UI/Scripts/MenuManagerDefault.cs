@@ -41,6 +41,9 @@ public class MenuManagerDefault : MonoBehaviour
         ChallengesMenu = 9,
         MainHelpMenu = 10,
         LevelSelectHelpMenu = 11,
+		ProfileMenu = 12,
+		PowerupSelector = 13,
+		PowerupSelectMenu = 14
     }
 
     public MenuTypes StartMenu = MenuTypes.MainMenu;
@@ -113,6 +116,24 @@ public class MenuManagerDefault : MonoBehaviour
             Menus.Add(MenuTypes.HelpGameMenu, gameHelpMenu);
         else
             Debug.LogError("MenuManager: Missing game help menu!");
+
+		StepProfileMenu profileMenu = transform.FindChild("ProfileMenu").GetComponent<StepProfileMenu>();
+		if (profileMenu != null)
+			Menus.Add(MenuTypes.ProfileMenu, profileMenu);
+		else
+			Debug.LogError("MenuManager: Missing profile menu!");
+
+		StepPowerupSelector powerupSelector = transform.FindChild("PowerupSelector").GetComponent<StepPowerupSelector>();
+		if (powerupSelector != null)
+			Menus.Add(MenuTypes.PowerupSelector, powerupSelector);
+		else
+			Debug.LogError("MenuManager: Missing Powerup selector !");
+
+		StepPowerupSelectMenu powerupSelectMenu = transform.FindChild("PowerupSelectMenu").GetComponent<StepPowerupSelectMenu>();
+		if (powerupSelectMenu != null)
+			Menus.Add(MenuTypes.PowerupSelectMenu, powerupSelectMenu);
+		else
+			Debug.LogError("MenuManager: Missing Powerup select menu!");
 
         foreach (MenuTypes key in Enum.GetValues(typeof(MenuTypes)))
         {
@@ -229,6 +250,44 @@ public class MenuManagerDefault : MonoBehaviour
             Debug.LogError("MenuManagerDefault: Unknown menu:" + type + "!");
         }
     }
+
+	MenuTypes previousMenu = MenuTypes.NONE;
+
+	public void ActivateOverlayMenu(MenuTypes type, bool animate = true)
+	{
+		IMenuStep nextStep = null;
+		
+		if (type == MenuTypes.NONE)
+		{
+			return;
+		}
+		
+		if (Menus.ContainsKey(type))
+		{
+			nextStep = Menus[type];
+		}
+		
+		if (nextStep != null)
+		{
+			nextStep.Activate(animate);
+
+			previousMenu = ActiveMenu;
+			ActiveMenu = type;
+		}
+		else
+		{
+			Debug.LogError("MenuManagerDefault: Unknown menu:" + type + "!");
+		}
+	}
+
+	public void DeactivateOverlayMenu(IMenuStep menu, bool animate)
+	{
+		menu.Deactivate(animate);
+		if (previousMenu != MenuTypes.NONE)
+		{
+			ActiveMenu = previousMenu;
+		}
+	}
 
     public Transform GetChildMenu(string menuName)
     {

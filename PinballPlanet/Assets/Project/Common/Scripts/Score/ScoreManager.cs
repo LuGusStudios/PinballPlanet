@@ -22,6 +22,11 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
     private int _scoreCombo = 0;
 
     private GameObject _lastObject = null;
+
+	private float scoreMultiplier = 1.0f;
+	private float scoreMultiplierIncrement = 0.0f;
+	private float scoreMultiplierMin = 0.0f;
+	private float scoreMultiplierMax = 2.0f;
     
 	// Use this for initialization
 	void Start () 
@@ -44,6 +49,14 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 
         Player.use.UpdateBallArray();
     }
+
+	public void SetBallCount(int amount)
+	{
+		BallCount = amount;
+		ShowBallCount();
+		
+		Player.use.UpdateBallArray();
+	}
 	
 	public void Reset()
 	{
@@ -77,9 +90,22 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	    _timeSinceScore += Time.deltaTime;
 	}
 
+	public void SetScoreMultiplierSettings(float multiplier, float multiplierIncrement, float multiplierMin, float multiplierMax)
+	{
+		scoreMultiplier = multiplier;
+		scoreMultiplierIncrement = multiplierIncrement;
+		scoreMultiplierMin = multiplierMin;
+		scoreMultiplierMax = multiplierMax;
+	}
+
     // Instantiates a score popup and awards the player points.
     public GameObject ShowScore(int score, Vector3 position, float time, AudioClip sound, Color color, GameObject sender)
     {
+		// Apply score multiplier
+		score = (int)(score * scoreMultiplier);
+		scoreMultiplier += scoreMultiplierIncrement;
+		scoreMultiplier = Mathf.Clamp(scoreMultiplier, scoreMultiplierMin, scoreMultiplierMax);
+
         // If no score this can also be used to just play a sound.
         if (score == 0)
         {

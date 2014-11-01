@@ -44,10 +44,12 @@ public class PlayerData : MonoBehaviour
 
                 _instance.Load();
             }
-
             return _instance;
         }
     }
+
+	public Powerup permanentPowerup = null;
+	public Powerup temporaryPowerup = null;
 
     // List of high scores for each level.
     public Dictionary<string, List<int>> LevelsHighscores;
@@ -96,7 +98,7 @@ public class PlayerData : MonoBehaviour
     private int _stars = 0;
     public int Stars
     {
-        get { return _stars; }
+        get {return _stars; }
         set
         {
             _stars = value;
@@ -108,6 +110,88 @@ public class PlayerData : MonoBehaviour
             }
         }
     }
+
+	private int _exp = 0;
+	private int _oldExp = 0;
+	private int _expToNext = 10000;
+
+	private int _level = 0;
+	private int _oldLevel = 0;
+
+
+	public float expMultiplier = 1.0f;
+
+	public void AddExp(int value)
+	{
+		_oldExp = _exp;
+		_oldLevel = _level;
+
+		value = Mathf.FloorToInt( (float) value * expMultiplier );
+		_exp += value;
+
+		Debug.Log("Adding exp " + value);
+
+		// Allow Multiple level-ups
+		while (_exp >= _expToNext)
+		{
+			Debug.Log("Exp " + _exp + " To next " + _expToNext);
+			_exp -= _expToNext;
+			_level += 1;
+			_expToNext = CalcExpToNext(_level);
+		}
+	}
+
+	public int GetExp()
+	{
+		return _exp;
+	}
+
+	public int GetOldExp()
+	{
+		return _oldExp;
+	}
+
+	public float GetExpPercentage()
+	{
+		return (float)_exp/(float)_expToNext;
+	}
+
+	public int GetLevel()
+	{
+		return _level;
+	}
+
+	public int getOldLevel()
+	{
+		return _oldLevel;
+	}
+
+	public int CalcExpToNext(int level)
+	{
+		// Calculation is zero based
+		// Subtract one from current level
+		level --;
+		if (level < 0) 
+			level = 0;
+
+		int nextExpValue = 10000;
+		int increment = 10000;
+		bool useHalfOfThisValue = false;
+
+		for (int i = 1; i <= level; i++)
+		{
+			if (useHalfOfThisValue)
+			{
+				increment = nextExpValue/2;
+			}
+
+			nextExpValue += increment;
+
+			useHalfOfThisValue = !useHalfOfThisValue;
+		}
+
+		return nextExpValue;
+	}
 
     // Text meshes linked to star count.
     public List<TextMesh> StarTextMeshes = new List<TextMesh>();
@@ -170,6 +254,29 @@ public class PlayerData : MonoBehaviour
         // Save stars.
         LugusConfig.use.User.SetInt("Stars", Stars, true);
 
+		// save level and exp
+		LugusConfig.use.User.SetInt ("Level", _level, true);
+		LugusConfig.use.User.SetInt ("Exp", _exp, true);
+
+		// Save Powerups
+		if (permanentPowerup != null)
+		{
+			LugusConfig.use.User.SetInt ("PermanentPowerup", permanentPowerup.id, true);
+		}
+		else 
+		{
+			LugusConfig.use.User.SetInt ("PermanentPowerup", 0, true);
+		}
+
+		if (temporaryPowerup != null)
+		{
+			LugusConfig.use.User.SetInt ("TemporaryPowerup", temporaryPowerup.id, true);
+		}
+		else
+		{
+			LugusConfig.use.User.SetInt ("TemporaryPowerup", 0, true);
+		}
+
         // Save levels unlocked.
         foreach (var lvlUnlocked in LevelsUnlocked)
         {
@@ -186,14 +293,14 @@ public class PlayerData : MonoBehaviour
         }
 
         // Save to files.
-        Debug.Log("Saving High Scores");
+        Debug.LogWarning("Saving High Scores");
         LugusConfig.use.SaveProfiles();
     }
 
     // Load Data.
     public void Load()
     {
-        Debug.Log("------ Loading player data. ------");
+        Debug.LogWarning("------ Loading player data. ------");
 
         // Load scores.
         foreach (KeyValuePair<string, List<int>> lvlHighScores in LevelsHighscores)
@@ -234,6 +341,18 @@ public class PlayerData : MonoBehaviour
 
         // Load stars.
         Stars = LugusConfig.use.User.GetInt("Stars", 0);
+
+		// Load Level and exp 
+		_level = LugusConfig.use.User.GetInt ("Level", 1);
+		_exp = LugusConfig.use.User.GetInt ("Exp", 0);
+		_expToNext = CalcExpToNext(_level);
+
+		// Load powerups
+		int permPUKey = LugusConfig.use.User.GetInt ("PermanentPowerup", 0);
+		int tempPUKey = LugusConfig.use.User.GetInt ("TemporaryPowerup", 0);
+
+		PowerupManager.use.SetPermanentPowerup((PowerupKey) permPUKey);
+		PowerupManager.use.SetTemporaryPowerup((PowerupKey) tempPUKey);
     }
 
     // Adds a highscore if high enough.

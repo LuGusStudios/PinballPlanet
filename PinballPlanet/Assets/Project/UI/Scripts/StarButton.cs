@@ -7,9 +7,16 @@ public class StarButton : Button
 	protected Transform parentTransform = null;
 	protected ILugusCoroutineHandle coroutineHandle = null;
 
+	protected bool allowPress = true;
+
     // Update is called once per frame
     protected override IEnumerator PressRoutine()
     {
+		if (!allowPress)
+		{
+			yield break;
+		}
+
         // Add star.
         ++PlayerData.use.Stars;
 
@@ -23,7 +30,7 @@ public class StarButton : Button
 		// Destroy button.
         Destroy(transform.parent.gameObject);
 
-        return base.PressRoutine();
+        yield return base.PressRoutine();
     }
 
 	public void StopAnimation()
@@ -51,6 +58,21 @@ public class StarButton : Button
 		parentTransform.gameObject.ScaleTo(Vector3.one).Time(3.5f).Delay(1.6f).Execute();
 
 		coroutineHandle = LugusCoroutines.use.StartRoutine(DestroyRoutine(6.5f));
+	}
+
+	public void startAutoCatchAnimation()
+	{
+		allowPress = false;
+		++PlayerData.use.Stars;
+		parentTransform = transform.parent;
+
+		parentTransform.localPosition = new Vector3(0.0f, 3.0f, -2.0f);
+		parentTransform.localScale = Vector3.zero;
+
+		parentTransform.gameObject.ScaleTo(Vector3.one*3).Time(0.5f).Execute();
+		parentTransform.gameObject.ScaleTo(Vector3.zero).Time(0.5f).Delay(0.6f).Execute();
+
+		coroutineHandle = LugusCoroutines.use.StartRoutine(DestroyRoutine(1.5f));
 	}
 
 	protected IEnumerator DestroyRoutine(float delay)

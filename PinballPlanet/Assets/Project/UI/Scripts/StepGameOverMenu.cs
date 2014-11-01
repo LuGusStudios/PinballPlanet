@@ -28,6 +28,10 @@ public class StepGameOverMenu : IMenuStep
 
     private int _oldStars = 0;
 
+	private Transform expBar = null;
+	private TextMesh expText = null;
+	private ParticleSystem expFullParticles = null;
+
     public GameObject ChallengePrefab;
     public List<Pair<GameObject, Challenge>> ChallengeObjects = null;
 
@@ -46,6 +50,10 @@ public class StepGameOverMenu : IMenuStep
 
 	public override void SetupLocal()
 	{
+		expBar = gameObject.FindComponentInChildren<Transform>(true, "LevelProgressBar");
+		expText = gameObject.FindComponentInChildren<TextMesh>(true, "Text_Level");
+		expFullParticles = gameObject.FindComponentInChildren<ParticleSystem>(true, "LevelParticle");
+
         if (RestartButton == null)
         {
             RestartButton = transform.FindChild("Button_Restart").GetComponent<Button>();
@@ -220,7 +228,7 @@ public class StepGameOverMenu : IMenuStep
                 PlayerData.use.Stars += challenge.StarsReward;
             }
         }
-
+	
         // Save.
         PlayerData.use.Save();
 
@@ -229,6 +237,7 @@ public class StepGameOverMenu : IMenuStep
 
         // Show challenges.
         _updateChallengesHandle = LugusCoroutines.use.StartRoutine(UpdateChallenges());
+		LugusCoroutines.use.StartRoutine(UpdateExperienceBar());
     }
 
 	public override void Deactivate(bool animate = true)
@@ -286,108 +295,50 @@ public class StepGameOverMenu : IMenuStep
 		ChallengeManager.use.FillChallenges();
     }
 
-//    // Updates challenges and does challenge animations.
-//    private IEnumerator UpdateChallenges()
-//    {
-//        // Fill challenges when some are empty.
-//        /*int nrChallenges = ChallengeObjects.Count;
-//        if (nrChallenges < PlayerData.MaxChallenges)
-//        {
-//            for (int i = 0; i < PlayerData.MaxChallenges - nrChallenges; i++)
-//            {
-//				Debug.Log("adding challenge object " + i);
-//                ChallengeObjects.Add(new Pair<GameObject, Challenge>(null, null));
-//            }
-//        }*/
-//
-//		// Resetting the list each time ensures that this list and the one in the challenge manager are in sync!
-//		// The list is refilled in Update Challenge Objects.
-//		foreach (Pair<GameObject, Challenge> pair in ChallengeObjects)
-//		{
-//			GameObject.Destroy(pair.First);
-//		};
-//
-//		ChallengeObjects = new List<Pair<GameObject, Challenge>>();
-//
-//		for (int i = 0; i < PlayerData.MaxChallenges; i++)
-//		{
-//			ChallengeObjects.Add(new Pair<GameObject, Challenge>(null, null));
-//		}
-//
-//        // Set text to value before completed challenges stars were added so that animation can be done.
-//        foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
-//        {
-//            if (starText != null)
-//                starText.text = _oldStars.ToString();
-//        }
-//
-//        // Update challenge objects.
-//        yield return LugusCoroutines.use.StartRoutine(UpdateChallengeObjects()).Coroutine;
-//
-//        // Give stars for completed challenges.
-//        int count = 0;
-//        int newStars = _oldStars;
-//        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
-//        {
-//            if (challenge.Completed)
-//            {
-//                if (ChallengeObjects[count].First == null)
-//                    Debug.Log("*** Problem with " + challenge.ID + " object, count: " + count + " ***");
-//				// Set icon sprite.
-//				ChallengeObjects[count].First.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
-//				
-//				// Show stars animation.
-//				for (int i = 0; i < challenge.StarsReward; i++)
-//				{
-//					// create new star at the challenge and move to the starIcon position
-//					Vector3 startPos = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
-//					Vector3 endPos = StarIcon.position;
-//					LugusCoroutines.use.StartRoutine(AnimateStar(startPos, endPos, ++newStars));
-//					// Wait for animation to end.
-//					yield return new WaitForSeconds(_starAnimDelay);
-//				}
-//                
-//            }
-//            ++count;
-//        }
-//
-//        // Update completed challenges (looping backwards so we can safely remove challenge objects from list).
-//        for (int i = ChallengeObjects.Count - 1; i>= 0; --i)
-//        {
-//            if (ChallengeObjects[i].Second != null)
-//            {
-//                if (ChallengeObjects[i].Second.Completed)
-//                {
-//                    // Replace old with new challenge.
-//                    bool toRemove = !ChallengeManager.use.ReplaceChallenge(ChallengeObjects[i].Second);
-//
-//                    // Make old challenge fly off.
-//                    Vector3 destPos = ChallengeObjects[i].First.transform.position.xAdd(15.0f);
-//                    ChallengeObjects[i].First.MoveTo(destPos).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeInBack).Execute();
-//
-//                    // Set challenge to null so that it will be updated to new one next time.
-//                    ChallengeObjects[i].Second = null;
-//
-//                    // Wait for animation to end.
-//                    yield return new WaitForSeconds(_challengeAnimTime);
-//
-//                    // Destroy game object.
-//                    Destroy(ChallengeObjects[i].First);
-//                    ChallengeObjects[i].First = null;
-//
-//                    // Remove if challenge was not replaced with a new one.
-//                    if(toRemove)
-//                        ChallengeObjects.Remove(ChallengeObjects[i]);
-//                }
-//            }
-//        }
-//
-//        // Fill empty challenge spots.
-//        ChallengeManager.use.FillChallenges();
-//
-//        // Update challenge objects.
-//        LugusCoroutines.use.StartRoutine(UpdateChallengeObjects());
-//    }
+	private IEnumerator UpdateExperienceBar()
+	{
+		int oldExp = PlayerData.use.GetOldExp();
+		int oldLevel = PlayerData.use.getOldLevel();
+		int newExp = PlayerData.use.GetExp();
+		int newLevel = PlayerData.use.GetLevel();
+
+		float startExp = (float)oldExp/(float)PlayerData.use.CalcExpToNext(oldLevel);
+		float endExp = PlayerData.use.GetExpPercentage();
+		int levelUps = newLevel - oldLevel;
+
+		expBar.localScale = new Vector3(startExp, 1, 1);
+		expText.text = "Level " + oldLevel;
+
+		float animateSpeed = 1.0f;
+
+		float scale = expBar.localScale.x;
+
+		// Animate the bar to full for each level up.
+		for (int l = 0; l < levelUps; l++)
+		{
+			while (scale < 1.0f)
+			{
+				scale += animateSpeed * Time.deltaTime;
+				expBar.localScale = new Vector3(scale, 1, 1);
+				yield return null;
+			}
+			expText.text = "Level " + (oldLevel + l + 1);
+			expFullParticles.Play();
+			scale = 0.0f;
+		}
+
+		// animate the bar to the correct percentage 
+		while (scale < endExp)
+		{
+			scale += animateSpeed * Time.deltaTime;
+			if (scale > endExp)
+				scale = endExp;
+			expBar.localScale = new Vector3(scale, 1, 1);
+			yield return null;
+		}
+
+		yield break;
+	}
 
 	// Updates challenges and does challenge animations.
 	private IEnumerator UpdateChallenges()

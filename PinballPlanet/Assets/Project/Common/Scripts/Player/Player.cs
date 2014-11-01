@@ -70,12 +70,18 @@ public class Player : LugusSingletonExisting<Player>
         // Game Over.
         if (ScoreManager.use.BallCount <= 0)
         {
-            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameOverMenu);
+			PlayerData.use.AddHighScore(Application.loadedLevelName, ScoreManager.use.TotalScore);
+			
+			PlayerData.use.AddExp(ScoreManager.use.TotalScore);
+			
+			Debug.Log(">>>>>>>> Player level " + PlayerData.use.GetLevel() + " <<<<<<<<");
 
-            PlayerData.use.AddHighScore(Application.loadedLevelName, ScoreManager.use.TotalScore);
+            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameOverMenu);
 
             return null;
         }
+
+		PowerupManager.use.ResetOnNewBall();
 
         // Now create a new ball
         GameObject newball;
@@ -126,9 +132,12 @@ public class Player : LugusSingletonExisting<Player>
 
     void Start()
     {
-        ReleaseBall();
+        
 
         LugusAudio.use.Music().Play(Music, true, new LugusAudioTrackSettings().Loop(true));
+
+//		PowerupManager.use.ActivatePowerups();
+//		ReleaseBall();
     }
 
     protected virtual void Update()
@@ -272,9 +281,9 @@ public class Player : LugusSingletonExisting<Player>
             {
                 BallsInPlay[0].transform.position = GameObject.Find("UnstuckPos").transform.position.z(BallsInPlay[0].transform.position.z);
             }
-			if (GUI.Button(new Rect(0, 200, 75, 25), "add 1000"))
+			if (GUI.Button(new Rect(0, 200, 75, 25), "add 5000"))
 			{
-				ScoreManager.use.ShowScore(1000, Vector3.zero, 100, null, Color.white, gameObject);
+				ScoreManager.use.ShowScore(5000, Vector3.zero, 1, null, Color.white, gameObject);
 			}
         }
     }
