@@ -8,6 +8,7 @@ public class PUExpUp : Powerup {
 		iconName = "Icon_Mrfancy01";
 		name = "Mr. Fancy";
 		description = "Get 20% more experience points";
+		unlockLevel = 15;
 	}
 
 	public override void Activate ()

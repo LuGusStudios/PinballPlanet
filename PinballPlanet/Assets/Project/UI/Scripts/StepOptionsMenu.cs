@@ -99,6 +99,7 @@ public class StepOptionsMenu : IMenuStep
 		}
 
         originalPosition = transform.position;
+
     }
 
     public void SetupGlobal()
@@ -151,7 +152,8 @@ public class StepOptionsMenu : IMenuStep
         }
         else if (SocialButton.pressed)
         {
-            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+            //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ProfileMenu, false);
         }
         else if (TrophyButton.pressed)
         {
@@ -171,6 +173,7 @@ public class StepOptionsMenu : IMenuStep
 		{
 			Debug.Log("Resetting");
 			ResetGame();
+			Application.LoadLevel(PlayerData.MainLvlName);
 		}
 		else if (resetNo.pressed)
 		{
@@ -194,7 +197,7 @@ public class StepOptionsMenu : IMenuStep
             else
             {
                 musicCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
-                LugusAudio.use.Music().VolumePercentage = 1.0f;
+                LugusAudio.use.Music().VolumePercentage = 0.5f;
 				LugusConfig.use.System.SetBool("musicMuted", false, true);
             }
 

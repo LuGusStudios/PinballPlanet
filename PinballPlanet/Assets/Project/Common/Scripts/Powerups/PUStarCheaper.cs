@@ -10,6 +10,7 @@ public class PUStarCheaper : Powerup {
 		iconName = "Icon_Stardom01";
 		name = "Stardom";
 		description = "Catch a star for every 15000 points";
+		unlockLevel = 10;
 	}
 
 	public override void Activate ()

@@ -16,6 +16,8 @@ public class StepLevelSelectMenu : IMenuStep
     protected GameObject StarCost = null;
     protected TextMesh StarCostText = null;
 
+	protected Transform noLevelSelected = null;
+
     protected Vector3 OriginalPosition = Vector3.zero;
 
     private Button _selectedLevelButton = null;
@@ -117,6 +119,17 @@ public class StepLevelSelectMenu : IMenuStep
             Debug.Log("StepGameOverMenu: Missing star cost text mesh!");
         }
 
+		if (noLevelSelected == null)
+		{
+			noLevelSelected = transform.FindChild("NoLevelSelected");
+		}
+		if (noLevelSelected == null)
+		{
+			Debug.Log("StepGameOverMenu: Missing noLevelSelected!");
+		}
+
+		noLevelSelected.gameObject.SetActive(false);
+
         LevelSelectButtons = new List<Button>();
         // Only search these items when in main menu.
         if (Application.loadedLevelName == "Pinball_MainMenu")
@@ -172,6 +185,22 @@ public class StepLevelSelectMenu : IMenuStep
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.LevelSelectHelpMenu);
             HelpButton.gameObject.SetActive(false);
+			if (_selectedLevelButton == null)
+			{
+				noLevelSelected.gameObject.SetActive(true);
+
+				LevelName.text = "Level";
+				LevelName.gameObject.SetActive(true);
+
+				for (int i = 0; i < 3; i++)
+				{
+					GameObject highscore = Instantiate(HighScorePrefab) as GameObject;
+					highscore.transform.parent = gameObject.transform;
+					highscore.transform.position = transform.FindChild("HighScore").position + Vector3.zero.yAdd(-0.6f * i);
+					highscore.transform.FindChild("Text_Score").GetComponent<TextMesh>().text = ""+(12000 - i * 1000);
+					Highscores.Add(highscore);
+				}
+			}
         }
         else if (BackButton.pressed)
         {
@@ -293,6 +322,19 @@ public class StepLevelSelectMenu : IMenuStep
         gameObject.SetActive(true);
 
         HelpButton.gameObject.SetActive(true);
+		noLevelSelected.gameObject.SetActive(false);
+
+		if (_selectedLevelButton == null)
+		{
+			// Destroy all highscores.
+			foreach (GameObject highscore in Highscores)
+			{
+				Destroy(highscore);
+			}
+			Highscores.Clear();
+
+			LevelName.gameObject.SetActive(false);
+		}
 
         // Activate level select buttons.
         foreach (Button levelButton in LevelSelectButtons)

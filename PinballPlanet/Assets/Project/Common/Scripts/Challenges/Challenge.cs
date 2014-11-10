@@ -14,7 +14,20 @@ public class Challenge
     public string Description = "";
 
     // Stars awarded.
-    public int StarsReward = 1;
+    //public int StarsReward = 1;
+	private int _starsReward = 1;
+
+	public int StarsReward {
+		get
+		{
+			Debug.Log(">>>> Getting starReward " + _starsReward + " + " +  PlayerData.use.bonusStarsOnChallengeComplete);
+			return _starsReward + PlayerData.use.bonusStarsOnChallengeComplete;
+		}
+		set
+		{
+			_starsReward = value;
+		}
+	}
 
     // Completed
     public bool Completed = false;

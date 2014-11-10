@@ -8,6 +8,7 @@ public class PUBonusBall : Powerup {
 		iconName = "Icon_Bonusball01";
 		name = "Bonus Ball";
 		description = "Get one extra ball";
+		starCost = 1;
 	}
 
 	public override void Activate ()

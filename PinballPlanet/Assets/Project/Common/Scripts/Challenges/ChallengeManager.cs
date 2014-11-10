@@ -246,6 +246,10 @@ public class ChallengeManager : MonoBehaviour
                             Debug.Log("New 'Level' condition created.");
                             newCondition = new LevelCondition();
                             break;
+						case "LevelUp":
+							Debug.Log("New 'LevelUp' condition created.");
+							newCondition = new LevelUpCondition();
+							break;
                         case "BallsInPlay":
                             Debug.Log("New 'BallsInPlay' condition created.");
                             newCondition = new BallsInPlayCondition();
@@ -274,9 +278,13 @@ public class ChallengeManager : MonoBehaviour
                             Debug.Log("New 'Flipper' condition created.");
                             newCondition = new FlipperCondition();
                             break;
-                        default:
-                            Debug.LogError("Condition type not found! Make sure it's a valid type.");
-                            return null;
+						case "Powerup":
+							Debug.Log("New 'Powerup' condition created.");
+							newCondition = new PowerupCondition();
+							break;
+						default:
+							Debug.LogError("Condition type not found! Make sure it's a valid type.");
+	                        return null;
                     }
                 }
 
@@ -325,17 +333,24 @@ public class ChallengeManager : MonoBehaviour
                 {
                     // Store completed challenge.
                     CompletedLvlChallenges.Add(_uncompletedChallenges[i]);
+					AchievementPopup.use.Show();
+					//Debug.Log("Completed challenge: " + _uncompletedChallenges[i].ID);
                     //ReplaceChallenge(_uncompletedChallenges[i]);
-                    //_uncompletedChallenges.Remove(_uncompletedChallenges[i]);
+                    _uncompletedChallenges.Remove(_uncompletedChallenges[i]);
 
                     // Save.
                     //PlayerData.use.Save();
-
-                    //TODO: Show particle effect/message.
                 }
             }
         }
     }
+
+	public void ManuallyMarkChallengeAsComplete(Challenge challenge)
+	{
+		challenge.Completed = true;
+		CompletedLvlChallenges.Add(challenge);
+		_uncompletedChallenges.Remove(challenge);
+	}
 
     // Called when a new level was loaded.
     void OnLevelWasLoaded(int level)

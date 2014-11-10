@@ -1,10 +1,18 @@
 <root>
 
+	<!-- ====== -->
+	<!-- GLOBAL -->
+	<!-- ====== -->
+	
+	<UnlockedAtLevelPrefix>Unlock at level </UnlockedAtLevelPrefix>
+	<UnlockedAtLevelSuffix>.</UnlockedAtLevelSuffix>
+	<PowerupRemoveLowLevel>You must be level 3 or above to remove a challenge.</PowerupRemoveLowLevel>
+
 	<!-- ========= -->
 	<!-- MAIN MENU -->
 	<!-- ========= -->
 
-	<MainMenuPopupHelp>Welcome to Pinball Planet!\nIf you need help, click the '?' button in the top right corner.\nHave fun!</MainMenuPopupHelp>
+	<MainMenuPopupHelp>Welcome to Pinball Planet!\nIf you need help, click the '?' button in the top right corner.\nHave fun!</MainMenuPopupHelp>	
 	
 	<!-- =========== -->
 	<!-- DURING GAME -->
@@ -18,8 +26,11 @@
 
 	<ClickChallengesButton>Open the challenge menu.</ClickChallengesButton>
 	<WorldMapFindTreasure>Find treasure on the world map.</WorldMapFindTreasure>
-	<LessThan1337Score>Score less than 1337. \n...N00b.</LessThan1337Score>
+	<LessThan1337Score>Launch control! \nScore less than 1337.</LessThan1337Score>
 	<MoreThan9000Score>"It's over Nine-Thousand!"</MoreThan9000Score>	
+	<ReachLvl3>Reach Level 3.</ReachLvl3>
+	<AnyPowerup>Use a powerup!</AnyPowerup>
+	<ImpossibleChallenge>Oops, How did this get here? Press the lock icon to get rid of this challenge.</ImpossibleChallenge>
 	
 	<!-- ================= -->
 	<!-- PIRATE CHALLENGES -->

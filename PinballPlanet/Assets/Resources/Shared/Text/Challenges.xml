@@ -90,6 +90,22 @@
     </Parameters>
   </Condition>
   
+  <Condition>
+    <Type>Powerup</Type>
+	<Parameters>
+	  <Type>any</Type> OR <Type>anyPermanent</Type> OR <Type>anyTemporary</Type> OR <Type>ENUMNAME</Type>
+	  <ShouldUse>false</ShouldUse>
+	</Parameters>
+  </Condition>
+  
+  <Condition>
+	<Type>LevelUp</Type>
+	<Parameters>
+	  <Value>2</Value>
+	  <Comparer>Greater</Comparer>
+	</Parameters>
+  </Condition>
+  
   Level Keys
   **********
   Mine, Pirate, Halloween, MainMenu
@@ -140,7 +156,7 @@
 	
 	<Challenge>
 		<ID>LessThan1337Score</ID>
-		<TextKey>Score less than 1337. \n...N00b.</TextKey>
+		<TextKey>Launch control! Score less than 1337.</TextKey>
 		<Priority>2</Priority>
 		<Stars>1</Stars>
 		<Condition>
@@ -169,6 +185,70 @@
 			<Parameters>
 				<Value>9000</Value>
 				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>ReachLvl3</ID>
+		<TextKey>Reach level 3</TextKey>
+		<Priority>2</Priority>
+		<Stars>1</Stars>
+		<Condition>
+			<Type>LevelUp</Type>
+			<Parameters>
+				<Value>2</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>AnyPowerup</ID>
+		<TextKey>Use any powerup</TextKey>
+		<Priority>2</Priority>
+		<Stars>1</Stars>		
+		<Condition>
+			<Type>Powerup</Type>
+			<Parameters>
+				<Type>any</Type>
+				<ShouldUse>true</ShouldUse>
+				<LevelLoadReset>true</LevelLoadReset>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>BallCount</Type>
+			<Parameters>
+				<Value>0</Value>
+				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>		
+	</Challenge>
+		
+	<Challenge>
+		<ID>ImpossibleChallenge</ID>
+		<TextKey>Oops, How did this get here? Press the lock to get rid of this challenge.</TextKey>		
+		<Priority>3</Priority>
+		<Stars>1</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>100</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>10</Value>
+				<Comparer>Less</Comparer>
+			</Parameters>
+		</Condition>
+		<Condition>
+			<Type>BallCount</Type>
+			<Parameters>
+				<Value>0</Value>
+				<Comparer>Equal</Comparer>
 			</Parameters>
 		</Condition>
 	</Challenge>

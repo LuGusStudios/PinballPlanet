@@ -19,7 +19,17 @@ public class StepPowerupSelector : IMenuStep
 	protected TextMeshWrapper powerup2Text = null;
 	protected TextMeshWrapper powerup1Description = null;
 	protected TextMeshWrapper powerup2Description = null;
-	
+
+	protected TextMeshWrapper powerup1StarCost = null;
+	protected TextMeshWrapper powerup2StarCost = null;
+
+	protected TextMeshWrapper playerStarCount = null;
+
+	protected Transform starCost1 = null;
+	protected Transform starCost2 = null;
+
+	protected Transform lock1 = null; 
+	protected Transform lock2 = null;
 	
 	protected List<Powerup> permanentPowerups = null;
 	protected List<Powerup> temporaryPowerups = null;
@@ -46,7 +56,17 @@ public class StepPowerupSelector : IMenuStep
 		
 		powerup1Description = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_PU1_Description");
 		powerup2Description = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_PU2_Description");
-		
+
+		powerup1StarCost = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_PU1_Cost");
+		powerup2StarCost = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_PU2_Cost");
+
+		playerStarCount = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_StarCount");
+
+		starCost1 = transform.FindChildRecursively("StarCost1");
+		starCost2 = transform.FindChildRecursively("StarCost2");
+		lock1 = transform.FindChildRecursively("Lock1");
+		lock2 = transform.FindChildRecursively("Lock2");
+				
 		originalPosition = transform.position;
 		
 		permanentPowerups = new List<Powerup>();
@@ -58,6 +78,7 @@ public class StepPowerupSelector : IMenuStep
 		Debug.Log ("Setup Global");
 		FillPowerupLists();
 		UpdatePowerups();
+		playerStarCount.SetText(PlayerData.use.Stars + "");
 	}
 	
 	protected void Start()
@@ -74,27 +95,90 @@ public class StepPowerupSelector : IMenuStep
 		{
 			if (updatingPermanentPowerups)
 			{
-				PlayerData.use.permanentPowerup = permanentPowerups[_startIndex];
+				// Set new powerup
+				Powerup pu = permanentPowerups[_startIndex];
+				if (pu == null)
+				{
+					// Deactivate old powerup
+					PowerupManager.use.DeactivatePermanentPowerup();
+
+					PlayerData.use.permanentPowerup = permanentPowerups[_startIndex];
+					MenuManager.use.DeactivateOverlayMenu(this, false);
+					PlayerData.use.Save();
+				}
+				else if(PlayerData.use.GetLevel() >= pu.unlockLevel && PlayerData.use.Stars >= pu.starCost)
+				{
+					// Deactivate old powerup
+					PowerupManager.use.DeactivatePermanentPowerup();
+
+					PlayerData.use.Stars -= pu.starCost;
+					PlayerData.use.permanentPowerup = permanentPowerups[_startIndex];
+					MenuManager.use.DeactivateOverlayMenu(this, false);
+					PlayerData.use.Save();
+				}
 			}
 			else 
 			{
-				PlayerData.use.temporaryPowerup = temporaryPowerups[_startIndex];
+				Powerup pu = temporaryPowerups[_startIndex];
+				if (pu == null)
+				{
+					PlayerData.use.temporaryPowerup = temporaryPowerups[_startIndex];
+					MenuManager.use.DeactivateOverlayMenu(this, false);
+					PlayerData.use.Save();
+				}
+				else if(PlayerData.use.GetLevel() >= pu.unlockLevel && PlayerData.use.Stars >= pu.starCost)
+				{
+					PlayerData.use.Stars -= pu.starCost;
+					PlayerData.use.temporaryPowerup = temporaryPowerups[_startIndex];
+					MenuManager.use.DeactivateOverlayMenu(this, false);
+					PlayerData.use.Save();
+				}
 			}
-			MenuManager.use.DeactivateOverlayMenu(this, false);
-			PlayerData.use.Save();
 		}
 		else if(powerup2Button.pressed)
 		{
 			if (updatingPermanentPowerups)
 			{
-				PlayerData.use.permanentPowerup = permanentPowerups[GetNextIndex()];
+				// Set new powerup
+				Powerup pu = permanentPowerups[GetNextIndex()];
+				if (pu == null)
+				{
+					// Deactivate old powerup
+					PowerupManager.use.DeactivatePermanentPowerup();
+
+					PlayerData.use.permanentPowerup = permanentPowerups[GetNextIndex()];
+					MenuManager.use.DeactivateOverlayMenu(this, false);
+					PlayerData.use.Save();
+				}
+				else if(PlayerData.use.GetLevel() >= pu.unlockLevel && PlayerData.use.Stars >= pu.starCost)
+				{
+					// Deactivate old powerup
+					PowerupManager.use.DeactivatePermanentPowerup();
+
+					PlayerData.use.Stars -= pu.starCost;
+					PlayerData.use.permanentPowerup = permanentPowerups[GetNextIndex()];
+					MenuManager.use.DeactivateOverlayMenu(this, false);
+					PlayerData.use.Save();
+				}
 			}
 			else 
 			{
-				PlayerData.use.temporaryPowerup = temporaryPowerups[GetNextIndex()];
+				Powerup pu = temporaryPowerups[GetNextIndex()];
+				if (pu == null)
+				{
+					PlayerData.use.temporaryPowerup = temporaryPowerups[GetNextIndex()];
+					MenuManager.use.DeactivateOverlayMenu(this, false);
+					PlayerData.use.Save();
+				}
+				else if(PlayerData.use.GetLevel() >= pu.unlockLevel && PlayerData.use.Stars >= pu.starCost)
+				{
+					PlayerData.use.Stars -= pu.starCost;
+					PlayerData.use.temporaryPowerup = temporaryPowerups[GetNextIndex()];
+					MenuManager.use.DeactivateOverlayMenu(this, false);
+					PlayerData.use.Save();
+				}
 			}
-			MenuManager.use.DeactivateOverlayMenu(this, false);
-			PlayerData.use.Save();
+
 		}
 		else if (upButton.pressed)
 		{
@@ -127,32 +211,99 @@ public class StepPowerupSelector : IMenuStep
 			pu1 = temporaryPowerups[_startIndex];
 			pu2 = temporaryPowerups[GetNextIndex()];
 		}
-		
+
 		// update PU1
 		if (pu1 != null){
+
+			bool levelReqOK = pu1.unlockLevel <= PlayerData.use.GetLevel();
+			bool starCost = pu1.starCost != 0;
+
 			powerup1Icon.sprite = LugusResources.use.Shared.GetSprite("Powerups/" + pu1.iconName);
 			powerup1Text.SetText(pu1.name);
-			powerup1Description.SetText(pu1.description);
+			// If level requirement ok -> show
+			if (levelReqOK)
+			{
+				powerup1Icon.color = powerup1Icon.color.a(1.0f);
+				lock1.gameObject.SetActive(false);
+				powerup1Description.SetText(pu1.description);
+			}
+			// If level requirement not ok -> show lock and level requirement
+			else 
+			{
+				powerup1Icon.color = powerup1Icon.color.a(0.5f);
+				lock1.gameObject.SetActive(true);
+				string t = LugusResources.use.Localized.GetText("UnlockedAtLevelPrefix") +
+						pu1.unlockLevel +
+						LugusResources.use.Localized.GetText("UnlockedAtLevelSuffix");
+				powerup1Description.SetText(t);
+			}
+
+			// If there is a star cost, show it. 
+			if (starCost)
+			{
+				starCost1.gameObject.SetActive(true);
+				powerup1StarCost.SetText(pu1.starCost + "");
+			}
+			else 
+			{
+				starCost1.gameObject.SetActive(false);
+			}
 		} 
 		else 
 		{
 			powerup1Icon.sprite = LugusResources.use.Shared.GetSprite("Powerups/Icon_NoPower01");
+			powerup2Icon.color = powerup2Icon.color.a(1.0f);
 			powerup1Text.SetText("None");
 			powerup1Description.SetText("");
+			starCost1.gameObject.SetActive(false);
+			lock1.gameObject.SetActive(false);
 		}
-		
+
 		// update PU2
 		if (pu2 != null)
-		{
+		{			
+			bool levelReqOK = pu2.unlockLevel <= PlayerData.use.GetLevel();
+			bool starCost = pu2.starCost != 0;
+
 			powerup2Icon.sprite = LugusResources.use.Shared.GetSprite("Powerups/" + pu2.iconName);
 			powerup2Text.SetText(pu2.name);
-			powerup2Description.SetText(pu2.description);
+			// If level requirement ok -> show
+			if (levelReqOK)
+			{
+				powerup2Icon.color = powerup2Icon.color.a(1.0f);
+				lock2.gameObject.SetActive(false);
+				powerup2Description.SetText(pu2.description);
+			}
+			// If level requirement not ok -> show lock and level requirement
+			else 
+			{
+				powerup2Icon.color = powerup2Icon.color.a(0.5f);
+				lock2.gameObject.SetActive(true);
+				string t = LugusResources.use.Localized.GetText("UnlockedAtLevelPrefix") +
+						pu2.unlockLevel +
+						LugusResources.use.Localized.GetText("UnlockedAtLevelSuffix");
+				powerup2Description.SetText(t);
+			}
+			
+			// If there is a star cost, show it. 
+			if (starCost)
+			{
+				starCost2.gameObject.SetActive(true);
+				powerup2StarCost.SetText(pu2.starCost + "");
+			}
+			else 
+			{
+				starCost2.gameObject.SetActive(false);
+			}
 		}
 		else 
 		{
 			powerup2Icon.sprite = LugusResources.use.Shared.GetSprite("Powerups/Icon_NoPower01");
+			powerup2Icon.color = powerup2Icon.color.a(1.0f);
 			powerup2Text.SetText("None");
 			powerup2Description.SetText("");
+			starCost2.gameObject.SetActive(false);
+			lock2.gameObject.SetActive(false);
 		}
 	}
 	
@@ -230,6 +381,7 @@ public class StepPowerupSelector : IMenuStep
 		_startIndex = 0;
 		FillPowerupLists();
 		UpdatePowerups();
+		playerStarCount.SetText(PlayerData.use.Stars + "");
 	}
 	
 	public override void Deactivate(bool animate = true)

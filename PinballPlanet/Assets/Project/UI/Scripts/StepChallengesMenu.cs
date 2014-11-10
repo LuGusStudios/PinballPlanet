@@ -11,6 +11,13 @@ public class StepChallengesMenu : IMenuStep
     protected TextMesh StarsText = null;
     protected Transform StarIcon = null;
 
+	protected Button removeChallengeYes = null;
+	protected Button removeChallengeNo = null;
+	protected GameObject removeConfirmation = null;
+	protected Challenge challengeToRemove = null;
+	private int _removeChallengeLevelLimit = 3;
+	private int _removeChallengeStarCost = 3;
+
     protected Transform ChallengesTopTransform = null;
     protected Transform ChallengesBotTransform = null;
     public GameObject ChallengePrefab;
@@ -18,6 +25,8 @@ public class StepChallengesMenu : IMenuStep
     public GameObject StarPrefab;
 
 	private float _challengeAnimTime = 0.6f;
+
+	private bool _finishedAnimations = false;
 	
 	private float _starAnimTime = 1.5f;
 	private float _starAnimDelay = 0.2f;
@@ -108,6 +117,12 @@ public class StepChallengesMenu : IMenuStep
             Debug.Log("StepMainMenu: Missing challenge Star Icon.");
         }
 
+		removeChallengeYes = gameObject.FindComponentInChildren<Button>(true, "Button_Yes");
+		removeChallengeNo = gameObject.FindComponentInChildren<Button>(true, "Button_No");
+
+		removeConfirmation = transform.FindChild("RemoveConfirmation").gameObject;
+		removeConfirmation.SetActive(false);
+
         OriginalPosition = transform.position;
 
         // Initialize challenge manager by calling it.
@@ -145,12 +160,73 @@ public class StepChallengesMenu : IMenuStep
         }
         else if (SocialButton.pressed)
         {
-            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+            //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ProfileMenu, false);
         }
         else if (SettingsButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
         }
+		else if (removeChallengeYes.pressed)
+		{
+			if (challengeToRemove != null)
+			{
+				ChallengeManager.use.ManuallyMarkChallengeAsComplete(challengeToRemove);
+				LugusCoroutines.use.StartRoutine(UpdateAfterManualEdit());
+				PlayerData.use.Stars -= _removeChallengeStarCost;
+				foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
+				{
+					if (starText != null)
+						starText.text = PlayerData.use.Stars+"";
+				}
+			}
+			removeConfirmation.SetActive(false);
+
+		}
+		else if (removeChallengeNo.pressed)
+		{
+			removeConfirmation.SetActive(false);
+		}
+		else if (_finishedAnimations) 
+		{
+			foreach (Pair<GameObject, Challenge> pair in ChallengeObjects)
+			{
+				if (pair.First.GetComponent<Button>().pressed)
+				{
+					// Special challenge with no way to complete it
+					// Costs no stars to remove
+					// Dont show confirmation
+					if (pair.Second != null && pair.Second.ID == "ImpossibleChallenge")
+					{
+						challengeToRemove = pair.Second;
+						ChallengeManager.use.ManuallyMarkChallengeAsComplete(challengeToRemove);
+						LugusCoroutines.use.StartRoutine(UpdateAfterManualEdit());
+					}
+					else if (PlayerData.use.GetLevel() < _removeChallengeLevelLimit)
+					{
+						Popup newPopup = PopupManager.use.CreateBox(LugusResources.use.Localized.GetText("PowerupRemoveLowLevel"));
+						newPopup.transform.localPosition = newPopup.transform.localPosition.zAdd(-10f);
+						newPopup.blockInput = true;
+						newPopup.boxType = Popup.PopupType.Continue;
+						newPopup.onContinueButtonClicked += popupContinue;
+						newPopup.Show();
+					}
+					else if (PlayerData.use.Stars < _removeChallengeStarCost)
+					{
+						Popup newPopup = PopupManager.use.CreateBox(LugusResources.use.Localized.GetText("PowerupRemoveLowLevel"));
+						newPopup.transform.localPosition = newPopup.transform.localPosition.zAdd(-10f);
+						newPopup.blockInput = true;
+						newPopup.boxType = Popup.PopupType.Continue;
+						newPopup.onContinueButtonClicked += popupContinue;
+						newPopup.Show();
+					}
+					else {
+						challengeToRemove = pair.Second;
+						removeConfirmation.SetActive(true);
+					}
+				}
+			}
+		}
     }
 
     public override void Activate(bool animate = true)
@@ -162,6 +238,9 @@ public class StepChallengesMenu : IMenuStep
     {
         activated = true;
         gameObject.SetActive(true);
+
+		if (removeConfirmation != null)
+			removeConfirmation.SetActive(false);
 
         // Hide correct menu.
         if (Application.loadedLevelName == PlayerData.MainLvlName)
@@ -261,91 +340,12 @@ public class StepChallengesMenu : IMenuStep
 		ChallengeManager.use.FillChallenges();
     }
 
-//    // Updates challenges and does challenge animations.
-//    private IEnumerator UpdateChallenges()
-//    {
-//        // Fill challenges when some are empty.
-//        ChallengeManager.use.FillChallenges();
-//        int nrChallenges = ChallengeManager.use.CurrentChallenges.Count;
-//        if (nrChallenges < PlayerData.MaxChallenges)
-//        {
-//            for (int i = 0; i < PlayerData.MaxChallenges - nrChallenges; i++)
-//            {
-//                ChallengeObjects.Add(new Pair<GameObject, Challenge>(null, null));
-//            }
-//        }
-//
-//        // Set text to value before completed challenges stars were added so that animation can be done.
-//        foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
-//        {
-//            if (starText != null)
-//                starText.text = _oldStars.ToString();
-//        }
-//
-//        // Update challenge objects.
-//        yield return LugusCoroutines.use.StartRoutine(UpdateChallengeObjects()).Coroutine;
-//
-//        // Give stars for completed challenges.
-//        int count = 0;
-//        int newStars = _oldStars;
-//        foreach (Challenge challenge in ChallengeManager.use.CurrentChallenges)
-//        {
-//            if (challenge.Completed)
-//            {
-//                // Set icon sprite.
-//                ChallengeObjects[count].First.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
-//
-//                // Show stars animation.
-//                for (int i = 0; i < challenge.StarsReward; i++)
-//                {
-//					// create new star at the challenge and move to the starIcon position
-//					Vector3 startPos = ChallengeObjects[count].First.transform.position.zAdd(-5.0f);
-//					Vector3 endPos = StarIcon.position;
-//					LugusCoroutines.use.StartRoutine(AnimateStar(startPos, endPos, ++newStars));
-//					// Wait for animation to end.
-//					yield return new WaitForSeconds(_starAnimDelay);
-//                }
-//            }
-//
-//            ++count;
-//        }
-//
-//        // Update completed challenges.
-//        count = 0;
-//        foreach (Pair<GameObject, Challenge> challengeObj in ChallengeObjects)
-//        {
-//            if (challengeObj.Second != null)
-//            {
-//                if (challengeObj.Second.Completed)
-//                {
-//                    // Replace old with new challenge.
-//                    ChallengeManager.use.ReplaceChallenge(challengeObj.Second);
-//
-//                    // Make old challenge fly off.
-//                    Vector3 destPos = challengeObj.First.transform.position.xAdd(15.0f);
-//                    challengeObj.First.MoveTo(destPos).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeInBack).Execute();
-//
-//                    // Set challenge to null so that it will be updated to new one next time.
-//                    challengeObj.Second = null;
-//
-//                    // Wait for animation to end.
-//                    yield return new WaitForSeconds(_challengeAnimTime);
-//
-//                    // Destroy game object.
-//                    Destroy(challengeObj.First);
-//                    challengeObj.First = null;
-//                }
-//            }
-//            ++count;
-//        }
-//
-//        // Update challenge objects.
-//        LugusCoroutines.use.StartRoutine(UpdateChallengeObjects());
-//    }
-
 	// Updates challenges and does challenge animations.
 	private IEnumerator UpdateChallenges()
 	{
+
+		_finishedAnimations = false;
+
 		// Set text to value before completed challenges stars were added so that animation can be done.
 		foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
 		{
@@ -372,6 +372,42 @@ public class StepChallengesMenu : IMenuStep
 		
 		_addNewChallengeObjectsHandle = LugusCoroutines.use.StartRoutine(AddNewChallengeObjects());
 		yield return _addNewChallengeObjectsHandle.Coroutine;
+
+		// Add colliders to the key icons
+		foreach (Pair<GameObject, Challenge> pair in ChallengeObjects)
+		{
+			if (pair.First.GetComponent<Button>() == null){
+				pair.First.AddComponent<Button>();
+				pair.First.GetComponent<BoxCollider>().size = new Vector3(1.3f, 1.75f, 0);
+			}
+		}
+
+		_finishedAnimations = true;
+	}
+
+	private IEnumerator UpdateAfterManualEdit()
+	{
+		_finishedAnimations = false;
+
+		_removeCompletedChallengeObjectsHandle = LugusCoroutines.use.StartRoutine(RemoveCompletedChallengeObjects());
+		yield return _removeCompletedChallengeObjectsHandle.Coroutine;
+		
+		_reorderChallengeObjectsHandle = LugusCoroutines.use.StartRoutine(ReorderChallengeObjects());
+		yield return _reorderChallengeObjectsHandle.Coroutine;
+		
+		_addNewChallengeObjectsHandle = LugusCoroutines.use.StartRoutine(AddNewChallengeObjects());
+		yield return _addNewChallengeObjectsHandle.Coroutine;
+
+		// Add colliders to the key icons
+		foreach (Pair<GameObject, Challenge> pair in ChallengeObjects)
+		{
+			if (pair.First.GetComponent<Button>() == null){
+				pair.First.AddComponent<Button>();
+				pair.First.GetComponent<BoxCollider>().size = new Vector3(1.3f, 1.75f, 0);
+			}
+		}
+
+		_finishedAnimations = true;
 	}
 
 	private IEnumerator UpdateChallengesInPause()
@@ -596,7 +632,9 @@ public class StepChallengesMenu : IMenuStep
 
 		// Wait for animation to end.
 		yield return new WaitForSeconds(_starAnimTime);
-		
+
+		//LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio(""));
+
 		// Update star text mesh.
 		foreach (TextMesh starText in PlayerData.use.StarTextMeshes)
 		{
@@ -706,4 +744,12 @@ public class StepChallengesMenu : IMenuStep
         if (target != null)
             target.SetActive(false);
     }
+
+	private void popupContinue(Popup sender)
+	{
+		// Unsubscribe from popup event and hide it.
+		sender.transform.localPosition = sender.transform.localPosition.zAdd(10f);
+		sender.onContinueButtonClicked -= popupContinue;
+		sender.Hide();
+	}
 }

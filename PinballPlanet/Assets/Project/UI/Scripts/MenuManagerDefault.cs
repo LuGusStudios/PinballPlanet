@@ -51,6 +51,9 @@ public class MenuManagerDefault : MonoBehaviour
 
     public void SetupLocal()
     {
+//		int screenHeight = 1080;
+//		Screen.SetResolution( Mathf.RoundToInt(screenHeight*(10/16)), screenHeight, false);
+
         StepMainMenu mainMenu = transform.FindChild("MainMenu").GetComponent<StepMainMenu>();
         if (mainMenu != null)
             Menus.Add(MenuTypes.MainMenu, mainMenu);
@@ -167,7 +170,7 @@ public class MenuManagerDefault : MonoBehaviour
 		} 
 		else 
 		{
-			LugusAudio.use.Music().VolumePercentage = 1.0f;
+			LugusAudio.use.Music().VolumePercentage = 0.5f;
 		}
 
 		if (LugusConfig.use.System.GetBool("SFXMuted", false))

@@ -68,6 +68,8 @@ public class StepProfileMenu : IMenuStep
 		if (!activated)
 			return;
 
+		txt_TimeInGame.text = PlayerData.use.voidGetPlaytimeString(true);
+
 		// Keep track of powerup and update if it's changed
 		if (_selectedPowerup != PowerupManager.use.GetPermanentPowerup())
 		{
@@ -116,8 +118,8 @@ public class StepProfileMenu : IMenuStep
 	protected void UpdatePlayerStats()
 	{
 		txt_TopScore.text = "" + GetTopScore(); 
-		txt_TimeInGame.text = "TestVal";
-		txt_GamesPlayed.text = "TestVal";
+		txt_TimeInGame.text = PlayerData.use.voidGetPlaytimeString(true);
+		txt_GamesPlayed.text = "" + PlayerData.use.numberOfGamesPlayed;
 		txt_ChallengesCompleted.text = "" + GetNumberOfCompletedChallenges();
 	}
 
@@ -150,16 +152,18 @@ public class StepProfileMenu : IMenuStep
 	{
 		activated = true;
 		gameObject.SetActive(true);
-		
+
 		if (Application.loadedLevelName == PlayerData.MainLvlName)
 		{
 			MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu].Activate(false);
 			(MenuManager.use.Menus[MenuManagerDefault.MenuTypes.MainMenu] as StepMainMenu).DisableButtons();
+			PowerupButton.enabled = true;
 		}
 		else
 		{
 			MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu].Activate(false);
 			(MenuManager.use.Menus[MenuManagerDefault.MenuTypes.PauseMenu] as StepPauseMenu).DisableButtons();
+			PowerupButton.enabled = false;
 		}
 
 		UpdatePlayerStats();

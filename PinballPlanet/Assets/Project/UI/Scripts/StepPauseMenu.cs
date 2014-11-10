@@ -5,6 +5,7 @@ public class StepPauseMenu : IMenuStep
 {
     protected Button ResumeButton = null;
     protected Button MainMenuButton = null;
+	protected Button RetryButton = null;
     protected Button NoButton = null;
     protected Button YesButton = null;
     protected Button SocialButton = null;
@@ -36,6 +37,15 @@ public class StepPauseMenu : IMenuStep
         {
             Debug.Log("StepPauseMenu: Missing main menu button.");
         }
+
+		if (RetryButton == null)
+		{
+			RetryButton = transform.FindChild("Button_Retry").GetComponent<Button>();
+		}
+		if (RetryButton == null)
+		{
+			Debug.Log("StepPauseMenu: Missing retry button.");
+		}
 
         if (NoButton == null)
         {
@@ -117,32 +127,42 @@ public class StepPauseMenu : IMenuStep
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu);
         }
+		else if (RetryButton.pressed)
+		{
+			SceneLoader.use.LoadNewScene(Application.loadedLevel);
+		}
         else if (MainMenuButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu, false);
             ExitConfirmation.gameObject.SetActive(true);
             ResumeButton.gameObject.SetActive(false);
             MainMenuButton.gameObject.SetActive(false);
+			RetryButton.gameObject.SetActive(false);
         }
         else if (NoButton.pressed)
         {
             ExitConfirmation.gameObject.SetActive(false);
             ResumeButton.gameObject.SetActive(true);
             MainMenuButton.gameObject.SetActive(true);
+			RetryButton.gameObject.SetActive(true);
         }
         else if (YesButton.pressed)
         {
+			PlayerData.use.temporaryPowerup = null;
 			SceneLoader.use.LoadNewScene("Pinball_MainMenu");
         }
         else if (SocialButton.pressed)
         {
-            MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+            //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
+			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ProfileMenu, false);
             SocialButton.gameObject.SetActive(false);
+			ExitConfirmation.gameObject.SetActive(false);
         }
         else if (SettingsButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
             SettingsButton.gameObject.SetActive(false);
+			ExitConfirmation.gameObject.SetActive(false);
         }
         else if (TrophyButton.pressed)
         {
@@ -150,6 +170,7 @@ public class StepPauseMenu : IMenuStep
             TrophyButton.gameObject.SetActive(false);
             ResumeButton.gameObject.SetActive(false);
             MainMenuButton.gameObject.SetActive(false);
+			ExitConfirmation.gameObject.SetActive(false);
         }
     }
 
@@ -165,6 +186,7 @@ public class StepPauseMenu : IMenuStep
         TrophyButton.gameObject.SetActive(true);
         ResumeButton.gameObject.SetActive(true);
         MainMenuButton.gameObject.SetActive(true);
+		RetryButton.gameObject.SetActive(true);
 
         // Pause game.
         if (Player.Exists())
@@ -203,5 +225,6 @@ public class StepPauseMenu : IMenuStep
         TrophyButton.gameObject.SetActive(false);
         ResumeButton.gameObject.SetActive(false);
         MainMenuButton.gameObject.SetActive(false);
+		RetryButton.gameObject.SetActive(false);
     }
 }

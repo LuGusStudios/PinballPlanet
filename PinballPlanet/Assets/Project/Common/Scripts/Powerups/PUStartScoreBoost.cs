@@ -8,6 +8,7 @@ public class PUStartScoreBoost : Powerup {
 		iconName = "Icon_Inthebank01";
 		name = "In The Bank";
 		description = "Start the game with 10000 points";
+		starCost = 1;
 	}
 
 	public override void Activate ()

@@ -8,18 +8,21 @@ public class PUExtraStarOnChallenge : Powerup {
 		iconName = "Icon_Holygrail01";
 		name = "Holy Grail";
 		description = "Get one bonus star per completed challenge";
+		unlockLevel = 7;
 	}
 
 	public override void Activate ()
 	{
 		base.Activate ();
-		Debug.LogWarning("PUExtraStarOnChallenge: Not Yet Implemented");
+		PlayerData.use.bonusStarsOnChallengeComplete = 1;
+		//Debug.LogWarning("PUExtraStarOnChallenge: Not Yet Implemented");
 
 	}
 	
 	public override void Deactivate ()
 	{
 		base.Deactivate ();
-		Debug.LogWarning("PUExtraStarOnChallenge: Not Yet Implemented");
+		PlayerData.use.bonusStarsOnChallengeComplete = 0;
+		//Debug.LogWarning("PUExtraStarOnChallenge: Not Yet Implemented");
 	}
 }

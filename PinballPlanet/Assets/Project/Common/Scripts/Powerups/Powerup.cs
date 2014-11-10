@@ -14,6 +14,9 @@ public class Powerup {
 	public bool resetOnNewBall = false;
 	public int id = 0;
 
+	public int starCost = 0;
+	public int unlockLevel = 0;
+
 	public Powerup(int id)
 	{
 		this.id = id;

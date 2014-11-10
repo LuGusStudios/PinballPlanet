@@ -73,8 +73,14 @@ public class Player : LugusSingletonExisting<Player>
 			PlayerData.use.AddHighScore(Application.loadedLevelName, ScoreManager.use.TotalScore);
 			
 			PlayerData.use.AddExp(ScoreManager.use.TotalScore);
+
+			PlayerData.use.numberOfGamesPlayed ++;
 			
 			Debug.Log(">>>>>>>> Player level " + PlayerData.use.GetLevel() + " <<<<<<<<");
+
+			ChallengeManager.use.CheckChallenges();
+
+			PowerupManager.use.SetTemporaryPowerup(PowerupKey.NONE);
 
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameOverMenu);
 

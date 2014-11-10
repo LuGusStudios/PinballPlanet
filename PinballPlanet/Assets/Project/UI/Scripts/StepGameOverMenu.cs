@@ -313,6 +313,8 @@ public class StepGameOverMenu : IMenuStep
 
 		float scale = expBar.localScale.x;
 
+		int levelSound = 5;
+
 		// Animate the bar to full for each level up.
 		for (int l = 0; l < levelUps; l++)
 		{
@@ -324,6 +326,13 @@ public class StepGameOverMenu : IMenuStep
 			}
 			expText.text = "Level " + (oldLevel + l + 1);
 			expFullParticles.Play();
+
+			LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio("OrchestraPlop0" + levelSound));
+
+			levelSound --;
+			if (levelSound < 3)
+				levelSound = 3;
+
 			scale = 0.0f;
 		}
 

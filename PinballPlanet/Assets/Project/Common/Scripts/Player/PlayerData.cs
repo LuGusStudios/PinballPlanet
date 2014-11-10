@@ -192,6 +192,12 @@ public class PlayerData : MonoBehaviour
 
 		return nextExpValue;
 	}
+		
+	public void CheatLevel(int level)
+	{
+		_level = level;
+		_oldLevel = level;
+	}
 
     // Text meshes linked to star count.
     public List<TextMesh> StarTextMeshes = new List<TextMesh>();
@@ -219,6 +225,8 @@ public class PlayerData : MonoBehaviour
     // Levels that have been unlocked.
     public Dictionary<string, bool> LevelsUnlocked = new Dictionary<string, bool>();
 
+	public int bonusStarsOnChallengeComplete = 0;
+
     // Sort highscores.
     public void Sort(string lvlName)
     {
@@ -226,6 +234,58 @@ public class PlayerData : MonoBehaviour
         LevelsHighscores[lvlName].Reverse();
     }
 
+	private float _prevPlayTime = 0;
+
+	public string voidGetPlaytimeString(bool includeSeconds = false)
+	{
+		float time = 0;
+		if (_prevPlayTime == 0)
+		{
+			time = LugusConfig.use.User.GetFloat("TotalPlayTime", 0.0f);
+			_prevPlayTime = time;
+		}
+		else 
+		{
+			time = _prevPlayTime;
+		}
+
+		time += Time.realtimeSinceStartup;
+
+		// seconds per minute: 60
+		// seconds per hour  : 3600
+		float secondsPerHour = 3600;
+		float secondsPerMinute = 60;
+
+		int hours = Mathf.FloorToInt(time/secondsPerHour);
+		time -= (float)(hours*secondsPerHour);
+		int minutes = Mathf.FloorToInt(time/secondsPerMinute);
+		time -= (float)(minutes*secondsPerMinute);
+
+		if (includeSeconds)
+			return hours + "h " + minutes + "min " + Mathf.RoundToInt(time) + "s";
+		else
+			return hours + "h " + minutes + "min";
+	}
+		
+	public void SavePlaytime()
+	{
+		float val = LugusConfig.use.User.GetFloat("TotalPlayTime", 0.0f);
+		val += Time.realtimeSinceStartup;
+		LugusConfig.use.User.SetFloat("TotalPlayTime", val, true);
+	}
+
+	public int numberOfGamesPlayed = 0;
+
+	public void SaveNumberOfGamesPlayed()
+	{
+		LugusConfig.use.User.SetInt("NumberOfGamesPlayed", numberOfGamesPlayed, true);
+	}
+
+	public void loadNumberOfGamesPlayed()
+	{
+		numberOfGamesPlayed = LugusConfig.use.User.GetInt("NumberOfGamesPlayed", 0);
+	}
+	
     // Save data.
     public void Save()
     {
@@ -251,6 +311,9 @@ public class PlayerData : MonoBehaviour
             }
         }
 
+		SavePlaytime();
+		SaveNumberOfGamesPlayed();
+
         // Save stars.
         LugusConfig.use.User.SetInt("Stars", Stars, true);
 
@@ -268,14 +331,14 @@ public class PlayerData : MonoBehaviour
 			LugusConfig.use.User.SetInt ("PermanentPowerup", 0, true);
 		}
 
-		if (temporaryPowerup != null)
-		{
-			LugusConfig.use.User.SetInt ("TemporaryPowerup", temporaryPowerup.id, true);
-		}
-		else
-		{
-			LugusConfig.use.User.SetInt ("TemporaryPowerup", 0, true);
-		}
+//		if (temporaryPowerup != null)
+//		{
+//			LugusConfig.use.User.SetInt ("TemporaryPowerup", temporaryPowerup.id, true);
+//		}
+//		else
+//		{
+//			LugusConfig.use.User.SetInt ("TemporaryPowerup", 0, true);
+//		}
 
         // Save levels unlocked.
         foreach (var lvlUnlocked in LevelsUnlocked)
@@ -318,6 +381,8 @@ public class PlayerData : MonoBehaviour
             Sort(lvlHighScores.Key);
         }
 
+		loadNumberOfGamesPlayed();
+
         // Load levels unlocked.
         string[] lvlNames = new string[LevelsUnlocked.Count];
         LevelsUnlocked.Keys.CopyTo(lvlNames, 0);
@@ -352,7 +417,7 @@ public class PlayerData : MonoBehaviour
 		int tempPUKey = LugusConfig.use.User.GetInt ("TemporaryPowerup", 0);
 
 		PowerupManager.use.SetPermanentPowerup((PowerupKey) permPUKey);
-		PowerupManager.use.SetTemporaryPowerup((PowerupKey) tempPUKey);
+//		PowerupManager.use.SetTemporaryPowerup((PowerupKey) tempPUKey);
     }
 
     // Adds a highscore if high enough.

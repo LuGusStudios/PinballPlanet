@@ -8,6 +8,7 @@ public class PUMultiplierBall : Powerup {
 		iconName = "Icon_Multiplier01";
 		name = "Multiplier Ball";
 		description = "Build up extra score over time";
+		starCost = 1;
 	}
 
 	public override void Activate ()

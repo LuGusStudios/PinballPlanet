@@ -8,6 +8,7 @@ public class PUStarCatcher : Powerup {
 		iconName = "Icon_Starcatcher01";
 		name = "Star Catcher";
 		description = "Catch stars automatically";
+		unlockLevel = 5;
 	}
 	
 	public override void Activate ()

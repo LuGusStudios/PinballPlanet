@@ -125,7 +125,7 @@ public class StepMainMenu : IMenuStep
             // Show locked message.
             if (LugusConfig.use.User.GetBool(_playLockedKey, true))
             {
-                Popup newPopup = PopupManager.use.CreateBox("You'll need some stars before you can play, click the challenges button.", ChallengeIcon);
+                Popup newPopup = PopupManager.use.CreateBox("You'll need some stars before you can play. Click the challenges button.", ChallengeIcon);
                 newPopup.blockInput = true;
                 newPopup.boxType = Popup.PopupType.Continue;
                 newPopup.onContinueButtonClicked += PlayLockedContinue;
@@ -205,6 +205,9 @@ public class StepMainMenu : IMenuStep
         } 
 
 		checkDailyStars();
+		PlayerData.use.temporaryPowerup = null;
+
+		PlayerData.use.Save();
     }
 
     public override void Deactivate(bool animate = true)
@@ -225,11 +228,13 @@ public class StepMainMenu : IMenuStep
         {
             if (GUI.Button(new Rect(10, 50, 250, 200), "Add 10 Stars"))
                 PlayerData.use.Stars += 10;
+			if (GUI.Button(new Rect(10, 250, 250, 200), "Set level 20"))
+				PlayerData.use.CheatLevel(20);
 
-            if (GUI.Button(new Rect(10, 250, 250, 200), "Clear save data."))
-            {
-				ResetGame();
-            }
+//            if (GUI.Button(new Rect(10, 250, 250, 200), "Clear save data."))
+//            {
+//				ResetGame();
+//            }
         }
     }
 

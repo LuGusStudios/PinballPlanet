@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Config>
-	<LastLoginDate>10/31/2014 12:00:00 AM</LastLoginDate>
+	<LastLoginDate>11/7/2014 12:00:00 AM</LastLoginDate>
 	<Message_Welcome_Seen>True</Message_Welcome_Seen>
 	<PlayButton_Locked>False</PlayButton_Locked>
-	<Highscore_Pinball_Halloween_0>125550</Highscore_Pinball_Halloween_0>
-	<Stars>3</Stars>
-	<Level>4</Level>
-	<Exp>14100</Exp>
-	<PermanentPowerup>102</PermanentPowerup>
-	<TemporaryPowerup>2</TemporaryPowerup>
-	<Pinball_Halloween_Unlocked>True</Pinball_Halloween_Unlocked>
+	<Stars>11</Stars>
+	<Level>1</Level>
+	<Exp>0</Exp>
+	<PermanentPowerup>0</PermanentPowerup>
+	<TemporaryPowerup>0</TemporaryPowerup>
+	<Pinball_Halloween_Unlocked>False</Pinball_Halloween_Unlocked>
 	<Pinball_Pirate_Unlocked>False</Pinball_Pirate_Unlocked>
 	<Pinball_Mine_Unlocked>False</Pinball_Mine_Unlocked>
 	<Challenge_ClickChallengesButton_Done>True</Challenge_ClickChallengesButton_Done>
-	<Message_LvlUnlock_Seen>True</Message_LvlUnlock_Seen>
-	<Highscore_Pinball_Halloween_1>54000</Highscore_Pinball_Halloween_1>
-	<FirstStarMessageShown>True</FirstStarMessageShown>
-	<Highscore_Pinball_Halloween_2>11850</Highscore_Pinball_Halloween_2>
-	<Challenge_HalloweenMoreThan10000Score_Done>True</Challenge_HalloweenMoreThan10000Score_Done>
-	<Challenge_MoreThan9000Score_Done>True</Challenge_MoreThan9000Score_Done>
-	<Highscore_Pinball_Halloween_3>8250</Highscore_Pinball_Halloween_3>
+	<TotalPlayTime>0.09293333</TotalPlayTime>
+	<NumberOfGamesPlayed>0</NumberOfGamesPlayed>
 </Config>

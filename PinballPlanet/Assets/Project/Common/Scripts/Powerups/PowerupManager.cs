@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum PowerupKey
 {
@@ -22,7 +23,7 @@ public class PowerupManager : LugusSingletonRuntime<PowerupManager> {
 
 	//public Powerup permanentPowerup = null;
 	//public Powerup temporaryPowerup = null;
-	
+
 	public override void InitializeSingleton ()
 	{
 		base.InitializeSingleton ();
@@ -37,6 +38,30 @@ public class PowerupManager : LugusSingletonRuntime<PowerupManager> {
 			PlayerData.use.temporaryPowerup.Activate();
 	}
 
+	public void ActivatePermanentPowerup()
+	{
+		if (PlayerData.use.permanentPowerup != null)
+			PlayerData.use.permanentPowerup.Activate();
+	}
+
+	public void ActivateTemporaryPowerup()
+	{
+		if (PlayerData.use.temporaryPowerup != null)
+			PlayerData.use.temporaryPowerup.Activate();
+	}
+
+	public void DeactivatePermanentPowerup()
+	{
+		if (PlayerData.use.permanentPowerup != null)
+			PlayerData.use.permanentPowerup.Deactivate();
+	}
+
+	public void DeactivateTemporaryPowerup()
+	{
+		if (PlayerData.use.temporaryPowerup != null)
+			PlayerData.use.temporaryPowerup.Deactivate();
+	}
+
 	public void ResetOnNewBall()
 	{
 		if (PlayerData.use.permanentPowerup != null && PlayerData.use.permanentPowerup.resetOnNewBall)
@@ -48,6 +73,11 @@ public class PowerupManager : LugusSingletonRuntime<PowerupManager> {
 
 	public void SetPermanentPowerup(PowerupKey key)
 	{
+		if (key == PowerupKey.NONE)
+		{
+			PlayerData.use.permanentPowerup = null;
+		}
+
 		if ((int)key > 100)
 		{
 			PlayerData.use.permanentPowerup = GetNewPowerupOfType(key);
@@ -61,6 +91,11 @@ public class PowerupManager : LugusSingletonRuntime<PowerupManager> {
 
 	public void SetTemporaryPowerup(PowerupKey key)
 	{
+		if (key == PowerupKey.NONE)
+		{
+			PlayerData.use.temporaryPowerup = null;
+		}
+
 		if ((int)key < 100)
 		{
 			PlayerData.use.temporaryPowerup = GetNewPowerupOfType(key);
