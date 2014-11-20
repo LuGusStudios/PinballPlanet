@@ -142,7 +142,7 @@ public class StepOptionsMenu : IMenuStep
         if (!activated)
             return;
 
-        if (optionsButton.pressed)
+		if (optionsButton.pressed || LugusInput.use.KeyDown(KeyCode.Escape))
         {
             //Debug.Log("--- Loaded Level: " + Application.loadedLevelName + " ---");
             if (Application.loadedLevelName == "Pinball_MainMenu")

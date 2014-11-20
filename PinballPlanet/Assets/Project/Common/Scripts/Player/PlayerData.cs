@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public enum LevelKey
 {
@@ -235,6 +236,7 @@ public class PlayerData : MonoBehaviour
     }
 
 	private float _prevPlayTime = 0;
+	private float _realTimeAtLastSave = 0;
 
 	public string voidGetPlaytimeString(bool includeSeconds = false)
 	{
@@ -251,18 +253,22 @@ public class PlayerData : MonoBehaviour
 
 		time += Time.realtimeSinceStartup;
 
-		// seconds per minute: 60
-		// seconds per hour  : 3600
-		float secondsPerHour = 3600;
-		float secondsPerMinute = 60;
 
-		int hours = Mathf.FloorToInt(time/secondsPerHour);
-		time -= (float)(hours*secondsPerHour);
-		int minutes = Mathf.FloorToInt(time/secondsPerMinute);
-		time -= (float)(minutes*secondsPerMinute);
+
+//		float secondsPerHour = 3600;
+//		float secondsPerMinute = 60;
+//
+//		int hours = Mathf.FloorToInt(time/secondsPerHour);
+//		time -= (float)(hours*secondsPerHour);
+//		int minutes = Mathf.FloorToInt(time/secondsPerMinute);
+//		time -= (float)(minutes*secondsPerMinute);
+
+		TimeSpan ts = TimeSpan.FromSeconds(time);
+		int hours = (int)Math.Floor(ts.TotalHours);
+		int minutes = ts.Minutes;
 
 		if (includeSeconds)
-			return hours + "h " + minutes + "min " + Mathf.RoundToInt(time) + "s";
+			return hours + "h " + minutes + "min " + ts.Seconds + "s";
 		else
 			return hours + "h " + minutes + "min";
 	}
@@ -270,8 +276,9 @@ public class PlayerData : MonoBehaviour
 	public void SavePlaytime()
 	{
 		float val = LugusConfig.use.User.GetFloat("TotalPlayTime", 0.0f);
-		val += Time.realtimeSinceStartup;
+		val += Time.realtimeSinceStartup - _realTimeAtLastSave;
 		LugusConfig.use.User.SetFloat("TotalPlayTime", val, true);
+		_realTimeAtLastSave = Time.realtimeSinceStartup;
 	}
 
 	public int numberOfGamesPlayed = 0;
@@ -289,7 +296,7 @@ public class PlayerData : MonoBehaviour
     // Save data.
     public void Save()
     {
-        Debug.Log("------ Saving player data. ------");
+        Debug.LogError("------ Saving player data. ------");
 
         // Initialize lists.
         if (LevelsHighscores == null)
@@ -352,7 +359,7 @@ public class PlayerData : MonoBehaviour
         foreach (Challenge challenge in ChallengeManager.use.AllChallenges)
         {
             if (challenge.Completed)
-                LugusConfig.use.User.SetBool("Challenge_" + challenge.ID + "_Done", challenge.Completed, true);
+                LugusConfig.use.User.SetBool("Challenge_" + challenge.ID + "_Done", challenge.Completed, true);				
         }
 
         // Save to files.
@@ -363,7 +370,7 @@ public class PlayerData : MonoBehaviour
     // Load Data.
     public void Load()
     {
-        Debug.LogWarning("------ Loading player data. ------");
+        Debug.LogError("------ Loading player data. ------");
 
         // Load scores.
         foreach (KeyValuePair<string, List<int>> lvlHighScores in LevelsHighscores)

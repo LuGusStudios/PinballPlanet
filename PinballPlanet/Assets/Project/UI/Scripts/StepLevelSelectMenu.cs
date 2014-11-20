@@ -202,7 +202,7 @@ public class StepLevelSelectMenu : IMenuStep
 				}
 			}
         }
-        else if (BackButton.pressed)
+		else if (BackButton.pressed || LugusInput.use.KeyDown(KeyCode.Escape))
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu);
             HideLevel();

@@ -11,6 +11,9 @@ public class StepChallengesMenu : IMenuStep
     protected TextMesh StarsText = null;
     protected Transform StarIcon = null;
 
+	protected Button restartButton = null;
+	protected Transform restartOverlay = null;
+
 	protected Button removeChallengeYes = null;
 	protected Button removeChallengeNo = null;
 	protected GameObject removeConfirmation = null;
@@ -36,6 +39,8 @@ public class StepChallengesMenu : IMenuStep
 
     private int _oldStars = 0;
 
+	private string whooshSound = "Whoosh01";
+
 	protected ILugusCoroutineHandle _updateChallengesHandle = null;
 	protected ILugusCoroutineHandle _createChallengeObjectsHandle = null;
 	protected ILugusCoroutineHandle _setChallengeCompletedIconHandle = null;
@@ -51,6 +56,10 @@ public class StepChallengesMenu : IMenuStep
 
     public override void SetupLocal()
     {
+		restartButton = gameObject.FindComponentInChildren<Button>(true, "Button_Restart");
+		restartOverlay = transform.FindChildRecursively("AllChallengesCompleted");
+		restartOverlay.gameObject.SetActive(false);
+
         if (SocialButton == null)
         {
             SocialButton = transform.FindChild("Button_Social").GetComponent<Button>();
@@ -151,7 +160,7 @@ public class StepChallengesMenu : IMenuStep
         if (!activated)
             return;
 
-        if (ChallengesButton.pressed)
+        if (ChallengesButton.pressed || LugusInput.use.KeyDown(KeyCode.Escape))
         {
             if (Application.loadedLevelName == "Pinball_MainMenu")
                 MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu, false);
@@ -167,6 +176,23 @@ public class StepChallengesMenu : IMenuStep
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
         }
+		else if (restartButton.pressed)
+		{
+			Debug.LogError("Restarting Challenges");
+			foreach(Challenge challenge in ChallengeManager.use.AllChallenges)
+			{
+				challenge.Completed = false;
+//				if (LugusConfig.use.User.Exists(challenge.ID))
+//				{
+				LugusConfig.use.User.Remove("Challenge_" + challenge.ID + "_Done");
+//				}
+			}
+			//PlayerData.use.Save();
+			LugusConfig.use.SaveProfiles();
+			PlayerData.use.Load();
+			ChallengeManager.use.reset();
+			SceneLoader.use.LoadNewScene(PlayerData.MainLvlName);
+		}
 		else if (removeChallengeYes.pressed)
 		{
 			if (challengeToRemove != null)
@@ -239,6 +265,8 @@ public class StepChallengesMenu : IMenuStep
         activated = true;
         gameObject.SetActive(true);
 
+		_finishedAnimations = false;
+
 		if (removeConfirmation != null)
 			removeConfirmation.SetActive(false);
 
@@ -275,11 +303,21 @@ public class StepChallengesMenu : IMenuStep
             yield return null;
 
             // Show challenges.
-            _updateChallengesHandle = LugusCoroutines.use.StartRoutine(UpdateChallenges());
+			Debug.LogError(ChallengeManager.use.AreAllChallengesCompleted());
+			Debug.LogError(ChallengeManager.use.AllChallenges.Count);
+			Debug.LogError(ChallengeManager.use.CurrentChallenges.Count);
+
+			if (ChallengeManager.use.AreAllChallengesCompleted())            	
+				ShowChallengesCompleteOverlay();
+			else
+				_updateChallengesHandle = LugusCoroutines.use.StartRoutine(UpdateChallenges());
         }
         else
 		{
-			_updateChallengesHandle = LugusCoroutines.use.StartRoutine(UpdateChallengesInPause());
+			if (ChallengeManager.use.AreAllChallengesCompleted())
+				ShowChallengesCompleteOverlay();
+			else				
+				_updateChallengesHandle = LugusCoroutines.use.StartRoutine(UpdateChallengesInPause());
 		}
     }
 
@@ -289,6 +327,7 @@ public class StepChallengesMenu : IMenuStep
 			return;
 
         activated = false;
+		restartOverlay.gameObject.SetActive(false);
         gameObject.SetActive(false);
 
         // Stop any update coroutines still going on.
@@ -340,6 +379,11 @@ public class StepChallengesMenu : IMenuStep
 		ChallengeManager.use.FillChallenges();
     }
 
+	private void ShowChallengesCompleteOverlay()
+	{
+		restartOverlay.gameObject.SetActive(true);
+	}
+
 	// Updates challenges and does challenge animations.
 	private IEnumerator UpdateChallenges()
 	{
@@ -381,6 +425,9 @@ public class StepChallengesMenu : IMenuStep
 				pair.First.GetComponent<BoxCollider>().size = new Vector3(1.3f, 1.75f, 0);
 			}
 		}
+
+		// Save.
+		PlayerData.use.Save();
 
 		_finishedAnimations = true;
 	}
@@ -507,7 +554,9 @@ public class StepChallengesMenu : IMenuStep
 					Debug.Log("*** Problem with " + challenge.ID + " object, count: " + count + " ***");
 				// Set icon sprite.
 				ChallengeObjects[count].First.transform.FindChild("Challenge/MissionIcon").GetComponent<SpriteRenderer>().sprite = MissionIconCheck;
-				
+
+				starSoundIndex = starSoundStartIndex;
+
 				// Show stars animation.
 				for (int i = 0; i < challenge.StarsReward; i++)
 				{
@@ -537,7 +586,9 @@ public class StepChallengesMenu : IMenuStep
 				// Make old challenge fly off.
 				Vector3 destPos = ChallengeObjects[i].First.transform.position.xAdd(15.0f);
 				ChallengeObjects[i].First.MoveTo(destPos).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeInBack).Execute();
-				
+
+				LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio(whooshSound));
+
 				// Wait for animation to end.
 				yield return new WaitForSeconds(_challengeFlyOffTime);
 				
@@ -617,6 +668,10 @@ public class StepChallengesMenu : IMenuStep
 		return newChallengePair;
 	}
 
+	private int starSoundStartIndex = 1;
+	private int starSoundEndIndex = 5;
+	private int starSoundIndex = 1;
+	private string starSound = "ChallengeStar0";
 
 	private IEnumerator AnimateStar(Vector3 startPos, Vector3 targetPos, int newStarCount)
 	{
@@ -633,7 +688,12 @@ public class StepChallengesMenu : IMenuStep
 		// Wait for animation to end.
 		yield return new WaitForSeconds(_starAnimTime);
 
-		//LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio(""));
+		if (starSoundIndex > starSoundEndIndex)
+			starSoundIndex = starSoundEndIndex;
+
+		LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio(starSound + starSoundIndex));
+
+		starSoundIndex++;
 
 		// Update star text mesh.
 		foreach (TextMesh starText in PlayerData.use.StarTextMeshes)

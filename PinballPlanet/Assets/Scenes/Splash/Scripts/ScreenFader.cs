@@ -44,6 +44,11 @@ public class ScreenFader : LugusSingletonRuntime<ScreenFader>
 		SetupGlobal();
 	}
 
+	public void SetAlpha(float a)
+	{
+		fadeRenderer.color = fadeRenderer.color.a(a);
+	}
+
 	public void FadeOut(float time)
 	{
 		Debug.Log("ScreenFader: Fading out.");

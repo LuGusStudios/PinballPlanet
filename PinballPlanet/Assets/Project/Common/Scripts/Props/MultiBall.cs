@@ -85,7 +85,7 @@ public class MultiBall : MonoBehaviour
             //Debug.Log("New ball at: " + newBall.transform.position + " from " + exit.position);
             //newBall.transform.position = newBall.transform.position.z(5);
             newBall.rigidbody.velocity = exit.up.normalized * LaunchForce/100;
-            ScoreManager.use.AddBalls(1);
+            ScoreManager.use.AddMultiBalls(1);
 
 			ParticleSystem ps = exit.gameObject.GetComponentInChildren<ParticleSystem>();
 			if (ps != null)

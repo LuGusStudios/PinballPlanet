@@ -18,6 +18,8 @@ public class StepPowerupSelectMenu : IMenuStep
 
 	private Powerup _selectedPU1 = null;
 	private Powerup _selectedPU2 = null;
+
+	protected Transform newIcon = null;
 	
 	public override void SetupLocal()
 	{
@@ -31,6 +33,9 @@ public class StepPowerupSelectMenu : IMenuStep
 
 		powerup1Text = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_PU1Time");
 		powerup2Text = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_PUPerm");
+
+		newIcon = transform.FindChildRecursively("Text_New");
+		newIcon.gameObject.SetActive(false);
 		
 		originalPosition = transform.position;
 	}
@@ -113,11 +118,56 @@ public class StepPowerupSelectMenu : IMenuStep
 		activated = true;
 		UpdatePowerups();
 		gameObject.SetActive(true);
+
+		int lastPermPUUnlockLevel = LugusConfig.use.User.GetInt("LastPermPowerupUnlockLevel", 0);
+
+		List<Powerup> powerups = GetAllPermanentPowerups();
+		foreach(Powerup pu in powerups)
+		{
+			if (pu != null &&
+				pu.unlockLevel <= PlayerData.use.GetLevel() && 	// If powerup is unlocked
+			    pu.unlockLevel > lastPermPUUnlockLevel )		// and level is higher than last unlocked level
+			{
+				LugusConfig.use.User.SetInt("LastPermPowerupUnlockLevel", pu.unlockLevel, true);
+				newIcon.gameObject.SetActive(true);
+			}
+		}
+
 	}
 	
 	public override void Deactivate(bool animate = true)
 	{
 		activated = false;
 		gameObject.SetActive(false);
+	}
+
+	public List<Powerup> GetAllPermanentPowerups()
+	{
+		List<Powerup> permanentPowerups = new List<Powerup>();
+		
+		foreach (int value in Enum.GetValues(typeof(PowerupKey)))
+		{
+			if (value == 0)
+			{
+				permanentPowerups.Add(PowerupManager.use.GetNewPowerupOfType((PowerupKey)value));
+			} 
+			else if (value > 100)
+			{
+				permanentPowerups.Add(PowerupManager.use.GetNewPowerupOfType((PowerupKey)value));
+			}
+		}
+		
+		//temporaryPowerups.Sort(delegate(Powerup p1, Powerup p2) { return p1.unlockLevel > p2.unlockLevel; });
+		permanentPowerups.Sort(delegate(Powerup p1, Powerup p2) { 
+			
+			if (p1 == null)
+				return -1;
+			if (p2 == null)
+				return 1;
+			
+			return p1.unlockLevel - p2.unlockLevel; 
+		});
+
+		return permanentPowerups;
 	}
 }

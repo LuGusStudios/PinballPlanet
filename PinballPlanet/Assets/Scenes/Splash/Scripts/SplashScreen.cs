@@ -17,8 +17,10 @@ public class SplashScreen : MonoBehaviour {
 	protected IEnumerator SplashRoutine()
 	{
 		// Set Black and short wait
-		ScreenFader.use.FadeOut(0.0f);
-		yield return new WaitForSeconds(1.0f);
+		//ScreenFader.use.FadeOut(0.0f);
+		ScreenFader.use.SetAlpha(1.0f);
+		yield return null;
+		yield return new WaitForSeconds(3.2f); // 3 seconds until unity logo vanishes
 
 		// start music just before revealing logo
 		LugusAudio.use.Music().Play(LugusResources.use.Shared.GetAudio("LugusSplashShort01"));

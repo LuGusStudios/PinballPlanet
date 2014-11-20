@@ -27,6 +27,10 @@ public class FlipperNew : MonoBehaviour
     // FixedUpdate is called once per physics calculation.
     void FixedUpdate()
     {
+		if (MenuManager.use.ActiveMenu != MenuManagerDefault.MenuTypes.GameMenu)
+			return;
+
+
         if (Input.GetKey(InputKey) || Pressed)
         {
             GetComponent<HingeJoint>().motor = _reverseMotor;

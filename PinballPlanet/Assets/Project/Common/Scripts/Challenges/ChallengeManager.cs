@@ -66,7 +66,10 @@ public class ChallengeManager : MonoBehaviour
 		{
 #endif
 			// Load challenges file into reader.
-			Debug.Log("LResources" + LugusResources.use);
+			if (LugusResources.use.Shared == null)
+				LugusResources.use.LoadDefaultCollections();
+
+			Debug.Log( LugusResources.use.Shared);
 			TextAsset challengesText = LugusResources.use.Shared.GetTextAsset ("Challenges");
 
 			// Check if challenges file is found.
@@ -282,6 +285,10 @@ public class ChallengeManager : MonoBehaviour
 							Debug.Log("New 'Powerup' condition created.");
 							newCondition = new PowerupCondition();
 							break;
+						case "GamesPlayed":
+							Debug.Log("New 'GamesPlayed' condition created.");
+							newCondition = new GamesPlayedCondition();
+							break;
 						default:
 							Debug.LogError("Condition type not found! Make sure it's a valid type.");
 	                        return null;
@@ -442,6 +449,19 @@ public class ChallengeManager : MonoBehaviour
 	public void removeChallenge(Challenge toRemove)
 	{
 		CurrentChallenges.Remove(toRemove);
+	}
+
+	public bool AreAllChallengesCompleted ()
+	{
+		foreach(Challenge challenge in AllChallenges)
+		{
+			if (challenge.Completed == false)
+			{
+				//Debug.LogError("UNCompleted: " + challenge.ID);
+				return false;
+			} 
+		}
+		return true;
 	}
 
     // Adds an uncompleted challenge to the current challenges list.

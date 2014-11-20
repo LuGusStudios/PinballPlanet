@@ -86,7 +86,7 @@ public class StepGameMenu : IMenuStep
         if (!activated)
             return;
 
-        if (pauseButton.pressed)
+		if (pauseButton.pressed)
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.PauseMenu);
             helpButton.gameObject.SetActive(false);

@@ -113,6 +113,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: ed55c269043cff04b9fb1177a092d8d4, type: 2}
+      propertyPath: enableInitialFade
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed55c269043cff04b9fb1177a092d8d4, type: 2}
   m_RootGameObject: {fileID: 942966917}
@@ -196,6 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4b1bc2037da2f548a4f77ca33edb688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableInitialFade: 0
 --- !u!4 &942966919
 Transform:
   m_ObjectHideFlags: 0

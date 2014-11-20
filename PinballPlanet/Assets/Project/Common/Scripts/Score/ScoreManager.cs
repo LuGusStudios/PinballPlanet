@@ -15,6 +15,9 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	
 	public int BallCount = 5;
 
+	private int _displayBallCount = 0;
+	private int _multiballsInPlay = 0;
+
     private float _timeSinceScore = 0;
     private float _scoreComboTime = 0.65f;
     private float _scoreDelay = 0.25f;
@@ -31,6 +34,7 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	// Use this for initialization
 	void Start () 
 	{
+		_displayBallCount = BallCount;
 		ShowTotalScore();
 		ShowBallCount();     
 	}
@@ -39,21 +43,37 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 	public void BallDestroyed()
 	{
 		BallCount--;
-		ShowBallCount();
+
+		if (_multiballsInPlay > 0)
+			_multiballsInPlay--;
+		else 
+			_displayBallCount--;
+
+		//ShowBallCount();
 	}
 	
 	public void AddBalls(int amount)
 	{
 		BallCount += amount;
-		ShowBallCount();
+		//ShowBallCount();
 
         Player.use.UpdateBallArray();
     }
 
+	public void AddMultiBalls(int amount)
+	{
+		BallCount += amount;
+		_multiballsInPlay += amount;
+		//ShowBallCount();
+		
+		Player.use.UpdateBallArray();
+	}
+
 	public void SetBallCount(int amount)
 	{
+		_displayBallCount = amount;
 		BallCount = amount;
-		ShowBallCount();
+		//ShowBallCount();
 		
 		Player.use.UpdateBallArray();
 	}
@@ -77,17 +97,35 @@ public class ScoreManager : LugusSingletonExisting<ScoreManager>
 		
 		return text;
 	}
-	
+
+	private int _OldDisplayBallCount = 0;
+
 	protected void ShowBallCount()
 	{
         if (BallCountText != null)
-            BallCountText.text = "" + BallCount;
+		{
+			int displayVal = _displayBallCount - 1;
+
+			if (Player.use.IsSingleBallReadyForLaunch())
+				displayVal += 1;
+
+			if (_OldDisplayBallCount != displayVal)
+			{
+				_OldDisplayBallCount = displayVal;
+
+				if (displayVal >= 0)
+					BallCountText.text = "" + displayVal;
+				else 
+					BallCountText.text = "0";
+			}
+		}
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 	    _timeSinceScore += Time.deltaTime;
+		ShowBallCount();
 	}
 
 	public void SetScoreMultiplierSettings(float multiplier, float multiplierIncrement, float multiplierMin, float multiplierMax)

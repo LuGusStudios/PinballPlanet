@@ -18,6 +18,7 @@ public class BreakableMultiObjective : Breakable
 
     // How long till the chest objective resets.
     public float ResetDelay = 3.0f;
+	public float characterSize = 2.5f;
 
     private bool _recentlyActivated = false;
 
@@ -80,7 +81,7 @@ public class BreakableMultiObjective : Breakable
 
         // Give bonus score for completing all objectives.
         GameObject scorePopup = ScoreManager.use.ShowScore(BonusPoints, transform.position.zAdd(20), 1.5f, null, Color.white, gameObject);
-        scorePopup.GetComponent<TextMesh>().characterSize = 2.5f;
+		scorePopup.GetComponent<TextMesh>().characterSize = characterSize;
 
         // Reset
         Invoke("Unbreak", ResetDelay);

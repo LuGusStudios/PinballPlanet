@@ -14,7 +14,7 @@ public class PUBonusBall : Powerup {
 	public override void Activate ()
 	{
 		base.Activate ();
-		ScoreManager.use.AddBalls(1);
+		ScoreManager.use.SetBallCount(ScoreManager.use.BallCount + 1);
 	}
 
 	public override void Deactivate ()

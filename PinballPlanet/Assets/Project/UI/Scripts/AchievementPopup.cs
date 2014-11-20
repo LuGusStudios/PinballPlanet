@@ -72,6 +72,8 @@ public class AchievementPopup : LugusSingletonExisting<AchievementPopup> {
 
 		float timerStart = Time.realtimeSinceStartup;
 
+		LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio("Whoosh01"));
+
 		// Reveal the icon
 		while ((Time.realtimeSinceStartup - timerStart) <= revealDuration)
 		{

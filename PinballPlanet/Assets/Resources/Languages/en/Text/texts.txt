@@ -30,7 +30,10 @@
 	<MoreThan9000Score>"It's over Nine-Thousand!"</MoreThan9000Score>	
 	<ReachLvl3>Reach Level 3.</ReachLvl3>
 	<AnyPowerup>Use a powerup!</AnyPowerup>
-	<ImpossibleChallenge>Oops, How did this get here? Press the lock icon to get rid of this challenge.</ImpossibleChallenge>
+	<ImpossibleChallenge>How did this get here? Tap the lock in the main menu to get rid of challenges.</ImpossibleChallenge>
+	<Play10Games>Play 10 Games.</Play10Games>
+	<Collect2Stars>Collect 2 stars in one game.</Collect2Stars>
+	<Collect5Stars>Collect 5 stars in one game.</Collect5Stars>
 	
 	<!-- ================= -->
 	<!-- PIRATE CHALLENGES -->

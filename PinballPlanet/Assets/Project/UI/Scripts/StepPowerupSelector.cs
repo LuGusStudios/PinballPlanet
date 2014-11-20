@@ -23,6 +23,9 @@ public class StepPowerupSelector : IMenuStep
 	protected TextMeshWrapper powerup1StarCost = null;
 	protected TextMeshWrapper powerup2StarCost = null;
 
+	protected Transform powerup1Frame = null;
+	protected Transform powerup2Frame = null;
+
 	protected TextMeshWrapper playerStarCount = null;
 
 	protected Transform starCost1 = null;
@@ -59,6 +62,9 @@ public class StepPowerupSelector : IMenuStep
 
 		powerup1StarCost = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_PU1_Cost");
 		powerup2StarCost = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_PU2_Cost");
+
+		powerup1Frame = transform.FindChildRecursively("Selection_PU1");
+		powerup2Frame = transform.FindChildRecursively("Selection_PU2");
 
 		playerStarCount = gameObject.FindComponentInChildren<TextMeshWrapper>(true, "Text_StarCount");
 
@@ -190,7 +196,7 @@ public class StepPowerupSelector : IMenuStep
 			_startIndex = GetNextIndex();
 			UpdatePowerups();
 		}
-		else if (exitButton.pressed)
+		else if (exitButton.pressed || LugusInput.use.KeyDown(KeyCode.Escape))
 		{
 			MenuManager.use.DeactivateOverlayMenu(this, false);
 		}
@@ -200,16 +206,40 @@ public class StepPowerupSelector : IMenuStep
 	{
 		Powerup pu1 = null;
 		Powerup pu2 = null;
-		
+
+		powerup1Frame.gameObject.SetActive(false);
+		powerup2Frame.gameObject.SetActive(false);
+
 		if (updatingPermanentPowerups)
 		{
 			pu1 = permanentPowerups[_startIndex];
 			pu2 = permanentPowerups[GetNextIndex()];
+
+			if (pu1 == null && PlayerData.use.permanentPowerup == null)			
+				powerup1Frame.gameObject.SetActive(true);			
+			else if (pu1 != null && PlayerData.use.permanentPowerup != null && (PowerupKey)pu1.id == (PowerupKey)PlayerData.use.permanentPowerup.id)
+				powerup1Frame.gameObject.SetActive(true);
+
+			if (pu2 == null && PlayerData.use.permanentPowerup == null)			
+				powerup2Frame.gameObject.SetActive(true);			
+			else if (pu2 != null && PlayerData.use.permanentPowerup != null && (PowerupKey)pu2.id == (PowerupKey)PlayerData.use.permanentPowerup.id)
+				powerup2Frame.gameObject.SetActive(true);
+
 		} 
 		else 
 		{
 			pu1 = temporaryPowerups[_startIndex];
 			pu2 = temporaryPowerups[GetNextIndex()];
+
+			if (pu1 == null && PlayerData.use.temporaryPowerup == null)			
+				powerup1Frame.gameObject.SetActive(true);			
+			else if (pu1 != null && PlayerData.use.temporaryPowerup != null && (PowerupKey)pu1.id == (PowerupKey)PlayerData.use.temporaryPowerup.id)
+				powerup1Frame.gameObject.SetActive(true);
+			
+			if (pu2 == null && PlayerData.use.temporaryPowerup == null)			
+				powerup2Frame.gameObject.SetActive(true);			
+			else if (pu2 != null && PlayerData.use.temporaryPowerup != null && (PowerupKey)pu2.id == (PowerupKey)PlayerData.use.temporaryPowerup.id)
+				powerup2Frame.gameObject.SetActive(true);
 		}
 
 		// update PU1
@@ -372,6 +402,17 @@ public class StepPowerupSelector : IMenuStep
 				permanentPowerups.Add(PowerupManager.use.GetNewPowerupOfType((PowerupKey)value));
 			}
 		}
+
+		//temporaryPowerups.Sort(delegate(Powerup p1, Powerup p2) { return p1.unlockLevel > p2.unlockLevel; });
+		permanentPowerups.Sort(delegate(Powerup p1, Powerup p2) { 
+
+			if (p1 == null)
+				return -1;
+			if (p2 == null)
+				return 1;
+
+			return p1.unlockLevel - p2.unlockLevel; 
+		});
 	}
 	
 	public override void Activate(bool animate = true)

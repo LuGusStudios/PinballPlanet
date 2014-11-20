@@ -19,6 +19,8 @@ public class Condition
         }
     }
 
+	public bool verboseDebug = false;
+
     // Whether Condition stays true once met.
     public bool MeetOnce = false;
     private bool _metOnce = false;

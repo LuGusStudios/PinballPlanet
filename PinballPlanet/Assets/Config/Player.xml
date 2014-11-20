@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Config>
-	<LastLoginDate>11/7/2014 12:00:00 AM</LastLoginDate>
-	<Message_Welcome_Seen>True</Message_Welcome_Seen>
-	<PlayButton_Locked>False</PlayButton_Locked>
-	<Stars>11</Stars>
-	<Level>1</Level>
+	<TotalPlayTime>322.212</TotalPlayTime>
+	<NumberOfGamesPlayed>0</NumberOfGamesPlayed>
+	<Stars>362</Stars>
+	<Level>20</Level>
 	<Exp>0</Exp>
 	<PermanentPowerup>0</PermanentPowerup>
-	<TemporaryPowerup>0</TemporaryPowerup>
-	<Pinball_Halloween_Unlocked>False</Pinball_Halloween_Unlocked>
-	<Pinball_Pirate_Unlocked>False</Pinball_Pirate_Unlocked>
-	<Pinball_Mine_Unlocked>False</Pinball_Mine_Unlocked>
+	<Pinball_Halloween_Unlocked>True</Pinball_Halloween_Unlocked>
+	<Pinball_Pirate_Unlocked>True</Pinball_Pirate_Unlocked>
+	<Pinball_Mine_Unlocked>True</Pinball_Mine_Unlocked>
+	<LastLoginDate>11/19/2014 12:00:00 AM</LastLoginDate>
+	<Message_Welcome_Seen>True</Message_Welcome_Seen>
+	<PlayButton_Locked>False</PlayButton_Locked>
+	<Message_LvlUnlock_Seen>True</Message_LvlUnlock_Seen>
+	<Challenge_ReachLvl3_Done>True</Challenge_ReachLvl3_Done>
 	<Challenge_ClickChallengesButton_Done>True</Challenge_ClickChallengesButton_Done>
-	<TotalPlayTime>0.09293333</TotalPlayTime>
-	<NumberOfGamesPlayed>0</NumberOfGamesPlayed>
 </Config>

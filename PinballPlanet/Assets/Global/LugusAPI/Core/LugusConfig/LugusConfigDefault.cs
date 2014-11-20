@@ -151,7 +151,9 @@ public class LugusConfigDefault : MonoBehaviour
 			_systemProfile.SetString("User.Latest", _currentUser.Name, true);
 
 		foreach (ILugusConfigProfile profile in _profiles)
+		{
 			profile.Store();
+		}
 	}
 
 	public ILugusConfigProfile FindProfile(string name)

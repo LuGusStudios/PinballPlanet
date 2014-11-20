@@ -99,8 +99,9 @@ PlayerSettings:
   iPadHighResLandscapeSplashScreen: {fileID: 0}
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: D:/users/Tom/Dropbox (LuGus Studios)/Pinball Planet/Android
+    Keystore/user.keystore
+  AndroidKeyaliasName: pinballplanetkey
   resolutionDialogBanner: {fileID: 0}
   m_BuildTargetIcons:
   - m_BuildTarget: 

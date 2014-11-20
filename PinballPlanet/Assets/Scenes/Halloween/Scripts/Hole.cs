@@ -124,7 +124,7 @@ public class Hole : MonoBehaviour
 				//StartCoroutine( ExitRoutine(balls[i], exits[i].gameObject) );
 			}
 			
-			GameObject.Find("JESUS").GetComponent<ScoreManager>().AddBalls(4);
+			GameObject.Find("JESUS").GetComponent<ScoreManager>().AddMultiBalls(4);
 		}
 		
 				//ball.rigidbody.AddForceAtPosition(Vector3(0,ballLaunchForce,0), ball.transform.position);			

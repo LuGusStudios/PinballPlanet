@@ -35,7 +35,7 @@ public class StepGameHelpMenu : IMenuStep
         if (!activated)
             return;
 
-        if (helpButton.pressed)
+		if (helpButton.pressed || LugusInput.use.KeyDown(KeyCode.Escape))
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu);
         }

@@ -102,6 +102,8 @@ public class StepMainMenu : IMenuStep
     {
         // Unlock play button.
         transform.FindChild("LevelSelectLock").gameObject.SetActive(LugusConfig.use.User.GetBool(_playLockedKey, true));
+
+		SocialShare.use.InitializeSocial();
     }
 
     protected void Start()

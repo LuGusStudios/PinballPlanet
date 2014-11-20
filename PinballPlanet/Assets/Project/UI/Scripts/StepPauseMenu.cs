@@ -123,7 +123,7 @@ public class StepPauseMenu : IMenuStep
         if (!activated)
             return;
 
-        if (ResumeButton.pressed)
+		if (ResumeButton.pressed || LugusInput.use.KeyDown(KeyCode.Escape))
         {
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.GameMenu);
         }

@@ -106,6 +106,14 @@
 	</Parameters>
   </Condition>
   
+  <Condition>
+    <Type>GamesPlayed</Type>
+    <Parameters>
+      <Value>9</Value>
+      <Comparer>Greater</Comparer>
+    </Parameters>
+  </Condition>
+  
   Level Keys
   **********
   Mine, Pirate, Halloween, MainMenu
@@ -130,7 +138,7 @@
 		<ID>ClickChallengesButton</ID>
 		<Stars>10</Stars>
 		<TextKey>Open the challenge menu.</TextKey>
-		<Priority>1</Priority>
+		<Priority>0</Priority>
 		<Condition>
 			<Type>ButtonPressed</Type>
 			<Parameters>
@@ -142,7 +150,7 @@
 	
 	<Challenge>
 		<ID>WorldMapFindTreasure</ID>
-		<Stars>1</Stars>
+		<Stars>0</Stars>
 		<TextKey>Find treasure on the world map.</TextKey>
 		<Priority>2</Priority>
 		<Condition>
@@ -157,7 +165,7 @@
 	<Challenge>
 		<ID>LessThan1337Score</ID>
 		<TextKey>Launch control! Score less than 1337.</TextKey>
-		<Priority>2</Priority>
+		<Priority>1</Priority>
 		<Stars>1</Stars>
 		<Condition>
 			<Type>Score</Type>
@@ -192,7 +200,7 @@
 	<Challenge>
 		<ID>ReachLvl3</ID>
 		<TextKey>Reach level 3</TextKey>
-		<Priority>2</Priority>
+		<Priority>0</Priority>
 		<Stars>1</Stars>
 		<Condition>
 			<Type>LevelUp</Type>
@@ -204,9 +212,23 @@
 	</Challenge>
 	
 	<Challenge>
+		<ID>Play10Games</ID>
+		<TextKey>Play 10 games</TextKey>
+		<Priority>1</Priority>
+		<Stars>2</Stars>
+		<Condition>
+			<Type>GamesPlayed</Type>
+			<Parameters>
+				<Value>9</Value>
+				<Comparer>Greater</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
 		<ID>AnyPowerup</ID>
 		<TextKey>Use any powerup</TextKey>
-		<Priority>2</Priority>
+		<Priority>1</Priority>
 		<Stars>1</Stars>		
 		<Condition>
 			<Type>Powerup</Type>
@@ -228,7 +250,7 @@
 	<Challenge>
 		<ID>ImpossibleChallenge</ID>
 		<TextKey>Oops, How did this get here? Press the lock to get rid of this challenge.</TextKey>		
-		<Priority>3</Priority>
+		<Priority>1</Priority>
 		<Stars>1</Stars>
 		<Condition>
 			<Type>Score</Type>
@@ -561,6 +583,7 @@
 			<Parameters>
 				<ObjectName>CrystalShard_Parent</ObjectName>
 				<CountToMeet>50</CountToMeet>
+				<LevelLoadReset>true</LevelLoadReset>
 			</Parameters>
 		</Condition>
 	</Challenge>
@@ -574,8 +597,9 @@
 		<Condition>
 			<Type>ObjectHit</Type>
 			<Parameters>
-			<ObjectName>PineTree01</ObjectName>
-			<CountToMeet>50</CountToMeet>
+				<ObjectName>PineTree01</ObjectName>
+				<CountToMeet>50</CountToMeet>
+				<LevelLoadReset>true</LevelLoadReset>
 			</Parameters>
 		</Condition>
 	</Challenge>
@@ -591,6 +615,7 @@
 			<Parameters>
 				<ObjectName>BridgeMultiObjective</ObjectName>
 				<CountToMeet>3</CountToMeet>
+				<LevelLoadReset>true</LevelLoadReset>
 			</Parameters>
 		</Condition>
 	</Challenge>
@@ -606,6 +631,7 @@
 			<Parameters>
 				<ObjectName>MineEntrance</ObjectName>
 				<CountToMeet>3</CountToMeet>
+				<LevelLoadReset>true</LevelLoadReset>
 			</Parameters>
 		</Condition>
 	</Challenge>
@@ -714,6 +740,7 @@
 			<Parameters>
 				<ObjectName>SpiderWeb</ObjectName>
 				<CountToMeet>10</CountToMeet>
+				<LevelLoadReset>true</LevelLoadReset>
 			</Parameters>
 		</Condition>
 	</Challenge>
@@ -759,6 +786,7 @@
 			<Parameters>
 				<ObjectName>Bat</ObjectName>
 				<CountToMeet>100</CountToMeet>
+				<LevelLoadReset>true</LevelLoadReset>
 			</Parameters>
 		</Condition>
 	</Challenge>

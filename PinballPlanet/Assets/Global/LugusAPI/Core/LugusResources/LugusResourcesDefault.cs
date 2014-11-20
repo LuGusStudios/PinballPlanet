@@ -33,7 +33,7 @@ public class LugusResources : LugusSingletonExisting<LugusResourcesDefault>
 		_instance = newInstance;
 	}
 	*/
-	
+
 	[System.Diagnostics.Conditional("DEBUG_RESOURCES")] 
 	public static void LogResourceLoad(string text)
 	{
@@ -41,7 +41,7 @@ public class LugusResources : LugusSingletonExisting<LugusResourcesDefault>
 	}
 }
 
-public class LugusResourcesDefault : MonoBehaviour
+public class LugusResourcesDefault : LugusSingletonExisting<LugusResourcesDefault>
 {
 	public event Lugus.OnResourcesReloaded onResourcesReloaded;
 	
@@ -57,9 +57,17 @@ public class LugusResourcesDefault : MonoBehaviour
 	public TextAsset errorTextAsset = null;
 
 	protected string languageTemp = ""; 
-	
-	protected void LoadDefaultCollections()
+
+	public override void InitializeSingleton ()
+	{
+		base.InitializeSingleton ();
+		LoadDefaultCollections();
+	}
+
+	public void LoadDefaultCollections()
 	{ 
+		Debug.LogWarning("Loadering");
+
 		collections = new List<ILugusResourceCollection>();
 		
 		this.Shared = new LugusResourceCollectionDefault("Shared/");
@@ -156,7 +164,7 @@ public class LugusResourcesDefault : MonoBehaviour
 	
 	public void Awake()
 	{
-		LoadDefaultCollections();
+		//LoadDefaultCollections();
 	}
 	
 	public Texture2D GetTexture(string key)

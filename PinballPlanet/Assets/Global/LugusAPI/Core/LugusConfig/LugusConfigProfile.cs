@@ -196,8 +196,14 @@ public class LugusConfigProfileDefault : ILugusConfigProfile
 
 	public void Remove(string key)
 	{
+		Debug.LogWarning("Removing " + key);
+
 		if (_data.ContainsKey(key))
+		{
+			_changed = true;
+			Debug.LogWarning(key + _changed);
 			_data.Remove(key);
+		}
 	}
 
 	#region Getters

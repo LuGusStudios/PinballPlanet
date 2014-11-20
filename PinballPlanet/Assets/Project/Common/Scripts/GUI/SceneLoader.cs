@@ -3,9 +3,12 @@ using System.Collections;
 
 public class SceneLoader : LugusSingletonExisting<SceneLoader> {
 
+	public bool enableInitialFade = true;
+
 	// Use this for initialization
 	void Start () {
-		ScreenFader.use.FadeIn(1.0f);
+		if (enableInitialFade)
+			ScreenFader.use.FadeIn(1.0f);
 	}
 	
 	// Update is called once per frame

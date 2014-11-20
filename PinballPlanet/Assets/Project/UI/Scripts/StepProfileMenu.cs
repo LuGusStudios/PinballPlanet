@@ -77,7 +77,7 @@ public class StepProfileMenu : IMenuStep
 			_selectedPowerup = PowerupManager.use.GetPermanentPowerup();
 		}
 		
-		if (socialButton.pressed)
+		if (socialButton.pressed || LugusInput.use.KeyDown(KeyCode.Escape))
 		{
 			if (Application.loadedLevelName == "Pinball_MainMenu")
 				MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu, false);

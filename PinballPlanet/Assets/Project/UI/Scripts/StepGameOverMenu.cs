@@ -10,6 +10,13 @@ public class StepGameOverMenu : IMenuStep
     protected TextMeshWrapper HighScore = null;
     protected Vector3 OriginalPosition = Vector3.zero;
 
+	protected Button shareButton = null;
+	protected Button facebookButton = null;
+	protected Button twitterButton = null;
+	protected Button shareBackground = null;
+
+	protected Transform shareOverlay = null;
+
     protected TextMesh StarsText = null;
     protected Transform StarIcon = null;
 
@@ -25,6 +32,8 @@ public class StepGameOverMenu : IMenuStep
 	private float _challengeReorderTime = 0.2f;
 	private float _challengeFlyOffTime = 0.7f;
 	private float _challengeAppearTime = 0.7f;
+
+	private string whooshSound = "Whoosh01";
 
     private int _oldStars = 0;
 
@@ -53,6 +62,14 @@ public class StepGameOverMenu : IMenuStep
 		expBar = gameObject.FindComponentInChildren<Transform>(true, "LevelProgressBar");
 		expText = gameObject.FindComponentInChildren<TextMesh>(true, "Text_Level");
 		expFullParticles = gameObject.FindComponentInChildren<ParticleSystem>(true, "LevelParticle");
+
+		shareButton = gameObject.FindComponentInChildren<Button>(true, "Button_Share");
+		facebookButton = gameObject.FindComponentInChildren<Button>(true, "Button_Facebook");
+		twitterButton = gameObject.FindComponentInChildren<Button>(true, "Button_Twitter");
+		shareBackground = gameObject.FindComponentInChildren<Button>(true, "Share_Background");
+
+		shareOverlay = transform.FindChild("Share");
+		shareOverlay.gameObject.SetActive(false);
 
         if (RestartButton == null)
         {
@@ -147,15 +164,47 @@ public class StepGameOverMenu : IMenuStep
 	{
 		if (!activated)
 			return;
-
-        if (RestartButton.pressed)
+		if (LugusInput.use.KeyDown(KeyCode.Escape))
+		{
+			if (shareOverlay.gameObject.activeSelf)
+			{
+				shareOverlay.gameObject.SetActive(false);
+			}
+			else
+			{
+				SceneLoader.use.LoadNewScene("Pinball_MainMenu");
+			}
+		}
+        else if (RestartButton.pressed)
         {
 			SceneLoader.use.LoadNewScene(Application.loadedLevel);
         }
-        else if (MainMenuButton.pressed)
+		else if (MainMenuButton.pressed)
         {
 			SceneLoader.use.LoadNewScene("Pinball_MainMenu");
-        }
+        } 
+		else if (shareButton.pressed)
+		{
+			shareOverlay.gameObject.SetActive(!shareOverlay.gameObject.activeSelf);
+		} 
+		else if (shareBackground.pressed)
+		{
+			shareOverlay.gameObject.SetActive(false);
+		}
+		else if (facebookButton.pressed)
+		{
+			string levelName = Application.loadedLevelName.Replace("Pinball_", "");
+			string score = ScoreManager.use.TotalScore.ToString();
+
+			SocialShare.use.facebook.Share("I got a score of " + score + " in the " + levelName + " level. Can you do better?");
+		}
+		else if (twitterButton.pressed)
+		{
+			string levelName = Application.loadedLevelName.Replace("Pinball_", "");
+			string score = ScoreManager.use.TotalScore.ToString();
+
+			SocialShare.use.twitter.Share("I got a score of " + score + " in the " + levelName + " level. Can you do better?");
+		}
 	}
 
 	public override void Activate(bool animate = true)
@@ -293,6 +342,8 @@ public class StepGameOverMenu : IMenuStep
 		}
 		
 		ChallengeManager.use.FillChallenges();
+
+		PlayerData.use.Save();
     }
 
 	private IEnumerator UpdateExperienceBar()
@@ -502,7 +553,9 @@ public class StepGameOverMenu : IMenuStep
 				// Make old challenge fly off.
 				Vector3 destPos = ChallengeObjects[i].First.transform.position.xAdd(15.0f);
 				ChallengeObjects[i].First.MoveTo(destPos).Time(_challengeAnimTime).EaseType(iTween.EaseType.easeInBack).Execute();
-				
+
+				LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio(whooshSound));
+
 				// Wait for animation to end.
 				yield return new WaitForSeconds(_challengeFlyOffTime);
 

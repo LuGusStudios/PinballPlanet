@@ -35,7 +35,7 @@ public class StepLevelSelectHelpMenu : IMenuStep
 		if (!activated)
 			return;
 
-	    if (helpButton.pressed || LugusInput.use.up)
+		if (helpButton.pressed || LugusInput.use.up || LugusInput.use.KeyDown(KeyCode.Escape))
 	    {
 	        MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.LevelSelectMenu); 
 	    }
