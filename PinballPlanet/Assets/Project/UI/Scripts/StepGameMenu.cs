@@ -145,6 +145,11 @@ public class StepGameMenu : IMenuStep
         star.transform.parent = transform;
         star.transform.localPosition = Vector3.zero.zAdd(-2.0f);
 
+#if UNITY_WP8
+		starButton.startAutoCatchAnimation();
+		return;
+#endif
+
 		if (AutoCaptureStars)
 		{
 			starButton.startAutoCatchAnimation();
@@ -165,6 +170,7 @@ public class StepGameMenu : IMenuStep
 				Player.use.PauseGame();
 			}
 		}
+
     }
 
 	private void popupContinue(Popup sender)

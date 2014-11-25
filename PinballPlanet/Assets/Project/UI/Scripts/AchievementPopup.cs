@@ -35,6 +35,11 @@ public class AchievementPopup : LugusSingletonExisting<AchievementPopup> {
 
 		icon.transform.localPosition = startTransform.localPosition;
 		icon.transform.localEulerAngles = startTransform.localEulerAngles;
+
+		foreach (Transform child in transform)
+		{
+			child.localPosition = MenuManager.use.CalculateUIPos(child.localPosition);
+		}
 	}
 
 	void Awake()

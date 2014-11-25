@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Config>
-	<TotalPlayTime>322.212</TotalPlayTime>
+	<TotalPlayTime>58.95912</TotalPlayTime>
 	<NumberOfGamesPlayed>0</NumberOfGamesPlayed>
-	<Stars>362</Stars>
+	<Stars>79</Stars>
 	<Level>20</Level>
 	<Exp>0</Exp>
 	<PermanentPowerup>0</PermanentPowerup>
 	<Pinball_Halloween_Unlocked>True</Pinball_Halloween_Unlocked>
-	<Pinball_Pirate_Unlocked>True</Pinball_Pirate_Unlocked>
-	<Pinball_Mine_Unlocked>True</Pinball_Mine_Unlocked>
-	<LastLoginDate>11/19/2014 12:00:00 AM</LastLoginDate>
+	<Pinball_Pirate_Unlocked>False</Pinball_Pirate_Unlocked>
+	<Pinball_Mine_Unlocked>False</Pinball_Mine_Unlocked>
+	<LastLoginDate>11/24/2014 12:00:00 AM</LastLoginDate>
 	<Message_Welcome_Seen>True</Message_Welcome_Seen>
 	<PlayButton_Locked>False</PlayButton_Locked>
-	<Message_LvlUnlock_Seen>True</Message_LvlUnlock_Seen>
-	<Challenge_ReachLvl3_Done>True</Challenge_ReachLvl3_Done>
 	<Challenge_ClickChallengesButton_Done>True</Challenge_ClickChallengesButton_Done>
+	<Challenge_ReachLvl3_Done>True</Challenge_ReachLvl3_Done>
+	<Challenge_ImpossibleChallenge_Done>True</Challenge_ImpossibleChallenge_Done>
+	<Challenge_AnyPowerup_Done>True</Challenge_AnyPowerup_Done>
+	<Message_LvlUnlock_Seen>True</Message_LvlUnlock_Seen>
+	<Challenge_WorldMapFindTreasure_Done>True</Challenge_WorldMapFindTreasure_Done>
+	<LastPermPowerupUnlockLevel>15</LastPermPowerupUnlockLevel>
 </Config>
