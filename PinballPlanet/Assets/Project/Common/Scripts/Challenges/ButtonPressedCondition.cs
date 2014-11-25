@@ -71,7 +71,7 @@ class ButtonPressedCondition : Condition
 
         // Find buttons with name.
         // This will also add prefabs not in scene, not really intended but causes no problems.
-        foreach (object button in GameObject.FindObjectsOfTypeAll(typeof(Button)))
+        foreach (object button in Resources.FindObjectsOfTypeAll(typeof(Button)))
         {
             Button butt = button as Button;
             if (butt.name == _buttonToPressName)

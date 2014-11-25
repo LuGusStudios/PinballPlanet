@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID && !UNITY_WP8
 using System.IO;
 #endif
 
@@ -61,7 +61,7 @@ public class ChallengeManager : MonoBehaviour
 
 		string txt = "";
 
-#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID && !UNITY_WP8
 		if (! loadFromFileSystem) 
 		{
 #endif
@@ -79,7 +79,7 @@ public class ChallengeManager : MonoBehaviour
 			}
 
 			txt = challengesText.text;
-#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID && !UNITY_WP8
 		}
 		else 
 		{

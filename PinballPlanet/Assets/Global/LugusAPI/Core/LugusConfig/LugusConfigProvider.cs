@@ -17,7 +17,7 @@ public interface ILugusConfigProvider
 	void Store(Dictionary<string, string> data, string key);
 }
 
-#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID && !UNITY_WP8
 public class LugusConfigProviderDefault : ILugusConfigProvider
 {
 

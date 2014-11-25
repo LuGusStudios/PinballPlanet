@@ -7,6 +7,7 @@
 	<UnlockedAtLevelPrefix>Unlock at level </UnlockedAtLevelPrefix>
 	<UnlockedAtLevelSuffix>.</UnlockedAtLevelSuffix>
 	<PowerupRemoveLowLevel>You must be level 3 or above to remove a challenge.</PowerupRemoveLowLevel>
+	<PowerupRemoveNotEnoughStars>You need 3 stars to remove a challenge.</PowerupRemoveNotEnoughStars>
 
 	<!-- ========= -->
 	<!-- MAIN MENU -->

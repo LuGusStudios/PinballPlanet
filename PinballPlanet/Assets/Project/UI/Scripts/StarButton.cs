@@ -22,7 +22,9 @@ public class StarButton : Button
 
         // Stop animation and destroy coroutine
 		StopAnimation();
-		coroutineHandle.StopRoutine();
+
+		if (coroutineHandle != null)
+			coroutineHandle.StopRoutine();
 
 		//TODO Animation!
 		LugusAudio.use.SFX().Play(LugusResources.use.Shared.GetAudio("Crystal_01"));
@@ -30,7 +32,8 @@ public class StarButton : Button
 		// Destroy button.
         Destroy(transform.parent.gameObject);
 
-        yield return base.PressRoutine();
+        //yield return 
+		LugusCoroutines.use.StartRoutine (base.PressRoutine());
     }
 
 	public void StopAnimation()

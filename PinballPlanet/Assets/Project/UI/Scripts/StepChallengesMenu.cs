@@ -89,7 +89,7 @@ public class StepChallengesMenu : IMenuStep
 
         if (StarsText == null)
         {
-            StarsText = transform.FindChild("Text_Stars").GetComponent<TextMesh>();
+            StarsText = transform.FindChildRecursively("Text_Stars").GetComponent<TextMesh>();
 
             StarsText.text = PlayerData.use.Stars.ToString();
             PlayerData.use.StarTextMeshes.Add(StarsText);
@@ -101,7 +101,7 @@ public class StepChallengesMenu : IMenuStep
 
         if (ChallengesTopTransform == null)
         {
-            ChallengesTopTransform = transform.FindChild("Challenge_Top");
+            ChallengesTopTransform = transform.FindChildRecursively("Challenge_Top");
         }
         if (ChallengesTopTransform == null)
         {
@@ -110,7 +110,7 @@ public class StepChallengesMenu : IMenuStep
 
         if (ChallengesBotTransform == null)
         {
-            ChallengesBotTransform = transform.FindChild("Challenge_Bot");
+			ChallengesBotTransform = transform.FindChildRecursively("Challenge_Bot");
         }
         if (ChallengesBotTransform == null)
         {
@@ -119,7 +119,7 @@ public class StepChallengesMenu : IMenuStep
 
         if (StarIcon == null)
         {
-            StarIcon = transform.FindChild("MissionStar");
+            StarIcon = transform.FindChildRecursively("MissionStar");
         }
         if (StarIcon == null)
         {
@@ -129,7 +129,7 @@ public class StepChallengesMenu : IMenuStep
 		removeChallengeYes = gameObject.FindComponentInChildren<Button>(true, "Button_Yes");
 		removeChallengeNo = gameObject.FindComponentInChildren<Button>(true, "Button_No");
 
-		removeConfirmation = transform.FindChild("RemoveConfirmation").gameObject;
+		removeConfirmation = transform.FindChildRecursively("RemoveConfirmation").gameObject;
 		removeConfirmation.SetActive(false);
 
         OriginalPosition = transform.position;
@@ -191,6 +191,9 @@ public class StepChallengesMenu : IMenuStep
 			LugusConfig.use.SaveProfiles();
 			PlayerData.use.Load();
 			ChallengeManager.use.reset();
+			int nrOfResets = LugusConfig.use.User.GetInt("NumberOfChallengeResets", 0);
+			nrOfResets ++;
+			LugusConfig.use.User.SetInt("NumberOfChallengeResets", nrOfResets, true);
 			SceneLoader.use.LoadNewScene(PlayerData.MainLvlName);
 		}
 		else if (removeChallengeYes.pressed)
@@ -239,7 +242,7 @@ public class StepChallengesMenu : IMenuStep
 					}
 					else if (PlayerData.use.Stars < _removeChallengeStarCost)
 					{
-						Popup newPopup = PopupManager.use.CreateBox(LugusResources.use.Localized.GetText("PowerupRemoveLowLevel"));
+						Popup newPopup = PopupManager.use.CreateBox(LugusResources.use.Localized.GetText("PowerupRemoveNotEnoughStars"));
 						newPopup.transform.localPosition = newPopup.transform.localPosition.zAdd(-10f);
 						newPopup.blockInput = true;
 						newPopup.boxType = Popup.PopupType.Continue;
@@ -303,9 +306,9 @@ public class StepChallengesMenu : IMenuStep
             yield return null;
 
             // Show challenges.
-			Debug.LogError(ChallengeManager.use.AreAllChallengesCompleted());
-			Debug.LogError(ChallengeManager.use.AllChallenges.Count);
-			Debug.LogError(ChallengeManager.use.CurrentChallenges.Count);
+//			Debug.LogError(ChallengeManager.use.AreAllChallengesCompleted());
+//			Debug.LogError(ChallengeManager.use.AllChallenges.Count);
+//			Debug.LogError(ChallengeManager.use.CurrentChallenges.Count);
 
 			if (ChallengeManager.use.AreAllChallengesCompleted())            	
 				ShowChallengesCompleteOverlay();
@@ -716,7 +719,7 @@ public class StepChallengesMenu : IMenuStep
             if (ChallengeObjects[count].Second == null)
             {
                 // Set pos in window.
-                Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (PlayerData.MaxChallenges - 1) * count;
+				Vector3 pos = GetChallengePosition(challenge); //ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (PlayerData.MaxChallenges - 1) * count;
 
                 // Instantiate challenge game object.
                 GameObject challengeGameObj = Instantiate(ChallengePrefab, pos, Quaternion.identity) as GameObject;
@@ -786,6 +789,7 @@ public class StepChallengesMenu : IMenuStep
 	protected Vector3 GetChallengePosition(int index)
 	{
 		Vector3 pos = ChallengesTopTransform.position + (ChallengesBotTransform.position - ChallengesTopTransform.position) / (PlayerData.MaxChallenges - 1) * index;
+		//pos = MenuManager.use.CalculateUIPos(pos);
 		return pos;
 	}
 	

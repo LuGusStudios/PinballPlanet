@@ -68,7 +68,7 @@ public class StepGameOverMenu : IMenuStep
 		twitterButton = gameObject.FindComponentInChildren<Button>(true, "Button_Twitter");
 		shareBackground = gameObject.FindComponentInChildren<Button>(true, "Share_Background");
 
-		shareOverlay = transform.FindChild("Share");
+		shareOverlay = transform.FindChildRecursively("Share");
 		shareOverlay.gameObject.SetActive(false);
 
         if (RestartButton == null)
@@ -91,7 +91,7 @@ public class StepGameOverMenu : IMenuStep
 
         if (Score == null)
         {
-            Score = transform.FindChild("Text_ScoreNr").GetComponent<TextMeshWrapper>();
+			Score = transform.FindChildRecursively("Text_ScoreNr").GetComponent<TextMeshWrapper>();
         }
         if (Score == null)
         {
@@ -100,7 +100,7 @@ public class StepGameOverMenu : IMenuStep
 
         if (HighScore == null)
         {
-            HighScore = transform.FindChild("Text_HighScoreNr").GetComponent<TextMeshWrapper>();
+			HighScore = transform.FindChildRecursively("Text_HighScoreNr").GetComponent<TextMeshWrapper>();
         }
         if (HighScore == null)
         {
@@ -109,7 +109,7 @@ public class StepGameOverMenu : IMenuStep
 
         if (ChallengesTopTransform == null)
         {
-            ChallengesTopTransform = transform.FindChild("Challenge_Top");
+			ChallengesTopTransform = transform.FindChildRecursively("Challenge_Top");
         }
         if (ChallengesTopTransform == null)
         {
@@ -118,7 +118,7 @@ public class StepGameOverMenu : IMenuStep
 
         if (ChallengesBotTransform == null)
         {
-            ChallengesBotTransform = transform.FindChild("Challenge_Bot");
+			ChallengesBotTransform = transform.FindChildRecursively("Challenge_Bot");
         }
         if (ChallengesBotTransform == null)
         {
@@ -127,7 +127,7 @@ public class StepGameOverMenu : IMenuStep
 
         if (StarsText == null)
         {
-            StarsText = transform.FindChild("Text_Stars").GetComponent<TextMesh>();
+			StarsText = transform.FindChildRecursively("Text_Stars").GetComponent<TextMesh>();
 
             StarsText.text = PlayerData.use.Stars.ToString();
             PlayerData.use.StarTextMeshes.Add(StarsText);
@@ -139,7 +139,7 @@ public class StepGameOverMenu : IMenuStep
 
         if (StarIcon == null)
         {
-            StarIcon = transform.FindChild("MissionStar");
+			StarIcon = transform.FindChildRecursively("MissionStar");
         }
         if (StarIcon == null)
         {

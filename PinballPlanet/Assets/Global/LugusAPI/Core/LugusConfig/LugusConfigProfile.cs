@@ -101,7 +101,7 @@ public class LugusConfigProfileDefault : ILugusConfigProfile
 		_data = new Dictionary<string, string>();
 		_providers = new List<ILugusConfigProvider>();
 		_changed = true;
-#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+		#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID && !UNITY_WP8
 		Providers.Add(new LugusConfigProviderDefault(Application.dataPath + "/Config/"));
 #else
 		Providers.Add(new LugusConfigProviderPlayerPrefs(name));
@@ -116,7 +116,7 @@ public class LugusConfigProfileDefault : ILugusConfigProfile
 		_providers = new List<ILugusConfigProvider>();
 		_changed = false;
 		
-#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID
+		#if !UNITY_WEBPLAYER && !UNITY_IPHONE && !UNITY_ANDROID && !UNITY_WP8
 		Providers.Add(new LugusConfigProviderDefault(path));
 #else
 		Providers.Add(new LugusConfigProviderPlayerPrefs(name));

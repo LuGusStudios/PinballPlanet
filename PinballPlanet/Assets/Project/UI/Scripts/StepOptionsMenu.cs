@@ -50,12 +50,12 @@ public class StepOptionsMenu : IMenuStep
 
 		if (resetButton == null)
 		{
-			resetButton = transform.FindChild("Button_Reset").GetComponent<Button>();
+			resetButton = transform.FindChildRecursively("Button_Reset").GetComponent<Button>();
 		}
 
         if (musicCheckBox == null)
         {
-            musicCheckBox = transform.FindChild("CheckBox_Music").GetComponent<Button>();
+			musicCheckBox = transform.FindChildRecursively("CheckBox_Music").GetComponent<Button>();
         }
         if (musicCheckBox == null)
         {
@@ -64,7 +64,7 @@ public class StepOptionsMenu : IMenuStep
 
         if (effectsCheckBox == null)
         {
-            effectsCheckBox = transform.FindChild("CheckBox_Effects").GetComponent<Button>();
+			effectsCheckBox = transform.FindChildRecursively("CheckBox_Effects").GetComponent<Button>();
         }
         if (effectsCheckBox == null)
         {
@@ -73,7 +73,7 @@ public class StepOptionsMenu : IMenuStep
 
 		if (resetConfirmation == null)
 		{
-			resetConfirmation = transform.FindChild("ResetConfirmation");
+			resetConfirmation = transform.FindChildRecursively("ResetConfirmation");
 		}
 		if (resetConfirmation == null)
 		{

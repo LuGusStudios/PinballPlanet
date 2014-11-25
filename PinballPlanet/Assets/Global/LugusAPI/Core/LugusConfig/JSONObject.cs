@@ -238,6 +238,17 @@ public class JSONObject {
 				}
 			}
 			if(str.Length > 0) {
+				// Fuck WP8 .. Doesn't have string compare...
+#if UNITY_WP8
+				if( str.ToLower() == "true") {
+					type = Type.BOOL;
+					b = true;
+				} else if( str.ToLower() == "false" ) {
+					type = Type.BOOL;
+					b = false;
+				} else if(str.ToLower() == "null") {
+					type = Type.NULL;
+#else
 				if(string.Compare(str, "true", true) == 0) {
 					type = Type.BOOL;
 					b = true;
@@ -246,6 +257,7 @@ public class JSONObject {
 					b = false;
 				} else if(string.Compare(str, "null", true) == 0) {
 					type = Type.NULL;
+#endif
 #if USEFLOAT
 				} else if(str == INFINITY) {
 					type = Type.NUMBER;

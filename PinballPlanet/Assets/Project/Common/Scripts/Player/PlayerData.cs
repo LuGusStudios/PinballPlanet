@@ -296,7 +296,7 @@ public class PlayerData : MonoBehaviour
     // Save data.
     public void Save()
     {
-        Debug.LogError("------ Saving player data. ------");
+        //Debug.LogError("------ Saving player data. ------");
 
         // Initialize lists.
         if (LevelsHighscores == null)
@@ -370,7 +370,7 @@ public class PlayerData : MonoBehaviour
     // Load Data.
     public void Load()
     {
-        Debug.LogError("------ Loading player data. ------");
+        //Debug.LogError("------ Loading player data. ------");
 
         // Load scores.
         foreach (KeyValuePair<string, List<int>> lvlHighScores in LevelsHighscores)
