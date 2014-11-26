@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: 35b22163833b243479cf57f771b61bed
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Icon_Inthebank01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

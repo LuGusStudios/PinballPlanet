@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: 0576d1d4b0804924a8bbb1fe31067559
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Icon_Starcatcher01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

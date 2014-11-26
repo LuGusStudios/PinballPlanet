@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: 43f8b30e4bdca964fad095ce5bc56067
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Icon_Holygrail01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

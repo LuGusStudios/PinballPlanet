@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: b20f6497aa1644444bf44d1ce4dca65c
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Icon_Powerball01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

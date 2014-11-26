@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: ac5cf748cbdaecd42a33b34cee9a3b49
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Icon_Bonusball01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

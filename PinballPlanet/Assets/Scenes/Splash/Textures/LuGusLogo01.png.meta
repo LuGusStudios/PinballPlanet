@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: 8c9404c4e19ac7345bc9f0fcdc41a4d2
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: LuGusLogo01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

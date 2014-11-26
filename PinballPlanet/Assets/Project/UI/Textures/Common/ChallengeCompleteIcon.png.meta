@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: bf74c3ec1f19df4468124cacc49c1044
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: ChallengeCompleteIcon
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

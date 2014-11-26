@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: b248cc7eed85ab9428067a235e22288a
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: ArrowDown01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -21,7 +22,7 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -2
   maxTextureSize: 1024
   textureSettings:
     filterMode: -1

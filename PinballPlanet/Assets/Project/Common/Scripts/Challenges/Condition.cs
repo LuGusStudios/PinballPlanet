@@ -266,30 +266,113 @@ public class Condition
     protected bool TryParseComparerParameter<T>(string key, out Func<T, T, bool> param, Func<T, T, bool> defaultValue, ref Dictionary<string, string> parameters)
        where T : IComparable<T>
     {
+		// Note instead of using generic types to generate the functions we use specific functions and cast them to generic
+		// This is needed for IOS which cannot generate code at runtime. (No JIT-compilation allowed)
+
         string readValue;
         if (parameters.TryGetValue(key, out readValue))
         {
             if (readValue == "Greater")
             {
-                param = Functor.Greater<T>();
+				if(typeof(T) == typeof(int)) {
+					param = (Func<T, T, bool>)((object)Functor.GreaterInt());
+				}
+				else if(typeof(T) == typeof(float)) {
+					param = (Func<T, T, bool>)((object)Functor.GreaterFloat());
+				}
+				else if(typeof(T) == typeof(double)) {
+					param = (Func<T, T, bool>)((object)Functor.GreaterDouble());
+				}
+				else if(typeof(T) == typeof(string)) {
+					param = (Func<T, T, bool>)((object)Functor.GreaterString());
+				}
+				else // this does not work on IOS
+				{
+#if UNITY_IOS
+					Debug.LogError("Generic type used in ios!");
+					param = defaultValue;
+					return false;
+#endif
+                	param = Functor.Greater<T>();
+				}
                 Debug.Log("Comparer Greater added.");
                 return true;
             }
             else if (readValue == "Less")
             {
-                param = Functor.Less<T>();
+				if(typeof(T) == typeof(int)) {
+					param = (Func<T, T, bool>)((object)Functor.LessInt());
+				}
+				else if(typeof(T) == typeof(float)) {
+					param = (Func<T, T, bool>)((object)Functor.LessFloat());
+				}
+				else if(typeof(T) == typeof(double)) {
+					param = (Func<T, T, bool>)((object)Functor.LessDouble());
+				}
+				else if(typeof(T) == typeof(string)) {
+					param = (Func<T, T, bool>)((object)Functor.LessString());
+				}
+				else // this does not work on IOS
+				{
+					#if UNITY_IOS
+					Debug.LogError("Generic type used in ios!");
+					param = defaultValue;
+					return false;
+					#endif
+					param = Functor.Less<T>();
+				}
                 Debug.Log("Comparer Less added.");
                 return true;
             }
             else if (readValue == "Equal")
             {
-                param = Functor.Equal<T>();
+				if(typeof(T) == typeof(int)) {
+					param = (Func<T, T, bool>)((object)Functor.EqualInt());
+				}
+				else if(typeof(T) == typeof(float)) {
+					param = (Func<T, T, bool>)((object)Functor.EqualFloat());
+				}
+				else if(typeof(T) == typeof(double)) {
+					param = (Func<T, T, bool>)((object)Functor.EqualDouble());
+				}
+				else if(typeof(T) == typeof(string)) {
+					param = (Func<T, T, bool>)((object)Functor.EqualString());
+				}
+				else // this does not work on IOS
+				{
+					#if UNITY_IOS
+					Debug.LogError("Generic type used in ios!");
+					param = defaultValue;
+					return false;
+					#endif
+					param = Functor.Equal<T>();
+				}
                 Debug.Log("Comparer Equal added.");
                 return true;
             }
             else if (readValue == "Unequal")
             {
-                param = Functor.Unequal<T>();
+				if(typeof(T) == typeof(int)) {
+					param = (Func<T, T, bool>)((object)Functor.UnequalInt());
+				}
+				else if(typeof(T) == typeof(float)) {
+					param = (Func<T, T, bool>)((object)Functor.UnequalFloat());
+				}
+				else if(typeof(T) == typeof(double)) {
+					param = (Func<T, T, bool>)((object)Functor.UnequalDouble());
+				}
+				else if(typeof(T) == typeof(string)) {
+					param = (Func<T, T, bool>)((object)Functor.UnequalString());
+				}
+				else // this does not work on IOS
+				{
+					#if UNITY_IOS
+					Debug.LogError("Generic type used in ios!");
+					param = defaultValue;
+					return false;
+					#endif
+					param = Functor.Unequal<T>();
+				}
                 Debug.Log("Comparer Unequal added.");
                 return true;
             }

@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: 3fe2741f96b62d54f8060b3d55f4b69c
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: PowerupFrameTop
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

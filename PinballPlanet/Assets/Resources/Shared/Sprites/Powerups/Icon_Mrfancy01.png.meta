@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: a42b5b96f461bd7459d725b0e77cac87
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Icon_Mrfancy01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

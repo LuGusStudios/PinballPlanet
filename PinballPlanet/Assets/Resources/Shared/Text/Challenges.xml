@@ -150,7 +150,7 @@
 	
 	<Challenge>
 		<ID>WorldMapFindTreasure</ID>
-		<Stars>0</Stars>
+		<Stars>1</Stars>
 		<TextKey>Find treasure on the world map.</TextKey>
 		<Priority>2</Priority>
 		<Condition>

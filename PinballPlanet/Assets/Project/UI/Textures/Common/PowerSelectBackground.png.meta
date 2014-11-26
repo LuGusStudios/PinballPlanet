@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: a2e4a70b70abd6b4eae298dcf996bd97
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: PowerSelectBackground
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -21,7 +22,7 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -2
   maxTextureSize: 1024
   textureSettings:
     filterMode: -1

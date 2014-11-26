@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: 13ca79c728bd5b24fbba7021342ca5c7
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: ScreenFade01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

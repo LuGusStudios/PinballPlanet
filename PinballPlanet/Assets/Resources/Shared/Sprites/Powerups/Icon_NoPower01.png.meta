@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: d9f8ac06d79c10642a44afae80138642
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Icon_NoPower01
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

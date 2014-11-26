@@ -1,7 +1,8 @@
 fileFormatVersion: 2
 guid: 3b89e31945410ce498e2183b1e3d0076
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: LevelBar
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
