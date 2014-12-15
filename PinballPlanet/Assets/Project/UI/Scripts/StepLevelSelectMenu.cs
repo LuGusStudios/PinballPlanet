@@ -165,6 +165,12 @@ public class StepLevelSelectMenu : IMenuStep
 
         // Hide.
         HideLevel();
+
+		if (Version.isLite)
+		{
+			PlayerData.use.LevelsUnlocked["Pinball_Pirate"] = true;
+			LugusConfig.use.User.SetBool(_messageLvlUnlockKey, true, true);
+		}
     }
 
     public void SetupGlobal()
@@ -213,6 +219,19 @@ public class StepLevelSelectMenu : IMenuStep
         }
         else if (LockButton.pressed)
         {
+			if(Version.isLite)
+			{
+				//TODO Determine behaviour for Lite Version
+//				Popup newPopup = PopupManager.use.CreateBox(LugusResources.use.Localized.GetText("LiteVersionLevelLocked"));
+//				newPopup.blockInput = true;
+//				newPopup.boxType = Popup.PopupType.Continue;
+//				newPopup.onContinueButtonClicked += popupLiteVersionWarningContinue;
+//				newPopup.Show();
+//				return;
+				MenuManager.use.ActivateOverlayMenu(MenuManagerDefault.MenuTypes.LiteBuyMenu, false);
+				return;
+			}
+
             // Unlock level if player has enough stars.
             if (PlayerData.use.Stars >= PlayerData.use.UnlockCost)
             {
@@ -291,13 +310,15 @@ public class StepLevelSelectMenu : IMenuStep
 
                 // Stop any iTweens animations on planet.
                 iTween.Stop(_planet);
-
                 // Calculate rotation amount.
-                Vector3 dragVec = LugusInput.use.lastPoint - LugusInput.use.inputPoints[LugusInput.use.inputPoints.Count - 2];
-                float dragAmountX = dragVec.x / Screen.width;
-                float dragAmountY = dragVec.y / Screen.height;
-                _planet.transform.Rotate(Vector3.down, dragAmountX * DragSpeed, Space.World);
-                _planet.transform.Rotate(Vector3.right, dragAmountY * DragSpeed, Space.World);
+				if (LugusInput.use.inputPoints.Count >= 2)
+				{
+	                Vector3 dragVec = LugusInput.use.lastPoint - LugusInput.use.inputPoints[LugusInput.use.inputPoints.Count - 2];
+	                float dragAmountX = dragVec.x / Screen.width;
+	                float dragAmountY = dragVec.y / Screen.height;
+	                _planet.transform.Rotate(Vector3.down, dragAmountX * DragSpeed, Space.World);
+	                _planet.transform.Rotate(Vector3.right, dragAmountY * DragSpeed, Space.World);
+				}
             }
         }
 
@@ -465,4 +486,11 @@ public class StepLevelSelectMenu : IMenuStep
         sender.onContinueButtonClicked -= LvlUnlockContinue;
         sender.Hide();
     }
+
+//	private void popupLiteVersionWarningContinue(Popup sender)
+//	{
+//		// Unsubscribe from popup event and hide it.
+//		sender.onContinueButtonClicked -= popupLiteVersionWarningContinue;
+//		sender.Hide();
+//	}
 }

@@ -444,6 +444,12 @@ public class PlayerData : MonoBehaviour
             return;
         }
 
+		if (LevelsHighscores[lvlName].Contains(score))
+		{
+			Debug.Log("High score list of level " + lvlName + " already contains score " + score);
+			return;
+		}
+
         // Add high score if list isn't full yet.
         if (LevelsHighscores[lvlName].Count < MaxHighScores)
         {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class ScreenFader : LugusSingletonRuntime<ScreenFader>
 {
 	protected SpriteRenderer fadeRenderer = null;

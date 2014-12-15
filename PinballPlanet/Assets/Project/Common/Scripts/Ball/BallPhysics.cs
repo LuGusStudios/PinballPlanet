@@ -73,7 +73,8 @@ public class BallPhysics : MonoBehaviour
         //have we moved more than our minimum extent? 
         Vector3 movementThisStep = _myRigidbody.position - _previousPosition;
         float movementSqrMagnitude = movementThisStep.sqrMagnitude;
-        if (movementSqrMagnitude > _sqrMinimumExtent)
+		// Update: Always check. This is important for the flippers which can also move fast, thus rendering this check inaccurate.
+        if (true || movementSqrMagnitude > _sqrMinimumExtent)
         {
             float movementMagnitude = Mathf.Sqrt(movementSqrMagnitude);
             RaycastHit hitInfo;
@@ -83,6 +84,8 @@ public class BallPhysics : MonoBehaviour
                 Debug.Log("DontGoThroughThings: Obstruction missed");
                 _myRigidbody.position = hitInfo.point - (movementThisStep / movementMagnitude) * _partialExtent;
             }
+
+			//Debug.DrawRay(_previousPosition, movementThisStep, Color.white, 0.5f);
         }
         _previousPosition = _myRigidbody.position;
     }

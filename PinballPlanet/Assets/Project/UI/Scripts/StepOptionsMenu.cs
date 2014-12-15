@@ -152,6 +152,12 @@ public class StepOptionsMenu : IMenuStep
         }
         else if (SocialButton.pressed)
         {
+			if (Version.isLite)
+			{
+				MenuManager.use.ActivateOverlayMenu(MenuManagerDefault.MenuTypes.LiteBuyMenu, false);
+				return;
+			}
+
             //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
 			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ProfileMenu, false);
         }

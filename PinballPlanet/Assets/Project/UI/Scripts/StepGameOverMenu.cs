@@ -149,6 +149,11 @@ public class StepGameOverMenu : IMenuStep
 		OriginalPosition = transform.position;
 
         ChallengeObjects = new List<Pair<GameObject, Challenge>>();
+
+#if UNITY_WP8
+		facebookButton.gameObject.SetActive(false);
+		twitterButton.transform.localPosition = twitterButton.transform.localPosition.y(-0.5f);
+#endif
     }
 	
 	public void SetupGlobal()
@@ -172,7 +177,7 @@ public class StepGameOverMenu : IMenuStep
 			}
 			else
 			{
-				SceneLoader.use.LoadNewScene("Pinball_MainMenu");
+				SceneLoader.use.LoadNewScene("Pinball_MainMenu", 0.3f, true);
 			}
 		}
         else if (RestartButton.pressed)
@@ -181,7 +186,7 @@ public class StepGameOverMenu : IMenuStep
         }
 		else if (MainMenuButton.pressed)
         {
-			SceneLoader.use.LoadNewScene("Pinball_MainMenu");
+			SceneLoader.use.LoadNewScene("Pinball_MainMenu", 0.3f, true);
         } 
 		else if (shareButton.pressed)
 		{
