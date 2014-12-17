@@ -171,6 +171,14 @@ public class StepMainMenu : IMenuStep
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
         }
 
+#if UNITY_WP8
+		if(Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+
+#endif
+
         _planet.transform.Rotate(Vector3.up, _rotationSpeed, Space.World);
     }
 
