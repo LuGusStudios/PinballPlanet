@@ -14,11 +14,11 @@ public class TwitterBasic {
 		}
 	}
 
-	private string Address = "http://twitter.com/intent/tweet";
+	private string Address = "http://www.twitter.com/intent/tweet";
 
 	public void Share (string message)
 	{	
-		string Address = "http://twitter.com/intent/tweet";
+		//string Address = "http://twitter.com/intent/tweet";
 		Application.OpenURL(Address +
 		                    "?text=" + WWW.EscapeURL(message + " www.pinball-planet.com/ #LuGusStudios") +
 		                    //"&amp;url=" + WWW.EscapeURL("http://www.pinball-planet.com/") +

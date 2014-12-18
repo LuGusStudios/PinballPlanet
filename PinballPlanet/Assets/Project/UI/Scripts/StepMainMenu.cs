@@ -96,6 +96,14 @@ public class StepMainMenu : IMenuStep
         }
 
         OriginalPosition = transform.position;
+
+		if (Version.isLite)
+		{
+			TitleLogo.GetComponent<SpriteRenderer>().sprite = LugusResources.use.Shared.GetSprite("PlanetPinballLogoLite");		
+			SocialButton.gameObject.GetComponent<SpriteRenderer>().sprite = LugusResources.use.Shared.GetSprite("PresentIcon");
+			LugusConfig.use.User.SetBool(_messageSeenKey, true, true);
+			LugusConfig.use.User.SetBool(_playLockedKey, false, true);
+		}
     }
 
     public void SetupGlobal()
@@ -138,6 +146,12 @@ public class StepMainMenu : IMenuStep
         }
         else if (SocialButton.pressed)
         {
+			if (Version.isLite)
+			{
+				MenuManager.use.ActivateOverlayMenu(MenuManagerDefault.MenuTypes.LiteBuyMenu, false);
+				return;
+			}
+
             //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
 			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ProfileMenu, false);
         }
@@ -156,6 +170,14 @@ public class StepMainMenu : IMenuStep
 
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
         }
+
+#if UNITY_WP8
+		if(Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+
+#endif
 
         _planet.transform.Rotate(Vector3.up, _rotationSpeed, Space.World);
     }

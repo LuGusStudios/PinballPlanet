@@ -163,6 +163,20 @@
 	</Challenge>
 	
 	<Challenge>
+		<ID>WorldMapFindHiddenTreasure</ID>
+		<Stars>4</Stars>
+		<TextKey>Find a hidden treasure on the world map.</TextKey>
+		<Priority>4</Priority>
+		<Condition>
+			<Type>ButtonPressed</Type>
+			<Parameters>
+				<Name>HiddenTreasure</Name>
+				<MeetOnce>true</MeetOnce>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
 		<ID>LessThan1337Score</ID>
 		<TextKey>Launch control! Score less than 1337.</TextKey>
 		<Priority>1</Priority>
@@ -271,6 +285,20 @@
 			<Parameters>
 				<Value>0</Value>
 				<Comparer>Equal</Comparer>
+			</Parameters>
+		</Condition>
+	</Challenge>
+	
+	<Challenge>
+		<ID>GlobalMoreThan40000Score</ID>
+		<TextKey>Score more than 40.000 points in any level.</TextKey>		
+		<Priority>3</Priority>
+		<Stars>3</Stars>
+		<Condition>
+			<Type>Score</Type>
+			<Parameters>
+				<Value>39999</Value>
+				<Comparer>Greater</Comparer>
 			</Parameters>
 		</Condition>
 	</Challenge>
@@ -731,15 +759,15 @@
 	
 	<Challenge>
 		<ID>HalloweenGetSpider10Times</ID>
-		<TextKey>Get Arachnophobia 10 times in one game.</TextKey>
+		<TextKey>Get Arachnophobia 5 times in one game.</TextKey>
 		<Level>Halloween</Level>
-		<Priority>2</Priority>
-		<Stars>2</Stars>
+		<Priority>3</Priority>
+		<Stars>3</Stars>
 		<Condition>
 			<Type>ObjectHit</Type>
 			<Parameters>
 				<ObjectName>SpiderWeb</ObjectName>
-				<CountToMeet>10</CountToMeet>
+				<CountToMeet>5</CountToMeet>
 				<LevelLoadReset>true</LevelLoadReset>
 			</Parameters>
 		</Condition>

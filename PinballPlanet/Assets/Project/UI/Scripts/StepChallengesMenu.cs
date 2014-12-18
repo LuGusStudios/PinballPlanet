@@ -169,6 +169,12 @@ public class StepChallengesMenu : IMenuStep
         }
         else if (SocialButton.pressed)
         {
+			if (Version.isLite)
+			{
+				MenuManager.use.ActivateOverlayMenu(MenuManagerDefault.MenuTypes.LiteBuyMenu, false);
+				return;
+			}
+
             //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
 			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ProfileMenu, false);
         }
@@ -191,6 +197,7 @@ public class StepChallengesMenu : IMenuStep
 			LugusConfig.use.SaveProfiles();
 			PlayerData.use.Load();
 			ChallengeManager.use.reset();
+			// TODO: Use this value to display medals or so. 
 			int nrOfResets = LugusConfig.use.User.GetInt("NumberOfChallengeResets", 0);
 			nrOfResets ++;
 			LugusConfig.use.User.SetInt("NumberOfChallengeResets", nrOfResets, true);

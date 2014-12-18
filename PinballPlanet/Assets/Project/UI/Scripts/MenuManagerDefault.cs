@@ -43,7 +43,8 @@ public class MenuManagerDefault : MonoBehaviour
         LevelSelectHelpMenu = 11,
 		ProfileMenu = 12,
 		PowerupSelector = 13,
-		PowerupSelectMenu = 14
+		PowerupSelectMenu = 14,
+		LiteBuyMenu = 15
     }
 
     public MenuTypes StartMenu = MenuTypes.MainMenu;
@@ -137,6 +138,12 @@ public class MenuManagerDefault : MonoBehaviour
 			Menus.Add(MenuTypes.PowerupSelectMenu, powerupSelectMenu);
 		else
 			Debug.LogError("MenuManager: Missing Powerup select menu!");
+
+		StepLiteBuyMenu liteBuyMenu = transform.FindChild("LiteBuyMenu").GetComponent<StepLiteBuyMenu>();
+		if (liteBuyMenu != null)
+			Menus.Add(MenuTypes.LiteBuyMenu, liteBuyMenu);
+		else
+			Debug.LogError("MenuManager: Missing Lite buy menu!");
 
         foreach (MenuTypes key in Enum.GetValues(typeof(MenuTypes)))
         {

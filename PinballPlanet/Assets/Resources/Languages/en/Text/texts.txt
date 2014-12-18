@@ -8,6 +8,7 @@
 	<UnlockedAtLevelSuffix>.</UnlockedAtLevelSuffix>
 	<PowerupRemoveLowLevel>You must be level 3 or above to remove a challenge.</PowerupRemoveLowLevel>
 	<PowerupRemoveNotEnoughStars>You need 3 stars to remove a challenge.</PowerupRemoveNotEnoughStars>
+	<LiteVersionLevelLocked>This level is unavailable in the lite version. Buy the full version to play.</LiteVersionLevelLocked>
 
 	<!-- ========= -->
 	<!-- MAIN MENU -->
@@ -27,6 +28,7 @@
 
 	<ClickChallengesButton>Open the challenge menu.</ClickChallengesButton>
 	<WorldMapFindTreasure>Find treasure on the world map.</WorldMapFindTreasure>
+	<WorldMapFindHiddenTreasure>Find a hidden treasure on the world map.</WorldMapFindHiddenTreasure>	
 	<LessThan1337Score>Launch control! \nScore less than 1337.</LessThan1337Score>
 	<MoreThan9000Score>"It's over Nine-Thousand!"</MoreThan9000Score>	
 	<ReachLvl3>Reach Level 3.</ReachLvl3>
@@ -35,6 +37,7 @@
 	<Play10Games>Play 10 Games.</Play10Games>
 	<Collect2Stars>Collect 2 stars in one game.</Collect2Stars>
 	<Collect5Stars>Collect 5 stars in one game.</Collect5Stars>
+	<GlobalMoreThan40000Score>Get more than 40.000 points in any level.</GlobalMoreThan40000Score>
 	
 	<!-- ================= -->
 	<!-- PIRATE CHALLENGES -->
@@ -71,7 +74,7 @@
 	<HalloweenMoreThan20000Score>Score more than 20.000 points in the halloween level.</HalloweenMoreThan20000Score>
 	<HalloweenMoreThan50000Score>Score more than 50.000 points in the halloween level.</HalloweenMoreThan50000Score>
 	<HalloweenMoreThan66600Score>Score more than 66.600 points in the halloween level.</HalloweenMoreThan66600Score>
-	<HalloweenGetSpider10Times>Get Arachnophobia 10 times in one game.</HalloweenGetSpider10Times>
+	<HalloweenGetSpider10Times>Get Arachnophobia 5 times in one game.</HalloweenGetSpider10Times>
 	<HalloweenHitGhost5Times>Ghost Hunting! Hit it 5 times in one game.</HalloweenHitGhost5Times>
 	<HalloweenHitPumpkin100Times>Pumpkin soup ingredients: 100 pumpkin slices.</HalloweenHitPumpkin100Times>
 	<HalloweenHitBat100Times>Catch 100 bats in one game.</HalloweenHitBat100Times>

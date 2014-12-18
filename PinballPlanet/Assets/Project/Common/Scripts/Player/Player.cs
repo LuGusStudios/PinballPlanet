@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -154,6 +155,10 @@ public class Player : LugusSingletonExisting<Player>
         // Control the launch.
         if (IsSingleBallReadyForLaunch())
         {
+
+//			if (BallLaunchForce != 0)
+//				Debug.LogError("LaunchForce " + BallLaunchForce);
+
             // Do not use keyboard launch controls when mouse/touch is being used.
             if (!LugusInput.use.down && !LugusInput.use.dragging)
             {
@@ -236,26 +241,73 @@ public class Player : LugusSingletonExisting<Player>
 
     public void LaunchBall()
     {
-        var ball = GameObject.Find("Ball");
-        ball.rigidbody.velocity = Vector3.zero;
 
-        //Debug.Log("Launch force: " + BallLaunchForce);
-		ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
-
-        // Reset launch force.
-        BallLaunchForce = 0;
-
-        // Spawn fire particles.
-        if (LaunchParticlesPrefab != null)
-            Instantiate(LaunchParticlesPrefab);
-
-        // Play release sound.
-        Debug.Log("Playing ReleaseSound");
-        LugusAudio.use.SFX().Play(ReleaseSound, true).Loop = false;
-        _launchSoundPlaying = false;
-
-        GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp(false);
+		LugusCoroutines.use.StartRoutine(launchRoutine());
+//        var ball = GameObject.Find("Ball");
+//        ball.rigidbody.velocity = Vector3.zero;
+//
+//		ball.rigidbody.rotation = Quaternion.identity;
+//		ball.transform.position = BallLaunch.transform.position;
+//
+//		Debug.LogError(BallLaunchForce + " " + _ballLaunchForce);
+//
+//        //Debug.Log("Launch force: " + BallLaunchForce);
+//		//ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
+//		ball.rigidbody.AddForce(new Vector3(0, _ballLaunchForce, 0));
+//
+//        // Reset launch force.
+//        BallLaunchForce = 0;
+//
+//        // Spawn fire particles.
+//        if (LaunchParticlesPrefab != null)
+//            Instantiate(LaunchParticlesPrefab);
+//
+//        // Play release sound.
+//        Debug.Log("Playing ReleaseSound");
+//        LugusAudio.use.SFX().Play(ReleaseSound, true).Loop = false;
+//        _launchSoundPlaying = false;
+//
+//		if (Vibrator.canVibrate)
+//			Vibrator.Vibrate();
+//
+//        GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp(false);
     }
+
+	private IEnumerator launchRoutine()
+	{
+		var ball = GameObject.Find("Ball");
+		ball.rigidbody.velocity = Vector3.zero;		
+		ball.rigidbody.rotation = Quaternion.identity;
+		ball.transform.position = BallLaunch.transform.position + new Vector3(0, 2, 0);
+
+		yield return null;
+
+		ball.rigidbody.velocity = Vector3.zero;		
+		ball.rigidbody.rotation = Quaternion.identity;
+		
+		//Debug.LogError(BallLaunchForce + " " + _ballLaunchForce);
+		
+		//Debug.Log("Launch force: " + BallLaunchForce);
+		//ball.rigidbody.AddForceAtPosition(new Vector3(0, _ballLaunchForce, 0), ball.transform.position);
+		ball.rigidbody.AddForce(new Vector3(0, _ballLaunchForce, 0));
+		
+		// Reset launch force.
+		BallLaunchForce = 0;
+		
+		// Spawn fire particles.
+		if (LaunchParticlesPrefab != null)
+			Instantiate(LaunchParticlesPrefab);
+		
+		// Play release sound.
+		Debug.Log("Playing ReleaseSound");
+		LugusAudio.use.SFX().Play(ReleaseSound, true).Loop = false;
+		_launchSoundPlaying = false;
+		
+		if (Vibrator.canVibrate)
+			Vibrator.Vibrate();
+		
+		GameObject.Find("GameMenu").GetComponent<StepGameMenu>().ShowLaunchHelp(false);
+	}
 
     // Play light on sound.
     public void PlayLightOnSound()

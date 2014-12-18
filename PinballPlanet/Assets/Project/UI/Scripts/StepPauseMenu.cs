@@ -149,10 +149,18 @@ public class StepPauseMenu : IMenuStep
         else if (YesButton.pressed)
         {
 			PlayerData.use.temporaryPowerup = null;
-			SceneLoader.use.LoadNewScene("Pinball_MainMenu");
+			SceneLoader.use.LoadNewScene("Pinball_MainMenu", 0.3f, true);
         }
         else if (SocialButton.pressed)
         {
+			if (Version.isLite)
+			{
+				MenuManager.use.ActivateOverlayMenu(MenuManagerDefault.MenuTypes.LiteBuyMenu, false);
+				SocialButton.gameObject.SetActive(false);
+				ExitConfirmation.gameObject.SetActive(false);
+				return;
+			}
+
             //MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.SocialMenu, false);
 			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ProfileMenu, false);
             SocialButton.gameObject.SetActive(false);

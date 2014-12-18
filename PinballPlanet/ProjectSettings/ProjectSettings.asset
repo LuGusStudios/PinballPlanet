@@ -68,8 +68,8 @@ PlayerSettings:
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   productGUID: 170e736900acf0a4aa9f17c5bab25556
-  iPhoneBundleVersion: 1.0
-  AndroidBundleVersionCode: 1
+  iPhoneBundleVersion: 1.05
+  AndroidBundleVersionCode: 105
   AndroidMinSdkVersion: 9
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -112,6 +112,9 @@ PlayerSettings:
     m_DynamicBatching: 1
   - m_BuildTarget: Web
     m_StaticBatching: 0
+    m_DynamicBatching: 1
+  - m_BuildTarget: Standalone
+    m_StaticBatching: 1
     m_DynamicBatching: 1
   webPlayerTemplate: APPLICATION:Black Background
   m_TemplateCustomTags: {}
@@ -157,6 +160,7 @@ PlayerSettings:
   spritePackerPolicy: 
   scriptingDefineSymbols:
     4: 
+    15: 
   metroPackageName: Productie
   metroPackageLogo: 
   metroPackageLogo140: 

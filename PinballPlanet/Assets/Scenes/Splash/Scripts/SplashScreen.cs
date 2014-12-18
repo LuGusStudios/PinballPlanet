@@ -1,10 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+//#if !UNITY_WP8
+//using UnityEngine.Advertisements;
+//#endif
 
 public class SplashScreen : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+//#if !UNITY_WP8
+//		if (!Advertisement.isInitialized)
+//		{
+//			if (Advertisement.isSupported) 
+//			{
+//				Advertisement.allowPrecache = true;
+//				Advertisement.Initialize("20569");
+//			}
+//			else 
+//			{
+//				Debug.LogWarning("Advertisements: Platform not supported");
+//			}
+//		}
+//#endif
+
 		LugusCoroutines.use.StartRoutine(SplashRoutine());
 	}
 

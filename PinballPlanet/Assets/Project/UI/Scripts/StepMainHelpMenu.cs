@@ -6,7 +6,8 @@ public class StepMainHelpMenu : IMenuStep
 {
     protected Button helpButton = null;
     protected Vector3 originalPosition = Vector3.zero;
-	
+	protected TextMesh textLite = null;
+
 	public override void SetupLocal()
 	{
         if (helpButton == null)
@@ -17,6 +18,13 @@ public class StepMainHelpMenu : IMenuStep
         {
             Debug.Log("StepGameHelpMenu: Missing help button.");
         }
+
+		textLite = gameObject.FindComponentInChildren<TextMesh>(true, "Text_Share");
+
+		if (Version.isLite)
+		{
+			textLite.text = "Buy";
+		}
 
 		originalPosition = transform.position;
 	}

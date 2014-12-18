@@ -117,6 +117,8 @@ public class StepGameMenu : IMenuStep
         activated = true;
         gameObject.SetActive(true);
 
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         helpButton.gameObject.SetActive(true);
         pauseButton.gameObject.SetActive(true);
 
@@ -126,6 +128,7 @@ public class StepGameMenu : IMenuStep
     public override void Deactivate(bool animate = true)
     {
         activated = false;
+		Screen.sleepTimeout = SleepTimeout.SystemSetting;
 
         if (pauseButton != null) 
             pauseButton.scaleDownFactor = 1;
@@ -145,10 +148,11 @@ public class StepGameMenu : IMenuStep
         star.transform.parent = transform;
         star.transform.localPosition = Vector3.zero.zAdd(-2.0f);
 
-#if UNITY_WP8
-		starButton.startAutoCatchAnimation();
-		return;
-#endif
+//#if UNITY_WP8
+//		//starButton.startAutoCatchAnimation();
+//		starButton.StartAnimation();
+//		return;
+//#endif
 
 		if (AutoCaptureStars)
 		{
