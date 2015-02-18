@@ -7,6 +7,11 @@ public enum LevelKey
     None = 0, MainMenu = 1, Halloween = 2, Pirate = 3, Mine = 4
 }
 
+public enum CameraMode
+{ 
+    NONE = 0, Instant = 1, Smooth = 2, Fixed = 3
+}
+
 public class PlayerData : MonoBehaviour
 {
     // Singleton Instance.
@@ -39,8 +44,8 @@ public class PlayerData : MonoBehaviour
                 _instance.LevelsUnlocked.Add(MineLvlName, false);
 
                 _instance._unlockCosts.Add(10);
-                _instance._unlockCosts.Add(20);
-                _instance._unlockCosts.Add(50);
+                _instance._unlockCosts.Add(15);
+                _instance._unlockCosts.Add(30);
                 _instance._unlockCosts.Add(100);
 
                 _instance.Load();
@@ -48,6 +53,8 @@ public class PlayerData : MonoBehaviour
             return _instance;
         }
     }
+
+    public CameraMode camMode = CameraMode.Smooth;
 
 	public Powerup permanentPowerup = null;
 	public Powerup temporaryPowerup = null;
@@ -318,6 +325,8 @@ public class PlayerData : MonoBehaviour
             }
         }
 
+        LugusConfig.use.System.SetInt("CamMode", (int)camMode, true);
+
 		SavePlaytime();
 		SaveNumberOfGamesPlayed();
 
@@ -389,6 +398,7 @@ public class PlayerData : MonoBehaviour
         }
 
 		loadNumberOfGamesPlayed();
+        camMode = (CameraMode) LugusConfig.use.System.GetInt("CamMode", 1);
 
         // Load levels unlocked.
         string[] lvlNames = new string[LevelsUnlocked.Count];
