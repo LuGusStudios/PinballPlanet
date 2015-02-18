@@ -9,6 +9,7 @@ public class StepMainMenu : IMenuStep
     protected Button SocialButton = null;
     protected Button SettingsButton = null;
     protected Button TrophyButton = null;
+    protected Button ExitButton = null;
     protected GameObject TitleLogo = null;
     protected Vector3 OriginalPosition = Vector3.zero;
 
@@ -71,6 +72,15 @@ public class StepMainMenu : IMenuStep
         if (TrophyButton == null)
         {
             Debug.Log("StepMainMenu: Missing trophy button.");
+        }
+
+        if (ExitButton == null)
+        {
+            ExitButton = transform.FindChild("Button_Exit").GetComponent<Button>();
+        }
+        if (ExitButton == null)
+        {
+            Debug.Log("StepMainMenu: Missing Exit button.");
         }
 
         if (TitleLogo == null)
@@ -170,13 +180,16 @@ public class StepMainMenu : IMenuStep
 
             MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.ChallengesMenu, false);
         }
+#if UNITY_WP8 || UNITY_ANDROID
+        else if (ExitButton.pressed)
+        {            
+            Application.Quit();
+        }
 
-#if UNITY_WP8
 		if(Input.GetKeyDown(KeyCode.Escape))
 		{
 			Application.Quit();
 		}
-
 #endif
 
         _planet.transform.Rotate(Vector3.up, _rotationSpeed, Space.World);

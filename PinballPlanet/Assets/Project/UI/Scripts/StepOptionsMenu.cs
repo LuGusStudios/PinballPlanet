@@ -10,14 +10,25 @@ public class StepOptionsMenu : IMenuStep
 	protected Transform resetConfirmation = null;
 	protected Button resetYes = null; 
 	protected Button resetNo = null;
+
     protected Button musicCheckBox = null;
     private bool _musicChecked = true;
     protected Button effectsCheckBox = null;
     private bool _effectsChecked = true;
+
+    protected Button camSmoothCheckbox = null;
+    protected bool _camSmoothChecked = false;
+    protected Button camInstantCheckbox = null;
+    protected bool _camInstantChecked = false;
+    protected Button camFixedCheckbox = null;
+    protected bool _camFixedChecked = false;
+
     protected Vector3 originalPosition = Vector3.zero;
 
     public Sprite CheckBoxChecked = null;
     public Sprite CheckBoxUnChecked = null;
+
+    private MenuManagerDefault.MenuTypes resetPrevMenu; // Bugfix. Mainmenu was opened in game when reset was pressed and then canceled.
 
     public override void SetupLocal()
     {
@@ -69,6 +80,33 @@ public class StepOptionsMenu : IMenuStep
         if (effectsCheckBox == null)
         {
             Debug.Log("StepMainMenu: Missing sound effects checkbox.");
+        }
+
+        if (camSmoothCheckbox == null)
+        {
+            camSmoothCheckbox = transform.FindChildRecursively("CheckBox_Smooth").GetComponent<Button>();
+        }
+        if (camSmoothCheckbox == null)
+        {
+            Debug.Log("StepMainMenu: Missing Cam Smooth checkbox.");
+        }
+
+        if (camInstantCheckbox == null)
+        {
+            camInstantCheckbox = transform.FindChildRecursively("CheckBox_Instant").GetComponent<Button>();
+        }
+        if (camInstantCheckbox == null)
+        {
+            Debug.Log("StepMainMenu: Missing Cam Instant checkbox.");
+        }
+
+        if (camFixedCheckbox == null)
+        {
+            camFixedCheckbox = transform.FindChildRecursively("CheckBox_Fixed").GetComponent<Button>();
+        }
+        if (camFixedCheckbox == null)
+        {
+            Debug.Log("StepMainMenu: Missing Cam Fixed checkbox.");
         }
 
 		if (resetConfirmation == null)
@@ -128,7 +166,9 @@ public class StepOptionsMenu : IMenuStep
 		else 
 		{
 			effectsCheckBox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
-		}
+		}        
+
+        SetCamModeCheckboxes();
 
 	}
 
@@ -168,6 +208,7 @@ public class StepOptionsMenu : IMenuStep
 		else if (resetButton.pressed) 
 		{
 			Debug.Log("Pressed reset button");
+            resetPrevMenu = MenuManager.use.ActiveMenu;
 			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.OptionsMenu, false);
 
 			foreach (Transform child in transform) {
@@ -187,7 +228,7 @@ public class StepOptionsMenu : IMenuStep
 				child.gameObject.SetActive(true);
 			}
 			resetConfirmation.gameObject.SetActive(false);
-			MenuManager.use.ActivateMenu(MenuManagerDefault.MenuTypes.MainMenu, false);
+			MenuManager.use.ActivateMenu(resetPrevMenu, false);
 		}
         else if (musicCheckBox.pressed)
         {
@@ -230,6 +271,8 @@ public class StepOptionsMenu : IMenuStep
 
             _effectsChecked = !_effectsChecked;
         }
+
+        UpdateCamModeCheckboxes();
     }
 
 	void ResetGame()
@@ -263,5 +306,49 @@ public class StepOptionsMenu : IMenuStep
         activated = false;
 
         gameObject.SetActive(false);
+    }
+
+    void UpdateCamModeCheckboxes()
+    {
+        if (camSmoothCheckbox.pressed)
+        {
+            PlayerData.use.camMode = CameraMode.Smooth;                
+        }
+        else if (camInstantCheckbox.pressed)
+        {
+            PlayerData.use.camMode = CameraMode.Instant;
+        }
+        else if (camFixedCheckbox.pressed)
+        {
+            PlayerData.use.camMode = CameraMode.Fixed;
+        }
+
+        SetCamModeCheckboxes();
+
+        PlayerData.use.Save();
+    }
+
+    void SetCamModeCheckboxes()
+    {
+        camSmoothCheckbox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
+        camInstantCheckbox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
+        camFixedCheckbox.GetComponent<SpriteRenderer>().sprite = CheckBoxUnChecked;
+
+        switch (PlayerData.use.camMode)
+        { 
+            case CameraMode.Smooth:
+                camSmoothCheckbox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
+                break;
+            case CameraMode.Instant:
+                camInstantCheckbox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
+                break;
+            case CameraMode.Fixed:
+                camFixedCheckbox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
+                break;
+            default:
+                PlayerData.use.camMode = CameraMode.Instant;
+                camInstantCheckbox.GetComponent<SpriteRenderer>().sprite = CheckBoxChecked;
+                break;
+        }
     }
 }
